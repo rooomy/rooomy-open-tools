@@ -121,6 +121,9 @@ class RubyRooomy < Rubyment
     rv
   end
 
+  ## SAMPLE EXAMPLES section: functions here below are provided as sample
+  # usage examples for the functions above.
+
 end
 
 
