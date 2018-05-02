@@ -124,6 +124,31 @@ class RubyRooomy < Rubyment
   ## SAMPLE EXAMPLES section: functions here below are provided as sample
   # usage examples for the functions above.
 
+  # example for sample_example__define_contexts
+  # experiment with:
+  # ./rubyrooomy.rb  invoke_double puts sample_example__define_contexts
+  def sample_example__define_contexts
+    define_contexts [
+      {
+        "role" => ["role_3", "role_4"],
+        "authenticate_as"=> ["role_1", "role_2"],
+        "result"=> [
+          Proc.new { |h|
+            "#{h["authenticate_as"]} ALLOWED to create #{h["role"]}"
+          }
+        ],
+      },
+      {
+        "role" => ["role_1", "role_2", "role_3", "role_4"] - ["role_3", "role_4"],
+        "authenticate_as"=> ["role_1", "role_2"],
+        "result"=> [
+          Proc.new { |h|
+            "#{h["authenticate_as"]} NOT ALLOWED to create #{h["role"]}"
+          }
+        ],
+      },
+    ]
+  end
 end
 
 
