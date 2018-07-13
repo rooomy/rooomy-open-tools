@@ -1,7 +1,15 @@
 #!/usr/bin/env ruby
 
-# Notice: Not to be published before
-# LICENSE is in place
+
+# Copyright 2018, NedSense Loft BV
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
 
 require "rubyment"
 
@@ -47,15 +55,15 @@ class RubyRooomy < Rubyment
     gem_ext ||= ".gem"
     gem_hifen ||= "-"
     gem_ext ||= "date"
-    gem_date ||= "2018-05-02"
+    gem_date ||= "2018-07-13"
     gem_summary     ||= "roOomy open tools for Ruby"
     gem_description ||= "a set of ruby helpers we use mostly in the backend testing environment of roOomy"
     gem_authors     ||= ["roOomy backend development team", "Ribamar Santarosa"]
-    gem_email       ||= 'ribamar@gmail.com'
+    gem_email       ||= 'ribamar.santarosa@rooomy.com'
     gem_files       ||= ["lib/#{gem_name}.rb"]
     gem_homepage    ||=
       "http://rubygems.org/gems/#{gem_name}"
-    gem_license     ||= 'Nonstandard'
+    gem_license     ||= 'MIT'
     gem_validate_class ||= self.class.to_s
     gem_validate_class_args ||= {:invoke => ["puts", "rubyrooomy gem installation validated"] }
     gem_validate_class_method ||= "new"
