@@ -55,7 +55,7 @@ class RubyRooomy < Rubyment
     gem_files       ||= ["lib/#{gem_name}.rb"]
     gem_homepage    ||=
       "http://rubygems.org/gems/#{gem_name}"
-    gem_license     ||= 'Nonstandard'
+    gem_license     ||= 'MIT'
     gem_validate_class ||= self.class.to_s
     gem_validate_class_args ||= {:invoke => ["puts", "rubyrooomy gem installation validated"] }
     gem_validate_class_method ||= "new"
