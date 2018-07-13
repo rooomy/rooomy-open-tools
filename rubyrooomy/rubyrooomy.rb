@@ -47,7 +47,12 @@ class RubyRooomy < Rubyment
     gem_validate_class,
     gem_validate_class_args,
     gem_validate_class_method,
-    gem_is_current_file = args
+    gem_is_current_file,
+    gem_bin_generate,
+    gem_bin_contents,
+    gem_bin_executables,
+    reserved = args
+
 
     gem_name ||= "rubyrooomy"
     gem_version ||= (version [])
@@ -67,9 +72,17 @@ class RubyRooomy < Rubyment
     gem_validate_class ||= self.class.to_s
     gem_validate_class_args ||= {:invoke => ["puts", "rubyrooomy gem installation validated"] }
     gem_validate_class_method ||= "new"
-    gem_is_current_file = true # this enables the possibility of building
+    gem_is_current_file = __FILE__ # this enables the possibility of building
     #  a gem for the calling file itself, but be aware that lib/gem_file.rb
     # is supposed to be overriden later.
+    gem_bin_generate = "bin/#{gem_name}" # generate a bin file
+    gem_bin_contents =<<-ENDHEREDOC
+#!/usr/bin/env ruby
+require '#{gem_name}'
+#{gem_validate_class}.new({:invoke => ARGV})
+    ENDHEREDOC
+    gem_executables = [ gem_bin_generate && "#{gem_name}" ]
+
     [
        gem_name,
        gem_version,
@@ -88,6 +101,9 @@ class RubyRooomy < Rubyment
        gem_validate_class_args,
        gem_validate_class_method,
        gem_is_current_file,
+       gem_bin_generate,
+       gem_bin_contents,
+       gem_bin_executables,
    ]
   end
 
