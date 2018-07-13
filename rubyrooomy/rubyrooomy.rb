@@ -47,11 +47,11 @@ class RubyRooomy < Rubyment
     gem_ext ||= ".gem"
     gem_hifen ||= "-"
     gem_ext ||= "date"
-    gem_date ||= "2018-05-02"
+    gem_date ||= "2018-07-13"
     gem_summary     ||= "roOomy open tools for Ruby"
     gem_description ||= "a set of ruby helpers we use mostly in the backend testing environment of roOomy"
     gem_authors     ||= ["roOomy backend development team", "Ribamar Santarosa"]
-    gem_email       ||= 'ribamar@gmail.com'
+    gem_email       ||= 'ribamar.santarosa@rooomy.com'
     gem_files       ||= ["lib/#{gem_name}.rb"]
     gem_homepage    ||=
       "http://rubygems.org/gems/#{gem_name}"
