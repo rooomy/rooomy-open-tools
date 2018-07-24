@@ -18,10 +18,11 @@ require "rubyment"
 # for RubyRooomy (not a module for
 # making serialization easier if ever
 # needed).
-# Inherits from Rubyment to
-# benefit from the RubyGem functions
-#  support.
-class RubyRooomy < Rubyment
+class RubyRooomy
+
+  # to benefit from the RubyGem functions
+  #  support and other helper functions:
+  include RubymentModule
 
   # overrides Rubyment::rubyment_gem_defaults
   # in order to enable a gem for RubyRooomy
