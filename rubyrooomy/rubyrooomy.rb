@@ -14,6 +14,63 @@
 require "rubyment"
 
 
+module RubyRooomyArrayOfHashesModule
+  # select only "name"  == name, retrieving only the id
+  def  id h, name
+   h.map  {|h1| (h1["name"]  == name ) && h1["id"] || nil }.compact.first
+  end
+
+  # select the ids of members of given id
+  def member_ids h, id
+    h.map  {|h1| (h1["id"]  == id ) && h1["members"].map{|h2| h2["id"] } || nil }.compact.flatten
+  end 
+
+  # select the ids of members of given id, recursively (in a Hash).
+  # note that the parent id won't be in the hash
+  def member_id_tree h, id, dont_visit = Set.new
+      id_member_ids = Set.new [(member_ids h, id)].flatten(1)
+      dont_visit << id
+      visit = (id_member_ids -  dont_visit)
+      result = visit.map { |member_id|
+         [member_id,( member_id_tree h, member_id, dont_visit ) ]
+     }.to_h
+    result
+  end
+
+
+  # retrieve, in the array of hashes h, the ones matching k == v
+  # laternote: used only as helper for  select_column_by_kv
+  def filter_by_kv h, k, v
+    h.map  {|h1| (h1[k]  == v) && h1 || nil }.compact
+  end
+
+  # retrieve, in the array of hashes h, the ones having v in values. k is by now ignored, but it may be used in the future (pass nil) 
+  # laternote: used only as helper for  select_column_by_kv
+  def filter_by_v_in_values h, k, v
+    h.map  {|h1| (h1.values.index v) && h1 || nil }.compact
+  end
+
+
+  def filter_by_v_matching_values h, k, v
+    h.map  {|h1| (h1.values.grep v).reduce(:+) && h1 || nil }.compact
+  end
+
+  # retrieve, in the array of hashes h, the ones matching k == v, selecting only one column
+  def  select_column_by_kv  h, k, v, column = nil, method_name = :filter_by_kv
+   filtered =  method(method_name).call h, k, v
+   column && filtered.map {|h1| h1[column]} || (!column) && filtered
+  end
+
+
+  # call keys for each element of the array h
+  #  example: map_to_keys h, :fetch, ["id", "default_id"] fetches all ids
+  def map_to_keys h, method_name = :keys, method_args = nil
+    h.map {|h1| h1.method(method_name).call  *method_args }
+  end
+
+end
+
+
 module RubyRooomyGitBaseModule
 
   require 'git'
