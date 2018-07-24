@@ -253,11 +253,7 @@ end
 # making serialization easier if ever
 # needed).
 class RubyRooomy
-
-
   include RubyRooomyModule
-
-
 end
 
 
