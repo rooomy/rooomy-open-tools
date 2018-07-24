@@ -13,6 +13,93 @@
 
 require "rubyment"
 
+
+module RubyRooomyGitBaseModule
+
+  require 'git'
+
+  class Git::Base
+
+    # note: this differs of pull("origin", operand_branch) because
+    # it pulls the +operand_branch+'s origin into itself.
+    def pull_on_operand_branch *args
+      self.on_operand_branch :pull, *args
+    end
+
+    def on_operand_branch operation, operand_branch=nil, repo="origin"
+       pop_branch  = self.current_branch
+       operand_branch ||= self.current_branch
+       results ||= []
+       results.push self.branch(operand_branch).checkout
+       results.push  self.send(operation, repo, self.current_branch)
+       results.push self.branch(pop_branch).checkout
+      results.join "\n"
+    end
+
+    def results
+      @results
+    end
+
+    def last_result_output
+      @results ||= []
+      @results.last[:output]
+    end
+
+    def results_reset
+      @results = []
+      self
+    end
+
+    def do call, *args
+      @results ||= []
+       @results.push({
+          :time => Time.now,
+          :call => call,
+          :args => args,
+          :output => (self.send call, *args),
+        })
+       self
+    end
+
+    def do_on type, object_id, call=nil, *args
+      @results ||= []
+       @results.push({
+          :time => Time.now.inspect,
+          :call => type,
+          :args => [object_id],
+          :output => (p (self.send type, object_id)),
+        })
+       object = last_result_output
+       call && @results.push({
+          :time => Time.now.inspect,
+          :call => call,
+          :args => args,
+          :output => (object.send call, *args),
+        })
+       self
+    end
+
+    def extra_command call, *args
+      require "open3"
+      @results ||= []
+      command = "#{call} #{args.join " "}"
+      stdin, stdoutanderr, wait_thr =  Open3.popen2e(command)
+       @results.push({
+          :time => Time.now.inspect,
+          :call => call,
+          :args => args,
+          :command => command,
+          :success => wait_thr.value.success?,
+          :output => (stdoutanderr.entries.join "\n")
+        })
+       self
+    end
+
+  end
+
+end
+
+
 module RubyRooomyDefineContextsModule
 
 
