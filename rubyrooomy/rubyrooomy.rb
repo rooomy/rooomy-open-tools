@@ -13,6 +13,82 @@
 
 require "rubyment"
 
+module RubyRooomyGemModule
+
+  include RubymentModule
+
+  # overrides Rubyment::rubyment_gem_defaults
+  # in order to enable a gem for RubyRooomy
+  # to be built instead.
+  def rubyment_gem_defaults args=ARGV
+    running_dir   = @memory[:running_dir]
+    basic_version = @memory[:basic_version]
+    major_version = @memory[:major_version]
+
+    gem_name,
+    gem_version,
+    gem_dir,
+    gem_ext,
+    gem_hifen,
+    gem_date,
+    gem_summary,
+    gem_description,
+    gem_authors,
+    gem_email,
+    gem_files,
+    gem_homepage,
+    gem_license,
+    gem_validate_class,
+    gem_validate_class_args,
+    gem_validate_class_method,
+    gem_is_current_file = args
+
+    gem_name ||= "rubyrooomy"
+    gem_version ||= (version [])
+    gem_dir ||= running_dir
+    gem_ext ||= ".gem"
+    gem_hifen ||= "-"
+    gem_ext ||= "date"
+    gem_date ||= "2018-07-13"
+    gem_summary     ||= "roOomy open tools for Ruby"
+    gem_description ||= "a set of ruby helpers we use mostly in the backend testing environment of roOomy"
+    gem_authors     ||= ["roOomy backend development team", "Ribamar Santarosa"]
+    gem_email       ||= 'ribamar.santarosa@rooomy.com'
+    gem_files       ||= ["lib/#{gem_name}.rb"]
+    gem_homepage    ||=
+      "http://rubygems.org/gems/#{gem_name}"
+    gem_license     ||= 'MIT'
+    gem_validate_class ||= self.class.to_s
+    gem_validate_class_args ||= {:invoke => ["puts", "rubyrooomy gem installation validated"] }
+    gem_validate_class_method ||= "new"
+    gem_is_current_file = true # this enables the possibility of building
+    #  a gem for the calling file itself, but be aware that lib/gem_file.rb
+    # is supposed to be overriden later.
+    [
+       gem_name,
+       gem_version,
+       gem_dir,
+       gem_ext,
+       gem_hifen,
+       gem_date,
+       gem_summary,
+       gem_description,
+       gem_authors,
+       gem_email,
+       gem_files,
+       gem_homepage,
+       gem_license,
+       gem_validate_class,
+       gem_validate_class_args,
+       gem_validate_class_method,
+       gem_is_current_file,
+   ]
+  end
+
+
+end
+
+
 # Main module, basically a namespace
 # for RubyRooomy (not a module for
 # making serialization easier if ever
