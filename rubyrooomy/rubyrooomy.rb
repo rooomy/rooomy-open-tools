@@ -405,6 +405,8 @@ module RubyRooomyModule
 
   include RubyRooomyGitBaseModule
 
+  include RubyRooomyArrayOfHashesModule
+
 end
 
 
