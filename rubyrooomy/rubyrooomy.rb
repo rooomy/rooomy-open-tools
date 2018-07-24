@@ -13,6 +13,15 @@
 
 require "rubyment"
 
+# Main module, basically a namespace
+# for RubyRooomy (not a module for
+# making serialization easier if ever
+# needed).
+module RubyRooomyModule
+
+
+end
+
 
 # Main class, basically a namespace
 # for RubyRooomy (not a module for
