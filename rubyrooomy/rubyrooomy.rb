@@ -11,8 +11,6 @@
 
 
 
-require "rubyment"
-
 
 module RubyRooomyArrayOfHashesModule
   # select only "name"  == name, retrieving only the id
