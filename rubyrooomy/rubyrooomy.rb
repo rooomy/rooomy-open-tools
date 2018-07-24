@@ -301,6 +301,7 @@ end
 module RubyRooomyGemModule
 
 
+  require "rubyment"
   # to benefit from the RubyGem functions
   #  support and other helper functions:
   include RubymentModule
