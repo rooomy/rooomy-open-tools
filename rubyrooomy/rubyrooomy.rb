@@ -12,6 +12,18 @@
 
 
 
+=begin
+  functions in this module get always a list of hashes
+  as parameter. Each of those hashes represents a row
+  from a table.
+  These structures are suitable to work with any "table".
+
+  having these columns:
+  ID NAME MEMBERS
+
+  that MEMBERS field is supposed to be another array
+  of hashes, having (at least) the ID field.
+=end
 module RubyRooomyArrayOfHashesModule
   # select only "name"  == name, retrieving only the id
   def  id h, name
