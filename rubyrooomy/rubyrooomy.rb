@@ -49,7 +49,7 @@ module RubyRooomyArrayOfHashesModule
 
 
   # retrieve, in the array of hashes h, the ones matching k == v
-  # laternote: used only as helper for  select_column_by_kv
+  # used mostly as helper for  select_column_by_kv
   def filter_by_kv h, k, v
     h.map  {|h1| (h1[k]  == v) && h1 || nil }.compact
   end
