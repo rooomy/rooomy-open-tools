@@ -41,6 +41,14 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin 
+  resets class variable @results
+=end
+    def results_reset
+      @results = []
+    end
+
+
 =begin
   calls a function on self object, and store
   a report with timestamp, call, args and return
