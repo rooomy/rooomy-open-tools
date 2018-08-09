@@ -19,6 +19,27 @@
 =end
 module RubyRooomyShellCommandsModule
 
+=begin
+  executes a command in a shell, storing
+  results, timestamp, command, args, return value,
+  and output (stdout joined with stderr) in the
+  last entry of the class variable @results
+=end
+  def batch_command call, *args
+    require "open3"
+    @results ||= []
+    command = "#{call} #{args.join " "}"
+    stdin, stdoutanderr, wait_thr =  Open3.popen2e(command)
+     @results.push({
+        :time => Time.now.inspect,
+        :call => call,
+        :args => args,
+        :command => command,
+        :success => wait_thr.value.success?,
+        :output => (stdoutanderr.entries.join "\n")
+      })
+  end
+
 
 end
 
