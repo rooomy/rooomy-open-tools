@@ -41,7 +41,7 @@ module RubyRooomyShellCommandsModule
   end
 
 
-=begin 
+=begin
   resets class variable @results
 =end
     def results_reset
