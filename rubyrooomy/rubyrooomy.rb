@@ -12,6 +12,17 @@
 
 
 
+=begin 
+  The purpose of this module is to offer functions that can
+  execute commands available in the command line shell where
+  ruby is running.
+=end
+module RubyRooomyShellCommandsModule
+
+
+end
+
+
 =begin
   functions in this module get always a list of hashes
   as parameter. Each of those hashes represents a row
