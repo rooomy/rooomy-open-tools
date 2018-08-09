@@ -442,6 +442,8 @@ end
 # needed).
 module RubyRooomyModule
 
+  include RubyRooomyShellCommandsModule
+
   include RubyRooomyGemModule
 
   include RubyRooomyDefineContextsModule
