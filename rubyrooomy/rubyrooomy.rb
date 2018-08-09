@@ -49,6 +49,14 @@ module RubyRooomyShellCommandsModule
     end
 
 
+=begin 
+  returns class variable @results
+=end
+  def results
+    @results ||= []
+  end
+
+
 =begin
   returns class variable @results.last[:output]
 =end
