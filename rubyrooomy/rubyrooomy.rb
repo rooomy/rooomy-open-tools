@@ -49,7 +49,7 @@ module RubyRooomyShellCommandsModule
     end
 
 
-=begin 
+=begin
   returns class variable @results.last[:output]
 =end
   def last_result_output
