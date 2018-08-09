@@ -162,6 +162,8 @@ module RubyRooomyGitBaseModule
 
   class Git::Base
 
+   include RubyRooomyShellCommandsModule
+
     # note: this differs of pull("origin", operand_branch) because
     # it pulls the +operand_branch+'s origin into itself.
     def pull_on_operand_branch *args
@@ -178,19 +180,6 @@ module RubyRooomyGitBaseModule
       results.join "\n"
     end
 
-    def results
-      @results
-    end
-
-    def last_result_output
-      @results ||= []
-      @results.last[:output]
-    end
-
-    def results_reset
-      @results = []
-      self
-    end
 
     def do call, *args
       @results ||= []
@@ -223,17 +212,7 @@ module RubyRooomyGitBaseModule
 
     def extra_command call, *args
       require "open3"
-      @results ||= []
-      command = "#{call} #{args.join " "}"
-      stdin, stdoutanderr, wait_thr =  Open3.popen2e(command)
-       @results.push({
-          :time => Time.now.inspect,
-          :call => call,
-          :args => args,
-          :command => command,
-          :success => wait_thr.value.success?,
-          :output => (stdoutanderr.entries.join "\n")
-        })
+      batch_command call, *args
        self
     end
 
