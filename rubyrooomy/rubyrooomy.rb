@@ -41,6 +41,24 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+  calls a function on self object, and store
+  a report with timestamp, call, args and return
+  value.
+  returns class variable @results
+=end
+  def do call, *args
+    @results ||= []
+    @results.push({
+       :time => Time.now,
+       :call => call,
+       :args => args,
+       :output => (self.send call, *args),
+    })
+    @results
+  end
+
+
 end
 
 
