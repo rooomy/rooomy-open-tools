@@ -49,6 +49,15 @@ module RubyRooomyShellCommandsModule
     end
 
 
+=begin 
+  returns class variable @results.last[:output]
+=end
+  def last_result_output
+    @results ||= []
+    @results.last[:output]
+  end
+
+
 =begin
   calls a function on self object, and store
   a report with timestamp, call, args and return
