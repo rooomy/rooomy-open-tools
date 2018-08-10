@@ -153,6 +153,14 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+  quote a list of strings
+=end
+  def quoted_shell_params args
+    args.map(&method(:quoted_shell_param))
+  end
+
+
 end
 
 
