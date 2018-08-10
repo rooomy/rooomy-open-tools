@@ -49,6 +49,17 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
+=begin
+ executes a batch of psql commads, for each given db_query.
+ if a db_query is nil, will generate a command to enter the
+ cli of psql.
+=end
+  def exec__psql_cli_or_db_queries psql_db, db_queries=[nil]
+    batch = psql_db_batch__cli_or_queries psql_db, db_queries
+    batch_commands batch
+  end
+
+
 end
 
 
