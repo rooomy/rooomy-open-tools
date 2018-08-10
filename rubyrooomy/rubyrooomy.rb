@@ -181,6 +181,16 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+  escapes all arguments, recursively with Shellwords.escape,
+  before executing #batch_command
+=end
+  def shell_escaped__batch_commands method_name, *args_to_method
+    method_name = :batch_commands
+    shell_escaped__send method_name, args_to_method
+  end
+
+
 end
 
 
