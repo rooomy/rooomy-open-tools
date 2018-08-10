@@ -150,6 +150,19 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
+=begin
+  just a sample example of a psql_db, as required by
+  :psql_db_command__cli
+=end
+  def psql_db__sample_example *args
+    db_name="any_db"
+    db_user="any_user"
+    db_host="localhost"
+    db_password="onlyNSAknows"
+    [db_name, db_user, db_password, db_host]
+  end
+
+
 end
 
 
