@@ -70,7 +70,7 @@ module RubyRooomyShellCommandsModule
   end
 
 
-=begin 
+=begin
  like #batch_command, but takes an Array having call, *args
  pairs, called a "batch of commands"
   executes multiple commands in a shell, storing
