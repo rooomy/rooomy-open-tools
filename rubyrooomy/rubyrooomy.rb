@@ -133,6 +133,18 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+  recursively escapes all objects in an Array using
+  Shellwords.escape
+=end
+  def recursive_array__shell_escaped a
+    a_is_container = a.respond_to? :each
+    a_is_container && a.map{|e|
+      recursive_array__shell_escaped e
+    } || (Shellwords.escape a)
+  end
+
+
 end
 
 
