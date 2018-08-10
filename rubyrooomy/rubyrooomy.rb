@@ -46,6 +46,18 @@ module RubyRooomySqlQueriesModule
   end
 
 
+=begin
+  transforms a query into a query that shows the count of that query.
+  check #db_query__show_tables__count for an example on how a
+  table listing is transformed into a count of tables listed.
+=end
+  def db_query_transform__count query
+    tmp_table = "resultset_table"
+    make_tmp_table = db_query_transform__subquery query, tmp_table
+    "SELECT COUNT(*) FROM #{make_tmp_table}"
+  end
+
+
 end
 
 
