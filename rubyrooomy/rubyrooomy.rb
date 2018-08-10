@@ -12,7 +12,7 @@
 
 
 
-=begin 
+=begin
   The purpose of this module is to offer functions that can
   execute postgresql commands in the command line shell where
   ruby is running, like psql, pg_dump, pg_restore.
