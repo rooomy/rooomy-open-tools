@@ -20,6 +20,22 @@
 module RubyRooomySqlQueriesModule
 
 
+=begin
+ Standard SQL way of listing all tables in a database
+=end
+  def db_query__show_tables *args
+
+    db_query = " SELECT
+        table_schema || '.' || table_name
+    FROM
+        information_schema.tables
+    WHERE
+        table_type = 'BASE TABLE'
+    AND
+        table_schema NOT IN ('pg_catalog', 'information_schema')"
+  end
+
+
 end
 
 
