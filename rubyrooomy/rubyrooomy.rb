@@ -12,6 +12,17 @@
 
 
 
+=begin 
+  The purpose of this module is to offer functions that generates
+  or are used to generate sql queries.
+
+=end
+module RubyRooomySqlQueriesModule
+
+
+end
+
+
 =begin
   The purpose of this module is to offer functions that can
   execute postgresql commands in the command line shell where
