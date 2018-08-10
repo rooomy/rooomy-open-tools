@@ -30,6 +30,7 @@ end
 =end
 module RubyRooomyPgShellCommandsModule
 
+  include RubyRooomySqlQueriesModule
 
 =begin
   Generates a psql command to connect to a database,
