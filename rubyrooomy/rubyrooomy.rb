@@ -12,6 +12,16 @@
 
 
 
+=begin 
+  The purpose of this module is to offer functions that can
+  execute postgresql commands in the command line shell where
+  ruby is running, like psql, pg_dump, pg_restore.
+=end
+module RubyRooomyPgShellCommandsModule
+
+end
+
+
 =begin
   The purpose of this module is to offer functions that can
   execute commands available in the command line shell where
