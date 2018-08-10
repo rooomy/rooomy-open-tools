@@ -76,6 +76,20 @@ module RubyRooomySqlQueriesModule
   end
 
 
+=begin
+  returns a query list that counts the tables in a database,
+  drops all the tables owned by the current user,
+  and then counts those tables again, for validation.
+=end
+  def db_queries__drop_owned_current_user *args
+    db_queries = [
+      db_query__show_tables__count,
+      db_query__drop_owned_current_user,
+      db_query__show_tables__count,
+    ]
+  end
+
+
 end
 
 
