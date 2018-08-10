@@ -70,6 +70,26 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin 
+ like #batch_command, but takes an Array having call, *args
+ pairs, called a "batch of commands"
+  executes multiple commands in a shell, storing
+  timestamp, command, args, return value,
+  and output (stdout joined with stderr) in the
+  last entries of the class variable @results
+
+  returns only the part of @results that corresponds to the
+  commands executed during its execution.
+=end
+  def batch_commands batch
+    results_before = results.dup
+    batch.map { |call, *args|
+      batch_command call, *args
+    }
+    results  - results_before
+  end
+
+
 =begin
   resets class variable @results
 =end
