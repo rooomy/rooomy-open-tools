@@ -29,6 +29,8 @@ end
 =end
 module RubyRooomyShellCommandsModule
 
+   include RubyRooomyPgShellCommandsModule
+
 =begin
   executes a command in a shell, storing
   results, timestamp, command, args, return value,
