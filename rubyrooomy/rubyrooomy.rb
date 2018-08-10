@@ -36,6 +36,16 @@ module RubyRooomySqlQueriesModule
   end
 
 
+=begin
+  transforms a given query, in a way that the whole query will
+  be transformed into a new temporary table called "resultset_table" by
+  default (configurable via tmp_table).
+=end
+  def db_query_transform__subquery query, tmp_table="resultset_table"
+    "(#{query}) as #{tmp_table}"
+  end
+
+
 end
 
 
