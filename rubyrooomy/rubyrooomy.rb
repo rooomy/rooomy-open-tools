@@ -67,6 +67,15 @@ module RubyRooomySqlQueriesModule
   end
 
 
+=begin
+  returns a query that drops all the tables owned by the
+  current user.
+=end
+  def db_query__drop_owned_current_user *args
+      db_query = "DROP OWNED BY CURRENT_USER CASCADE "
+  end
+
+
 end
 
 
