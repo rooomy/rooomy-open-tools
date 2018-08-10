@@ -161,6 +161,16 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+  escapes all arguments, recursively with Shellwords.escape,
+  before executing a function
+=end
+  def shell_escaped__send method_name, *args_to_method
+    escaped_args_to_method = recursive_array__shell_escaped a
+    send method_name, *escaped_args_to_method
+  end
+
+
 end
 
 
