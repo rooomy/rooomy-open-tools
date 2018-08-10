@@ -58,6 +58,15 @@ module RubyRooomySqlQueriesModule
   end
 
 
+=begin
+  a query for listing tables is transformed into a count of tables listed,
+  and then returned.
+=end
+  def db_query__show_tables__count
+    db_query_transform__count db_query__show_tables
+  end
+
+
 end
 
 
