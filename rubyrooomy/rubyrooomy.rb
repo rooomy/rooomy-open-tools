@@ -90,6 +90,14 @@ module RubyRooomySqlQueriesModule
   end
 
 
+=begin
+  just a sample example for psql_db_batch__db_queries_method
+=end
+  def psql_db_batch__drop_owned_current_user psql_db
+    batch = psql_db_batch__db_queries_method psql_db, :db_queries__drop_owned_current_user
+  end
+
+
 end
 
 
