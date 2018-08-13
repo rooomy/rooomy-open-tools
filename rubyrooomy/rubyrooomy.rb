@@ -95,6 +95,30 @@ module RubyRooomyFsShellCommandsModule
   end
 
 
+=begin
+ batch to fetch a file from an #aws_s3_path definition to
+ a local path. lists the path before and to validate the success
+=end
+  def fs_batch__fetch_from_aws_s3_to_local *args
+    aws_s3_path,
+      local_path,
+      local_path_is_dir,
+      reserved = args
+
+    aws_s3_batch = aws_s3_batch__fetch_file aws_s3_path, local_path
+
+    batch = [
+      (local_path_is_dir && ["mkdir", "-p", "#{local_path}" ] || nil),
+      ["ls", "-lh", "#{local_path}" ]
+    ] +
+    aws_s3_batch + [
+      ["ls", "-lh", "#{local_path}" ]
+    ]
+
+    batch.compact
+  end
+
+
 end
 
 
