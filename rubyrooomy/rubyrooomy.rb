@@ -90,6 +90,18 @@ module RubyRooomySqlQueriesModule
   end
 
 
+=begin 
+  returns for a given #psql_db definition, a batch having a
+  query list that counts the tables
+  in a database, drops all the tables owned by the current user,
+  and then counts those tables again, for validation.
+=end
+  def psql_db_batch__db_queries_method psql_db, db_queries_method
+    db_queries = send db_queries_method
+    batch = psql_db_batch__cli_or_queries psql_db, db_queries
+  end
+
+
 =begin
   just a sample example for psql_db_batch__db_queries_method
 =end
