@@ -53,6 +53,27 @@ module RubyRooomyFsShellCommandsModule
   end
 
 
+=begin
+   defines a sample #aws_s3_path__ having a file (not dir)
+=end
+  def aws_s3_path__sample_file
+    s3_bucket = "bucket_name"
+    s3_region = nil
+    s3_path = "path_to_file/file"
+    s3_path_is_dir = false
+    s3_exclude_pattern = nil
+    s3_include_pattern = nil
+    [
+      s3_bucket,
+      s3_region,
+      s3_path,
+      s3_path_is_dir,
+      s3_exclude_pattern,
+      s3_include_pattern,
+    ]
+  end
+
+
 end
 
 
