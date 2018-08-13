@@ -21,6 +21,38 @@
 module RubyRooomyFsShellCommandsModule
 
 
+=begin
+  defines a #aws_s3_batch__ that fetches a file or a directory
+  from an aws s3 bucket, given a #aws_s3_path__ definition
+=end
+  def aws_s3_batch__fetch_file *args
+    aws_s3_path,
+      local_path,
+      reserved = args
+
+    s3_bucket,
+      s3_region,
+      s3_path,
+      s3_path_is_dir,
+      s3_exclude_pattern,
+      s3_include_pattern,
+      reserved = aws_s3_path
+
+    batch = [
+      [
+        "aws s3",
+        s3_region && "--region #{s3_region}" || "",
+        "cp",
+        "s3://#{s3_bucket}/#{s3_path}",
+        "#{local_path}",
+        s3_path_is_dir && "--recursive" || "",
+        s3_exclude_pattern && "--exclude \"#{s3_exclude_pattern}\"" || "",
+        s3_include_pattern && "--include \"#{s3_include_pattern}\"" || "",
+      ],
+    ]
+  end
+
+
 end
 
 
