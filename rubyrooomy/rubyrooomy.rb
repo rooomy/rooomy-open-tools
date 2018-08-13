@@ -90,7 +90,7 @@ module RubyRooomySqlQueriesModule
   end
 
 
-=begin 
+=begin
   returns for a given #psql_db definition, a batch having a
   query list that counts the tables
   in a database, drops all the tables owned by the current user,
