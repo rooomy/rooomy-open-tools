@@ -12,6 +12,18 @@
 
 
 
+=begin
+  The purpose of this module is to offer functions that can
+  execute file system related commands in the command line
+  shell where ruby is running, like copying a file from aws,
+  or from another remote location.
+=end
+module RubyRooomyFsShellCommandsModule
+
+
+end
+
+
 =begin 
   The purpose of this module is to offer functions that generates
   or are used to generate sql queries.
