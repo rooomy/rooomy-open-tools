@@ -293,8 +293,8 @@ module RubyRooomyPgShellCommandsModule
   def exec__psql_db_batch__drop_owned_current_user *args
     psql_db = psql_db__sample_example
     drop_all_batch = psql_db_batch__db_queries_method psql_db, :db_queries__drop_owned_current_user
-    batches = drop_all_batch
-    batch_commands batches
+    batch = drop_all_batch
+    batch_commands batch
   end
 
 
