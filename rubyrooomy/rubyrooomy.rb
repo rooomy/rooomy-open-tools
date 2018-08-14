@@ -298,6 +298,20 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
+=begin
+ generates a batch of psql commads with "-f" option, for
+ each given db_dump_path.
+ if a db_dump_path is nil, will generate a command to enter the
+ cli of psql.
+=end
+  def psql_db_batch__cli_or_apply_dumps psql_db, db_dump_paths=[nil], options=""
+    batch = db_dump_paths.map { |db_dump_path|
+      cli = psql_db_command__cli psql_db
+      [cli, db_dump_path && " #{options} -f #{quoted_shell_param db_dump_path}"]
+    }
+  end
+
+
 end
 
 
