@@ -312,6 +312,19 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
+=begin
+  just a sample example of a #db_dumps__ definition, as required by
+  #psql_db_batch__cli_or_apply_dumps
+=end
+  def db_dumps__sample_example *args
+    [
+      "install/10.0_to_10.1.sql",
+      "/root/hack_10.0_to_10.1.sql",
+    ]
+
+  end
+
+
 end
 
 
