@@ -366,6 +366,16 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
+=begin
+  Generates a pg_dump command to connect to a database,
+  given a psql_db definition, which is an array having
+  [db_name, db_user, db_password, db_host]
+=end
+  def psql_db_command__dump psql_db
+   psql_db_command__program "pg_dump", psql_db
+  end
+
+
 end
 
 
