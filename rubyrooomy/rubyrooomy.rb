@@ -238,13 +238,7 @@ module RubyRooomyPgShellCommandsModule
   [db_name, db_user, db_password, db_host]
 =end
   def psql_db_command__cli psql_db
-    shell_params_psql_db = quoted_shell_params psql_db
-    db_name,
-      db_user,
-      db_password,
-      db_host,
-      reserved = shell_params_psql_db
-      psql_command = "PGPASSWORD=#{db_password} psql  -h #{db_host} -U #{db_user} #{db_name} "
+   psql_db_command__program "psql", psql_db
   end
 
 
