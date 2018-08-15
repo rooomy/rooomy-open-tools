@@ -339,6 +339,21 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
+=begin
+  a sample example of #psql_db_batch_generator__, that can be used
+  to create a #psql_db_batch__ definition equivalent of the one
+  executed by #exec__psql_db_batch__cli_or_apply_dumps
+=end
+  def psql_db_batch_generator__sample_example
+    [
+      :psql_db_batch__cli_or_apply_dumps,
+      psql_db__sample_example,
+      db_dumps__sample_example,
+      "ON_ERROR_STOP=off"
+    ]
+  end
+
+
 end
 
 
