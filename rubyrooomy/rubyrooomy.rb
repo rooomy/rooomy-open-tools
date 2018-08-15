@@ -494,6 +494,16 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+   execs a #batch_generator__ definition
+=end
+  def exec__batch_generator batch_generator
+    send_args = (send batch_generator) rescue  batch_generator
+    batch = send *send_args
+    batch_commands batch
+  end
+
+
 end
 
 
