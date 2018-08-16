@@ -12,6 +12,16 @@
 
 
 
+=begin 
+  The purpose of this module is to offer functions that can
+  manipulate json structures.
+=end
+module RubyRooomyJsonModule
+
+
+end
+
+
 =begin
   The purpose of this module is to offer functions that can
   execute file system related commands in the command line
