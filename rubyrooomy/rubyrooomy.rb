@@ -35,7 +35,8 @@ module RubyRooomyJsonModule
 =begin
   prints a hash or a string having json contents
 =end
-  def puts__json_pretty *args
+  def puts__json_pretty args
+    args = containerize args
     puts json_string__pretty *args
   end
 
