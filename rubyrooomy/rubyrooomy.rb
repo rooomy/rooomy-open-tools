@@ -25,10 +25,22 @@ module RubyRooomyJsonModule
 =end
   def json_string__pretty hash_or_json_string
     require 'json'
-    json_hash = (![Hash, Array].index hash_or_json_string.class) && (
-      JSON.load hash_or_json_string
-      ) || hash_or_json_string
-    JSON.pretty_generate json_hash
+    try_to_generate = begin
+      [(JSON.pretty_generate hash_or_json_string), nil]
+    rescue => e
+      [nil, e]
+    end
+
+    return try_to_generate.first unless try_to_generate.last
+
+    try_to_generate_2 = begin
+      [(JSON.pretty_generate JSON.load hash_or_json_string), nil]
+    rescue => e
+      # raise the first exception instead
+      raise try_to_generate.last
+      [nil, e]
+    end
+    try_to_generate_2.first
   end
 
 
