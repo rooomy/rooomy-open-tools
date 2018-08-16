@@ -12,7 +12,7 @@
 
 
 
-=begin 
+=begin
   The purpose of this module is to offer functions that can
   manipulate json structures.
 =end
