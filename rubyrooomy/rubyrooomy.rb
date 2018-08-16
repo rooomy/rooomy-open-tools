@@ -20,11 +20,12 @@ module RubyRooomyJsonModule
 
 
 =begin
-  returns a hash or a string having json contents
+  returns a string having json contents, from a string having json
+  contents or a structure known to be convertible to JSON.
 =end
   def json_string__pretty hash_or_json_string
     require 'json'
-    json_hash = (!hash_or_json_string.is_a?(Hash)) && (
+    json_hash = (![Hash, Array].index hash_or_json_string.class) && (
       JSON.load hash_or_json_string
       ) || hash_or_json_string
     JSON.pretty_generate json_hash
