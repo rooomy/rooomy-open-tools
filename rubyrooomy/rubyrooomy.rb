@@ -967,6 +967,8 @@ end
 # needed).
 module RubyRooomyModule
 
+  include RubyRooomyJsonModule
+
   include RubyRooomyShellCommandsModule
 
   include RubyRooomyGemModule
