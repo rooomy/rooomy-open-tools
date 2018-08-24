@@ -12,6 +12,17 @@
 
 
 
+=begin 
+  The purpose of this module is to offer functions that can
+  provide common regexes and other common string manipulation
+  functions
+=end
+module RubyRooomyStringsModule
+
+
+end
+
+
 =begin
   The purpose of this module is to offer functions that can
   manipulate json structures.
