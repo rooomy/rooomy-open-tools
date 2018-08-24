@@ -992,6 +992,8 @@ end
 # needed).
 module RubyRooomyModule
 
+  include RubyRooomyStringsModule
+
   include RubyRooomyJsonModule
 
   include RubyRooomyShellCommandsModule
