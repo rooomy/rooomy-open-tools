@@ -20,6 +20,14 @@
 module RubyRooomyStringsModule
 
 
+=begin
+  regex that can be used to scan for UUID (v4) in strings
+=end
+  def regex__uuid_v4
+    /[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}/
+  end
+
+
 end
 
 
