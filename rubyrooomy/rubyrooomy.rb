@@ -688,6 +688,13 @@ module RubyRooomyArrayOfHashesModule
   end
 
 
+  # retrieve, in the array of hashes h, the ones matching k == v, selecting only one column
+  def  select_columns_by_kv  h, k, v, columns = nil, method_name = :filter_by_kv
+   filtered =  method(method_name).call h, k, v
+   columns && filtered.map {|h1| columns.map {|c| [c, h1[c]] }.to_h} || (!columns) && filtered
+  end
+
+
   # call keys for each element of the array h
   #  example: map_to_keys h, :fetch, ["id", "default_id"] fetches all ids
   def map_to_keys h, method_name = :keys, method_args = nil
