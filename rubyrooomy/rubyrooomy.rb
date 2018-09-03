@@ -672,6 +672,11 @@ module RubyRooomyArrayOfHashesModule
   end
 
 
+  def filter_by_k_matching_keys h, k, v
+    h.map  {|h1| (h1.keys.grep k).reduce(:+) && h1 || nil }.compact
+  end
+
+
   def filter_by_v_matching_values h, k, v
     h.map  {|h1| (h1.values.grep v).reduce(:+) && h1 || nil }.compact
   end
