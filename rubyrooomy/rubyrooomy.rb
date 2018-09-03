@@ -482,6 +482,57 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
+=begin
+  defines #psql_db_dump_replacer_batch_generator__,
+  out of a #psql_db_dump_replacer__ definition,
+  that can be used
+  to create a #psql_db_batch__ which backups the
+  current contents of #psql_db__ , into each of the
+  files in db_dumps__backup_desired_path,
+  drops all of its tables (by current user), and then
+  reads each of the database dumps from
+  db_dumps__to_be_applied, into the same #psql_db__.
+
+  Just give this method name (or returned array) to
+  #exec__batch_generator , with the #psql_db_- definition, e.g:
+  exec__batch_generator [ :psql_db_dump_replacer_batch_generator__from, :psql_db_dump_replacer__for_psql_db__sample_example]
+=end
+  def psql_db_dump_replacer_batch_generator__from psql_db_dump_replacer
+    psql_db_dump_replacer = (
+      send *psql_db_dump_replacer
+    ) rescue psql_db_dump_replacer
+
+    psql_db,
+      db_dumps__backup_desired_path,
+      db_dumps__to_be_applied,
+      psql_dump_apply_options = psql_db_dump_replacer
+
+    batch_generators = [
+      [
+        :psql_db_batch__cli_or_generate_dumps,
+        psql_db,
+        db_dumps__backup_desired_path,
+        "",
+      ],
+      [
+        :psql_db_batch__db_queries_method,
+        psql_db,
+        :db_queries__drop_owned_current_user,
+      ],
+      [
+        :psql_db_batch__cli_or_apply_dumps,
+        psql_db,
+        db_dumps__to_be_applied,
+        psql_dump_apply_options,
+      ],
+    ]
+
+    batch_generators.map {|batch_generator|
+      batch__from_batch_generator batch_generator
+    }.flatten 1
+  end
+
+
 end
 
 
