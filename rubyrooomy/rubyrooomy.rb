@@ -750,6 +750,14 @@ module RubyRooomyArrayOfHashesModule
     h.map  {|h1| (h1[k]  == v) && h1 || nil }.compact
   end
 
+=begin
+  Just like filter_by_kv, but test if the values for the k matches
+  (and not equals) v
+=end
+  def filter_by_kv_match h, k, v
+    h.map  {|h1| (h1[k].match v rescue nil) && h1 || nil }.compact
+  end
+
   # retrieve, in the array of hashes h, the ones having v in values. k is by now ignored, but it may be used in the future (pass nil) 
   # laternote: used only as helper for  select_column_by_kv
   def filter_by_v_in_values h, k, v
