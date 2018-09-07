@@ -20,6 +20,20 @@
 module RubyRooomyMetaModule
 
 
+=begin
+  transforms a definition into an Array.
+  currently, tests if a definition is defined
+  by a method, and call it. otherwise, just
+  returns (since the only two ways of
+  creating a definition is implementing
+  an array or a method), but this can
+  be extended.
+=end
+  def array__from definition
+    send definition rescue definition
+  end
+
+
 end
 
 
