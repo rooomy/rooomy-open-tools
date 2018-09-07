@@ -568,6 +568,7 @@ end
 =end
 module RubyRooomyShellCommandsModule
 
+   include RubyRooomyFsShellCommandsModule
    include RubyRooomyPgShellCommandsModule
 
 =begin
