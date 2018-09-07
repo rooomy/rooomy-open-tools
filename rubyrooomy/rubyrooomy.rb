@@ -12,6 +12,17 @@
 
 
 
+=begin
+  The purpose of this module is to offer
+  functions that serves mostly to implement
+  common designs/code style of this project.
+=end
+module RubyRooomyMetaModule
+
+
+end
+
+
 =begin 
   The purpose of this module is to offer functions that can
   provide common regexes and other common string manipulation
