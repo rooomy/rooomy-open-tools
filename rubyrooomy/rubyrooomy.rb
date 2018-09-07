@@ -1118,11 +1118,290 @@ require '#{gem_name}'
 end
 
 
+=begin
+ this module contains functions that are not supposed
+ to be merged here -- they're likely to go in other
+ repositories
+=end
+module RubyRooomyDevelopmentModule
+
+
+=begin
+  Functions to itools: NEVER COMMIT THEM.
+
+  IF THIS IS IN MERGE, IT CANNOT GO PUBLIC
+=end
+
+=begin
+  #psql_db__ definition
+=end
+  def psql_db__generic_rsa_owl *args
+    db_name="generic"
+    db_user="rsa"
+    db_host="dev02-eu-west-1.loftweb.nl"
+    db_password="tijolo22"
+    [db_name, db_user, db_password, db_host]
+  end
+
+
+=begin
+  #psql_db__ definition
+=end
+  def psql_db__dev_backend2_mouse *args
+    db_name="dev_backend2"
+    db_user="dev_backend2"
+    db_host="mouse.cedh27w4fjqm.eu-west-1.rds.amazonaws.com"
+    db_password="ariba"
+    [db_name, db_user, db_password, db_host]
+  end
+
+
+=begin
+  #db_dumpbs__ definition
+=end
+  def db_dumps__upgrade_backend_2_10_to_2_11 *args
+    [
+      "/home/rsa/rooomy-backend/packaging/install/2.10.0.0_to_2.10.0.1.sql",
+      "/home/rsa/rooomy-backend/packaging/install/2.10.0.1_to_2.10.1.0.sql",
+      "/home/rsa/rooomy-backend/packaging/install/2.10.1.0_to_2.11.0.0.sql",
+    ]
+  end
+
+
+=begin
+  deprecated style. Just generate a batch to be executed with
+  #exec__batch_generator, like
+  # psql_db_batch_generator__generate_dumps_of_dev_backend2_mouse
+   deprecated style
+   upgrade the #psql_db__generic_rsa_owl db from 2.10.0 to 2.11.0
+=end
+  def exec__upgrade_backend_2_10_to_2_11_batch *args
+    psql_db = psql_db__generic_rsa_owl
+    db_dumps = db_dumps__upgrade_backend_2_10_to_2_11
+    batch = psql_db_batch__cli_or_apply_dumps psql_db, db_dumps, "ON_ERROR_STOP=off"
+    batch_commands batch
+  end
+
+
+=begin
+  deprecated style. Just generate a batch to be executed with
+  #exec__batch_generator, like
+  # psql_db_batch_generator__generate_dumps_of_dev_backend2_mouse
+  execs a batch that fetches the last db backup from jenkins
+=end
+  def exec__aws_s3_batch_fetch_db_dump_last_jenkins_backup local_path = "last_jenkins_dump"
+    # aws_s3_path = aws_s3_path__rooomy_backend_dev_2_10_0_1_tgz
+    aws_s3_path = aws_s3_path__last_jenkins_backup
+    aws_s3_batch = fs_batch__fetch_from_aws_s3_to_local(
+      aws_s3_path,
+      local_path,
+      :local_path_is_dir
+    )
+    batch = []
+    batch += aws_s3_batch
+    batch_commands batch
+  end
+
+
+=begin
+  Returns a batch for pg_restore command for
+  generating a restore file
+  out of a postgresql dump file.
+=end
+  def pg_restore_batch__output_file *args
+    local_path,
+      output_file_path,
+      reserved = args
+    batch = [
+      [
+        "ls",
+        "-lh",
+        "#{local_path}",
+      ],
+      [
+        "pg_restore",
+        "-l",
+        "#{local_path}",
+        "-f",
+        "#{output_file_path}",
+      ],
+      [
+        "ls",
+        "-lh",
+        "#{output_file_path}",
+      ],
+    ]
+  end
+
+
+=begin
+=end
+  def exec__pg_restore_batch__last_jenkins_backup
+    local_path = "last_jenkins_dump/*"
+    output_file_path = "dump.temp-#{time_now_hash}"
+    batch = pg_restore_batch__output_file(
+      local_path,
+      output_file_path
+    )
+    batch_commands batch
+  end
+
+
+=begin
+  defines #psql_db_batch_generator__, that can be used
+  to create a #psql_db_batch__ which drops all the
+  tables for the current user in the #psql_db__ defined
+  by  #psql_db__dev_backend2_mouse
+
+  Just give this method name (or returned array) to
+  #exec__batch_generator
+=end
+  def psql_db_batch_generator__drop_all_from_dev_backend2_mouse
+    [
+      :psql_db_batch__db_queries_method,
+      psql_db__dev_backend2_mouse,
+      :db_queries__drop_owned_current_user,
+    ]
+  end
+
+
+=begin
+  defines #psql_db_batch_generator__, that can be used
+  to create a #psql_db_batch__ which counts the
+  tables for the current user in the #psql_db__ defined
+  by  #psql_db__dev_backend2_mouse
+
+  Just give this method name (or returned array) to
+  #exec__batch_generator
+=end
+  def psql_db_batch_generator__count_tables_on__dev_backend2_mouse
+    [
+      :psql_db_batch__db_queries_method,
+      psql_db__dev_backend2_mouse,
+      [
+        db_query_transform__count(db_query__show_tables)
+      ],
+    ]
+  end
+
+
+=begin
+  defines #psql_db_batch_generator__, that can be used
+  to create a #psql_db_batch__ which reads a database
+  dump from "/tmp/database_dump" into the #psql_db__ defined
+  by  #psql_db__dev_backend2_mouse
+
+  Just give this method name (or returned array) to
+  #exec__batch_generator
+=end
+  def psql_db_batch_generator__apply_dumps_on_dev_backend2_mouse
+    [
+      :psql_db_batch__cli_or_apply_dumps,
+      psql_db__dev_backend2_mouse,
+      [
+        "/tmp/database_dump",
+      ],
+      "ON_ERROR_STOP=off"
+    ]
+  end
+
+
+=begin
+  defines #psql_db_batch_generator__, that can be used
+  to create a #psql_db_batch__ which dumps database
+  defined by  #psql_db__dev_backend2_mouse into the
+  file "/tmp/database_dump"
+
+  Just give this method name (or returned array) to
+  #exec__batch_generator
+=end
+  def psql_db_batch_generator__generate_dumps_of_dev_backend2_mouse
+    [
+      :psql_db_batch__cli_or_generate_dumps,
+      psql_db__dev_backend2_mouse,
+      [
+        "/tmp/database_dump",
+      ],
+      ""
+    ]
+  end
+
+
+=begin
+  defines a #aws_s3_path__ having the location of
+  last successful autotests dump in jenkins (DEV-1026)
+=end
+  def aws_s3_path__last_jenkins_backup
+    s3_bucket = "rooomy-backend-dev"
+    s3_region = "eu-west-1"
+    s3_path = "autotests-reference-dbdumps/jenkins_backups/last"
+    s3_path_is_dir = true
+    s3_exclude_pattern = nil
+    s3_include_pattern = nil
+    [
+      s3_bucket,
+      s3_region,
+      s3_path,
+      s3_path_is_dir,
+      s3_exclude_pattern,
+      s3_include_pattern,
+    ]
+  end
+
+
+=begin
+  defines a #aws_s3_path__ having the location of
+  the release package roOomy-2.10.0.1.tgz in aws s3
+=end
+  def aws_s3_path__rooomy_backend_dev_2_10_0_1_tgz
+    s3_bucket = "rooomy-backend-dev"
+    s3_region = "eu-west-1"
+    s3_path = "backend-releases/roOomy-2.10.0.1.tgz"
+    s3_path_is_dir = false
+    s3_exclude_pattern = nil
+    s3_include_pattern = nil
+    [
+      s3_bucket,
+      s3_region,
+      s3_path,
+      s3_path_is_dir,
+      s3_exclude_pattern,
+      s3_include_pattern,
+    ]
+  end
+
+
+=begin
+  deprecated style. Just generate a batch to be executed with
+  #exec__batch_generator, like
+  # psql_db_batch_generator__generate_dumps_of_dev_backend2_mouse
+
+  fetches the relase package roOomy-2.10.0.1.tgz from the backend
+  bucket on aws
+=end
+  def exec__aws_s3_batch_fetch_file_2_10_0_1_tgz
+    aws_s3_path = aws_s3_path__rooomy_backend_dev_2_10_0_1_tgz
+    local_path =  "temp-#{time_now_hash}"
+    aws_s3_batch = fs_batch__fetch_from_aws_s3_to_local(
+      aws_s3_path,
+      local_path,
+      :local_path_is_dir
+    )
+    batch = []
+    batch += aws_s3_batch
+    batch_commands batch
+  end
+
+
+end
+
 # Main module, basically a namespace
 # for RubyRooomy (not a module for
 # making serialization easier if ever
 # needed).
 module RubyRooomyModule
+
+  include RubyRooomyMetaModule
 
   include RubyRooomyStringsModule
 
