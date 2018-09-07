@@ -705,6 +705,14 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+  Just an alias with a more modern name for  #batch_commands
+=end
+  def exec__batch *args
+    batch_commands *args
+  end
+
+
 end
 
 
