@@ -831,6 +831,10 @@ module RubyRooomyArrayOfHashesModule
 end
 
 
+=begin
+  the purpose of this module is to extend the
+  class Git::Base of the gem 'git'
+=end
 module RubyRooomyGitBaseModule
 
   require 'git'
