@@ -1402,19 +1402,12 @@ end
 module RubyRooomyModule
 
   include RubyRooomyMetaModule
-
   include RubyRooomyStringsModule
-
   include RubyRooomyJsonModule
-
   include RubyRooomyShellCommandsModule
-
   include RubyRooomyGemModule
-
   include RubyRooomyDefineContextsModule
-
   include RubyRooomyGitBaseModule
-
   include RubyRooomyArrayOfHashesModule
 
 end
