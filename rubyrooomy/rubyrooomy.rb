@@ -24,13 +24,17 @@ module RubyRooomyMetaModule
   transforms a definition into an Array.
   currently, tests if a definition is defined
   by a method, and call it. otherwise, just
-  returns (since the only two ways of
+  returns whatever definition inside an Array
+  (since the only two ways of
   creating a definition is implementing
   an array or a method), but this can
   be extended.
+  If definition was already an Array, ensure
+  that dimensions aren't changed.
 =end
   def array__from definition
-    send definition rescue definition
+    a = (send definition rescue definition)
+    [ a ].flatten 1
   end
 
 
