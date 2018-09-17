@@ -763,6 +763,15 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+  returns a command string exactly at is expected to
+  be run in the shell.
+=end
+  def command_shell_string__from call, *args
+    "#{call} #{args.join " "}"
+  end
+
+
 end
 
 
