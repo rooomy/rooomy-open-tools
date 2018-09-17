@@ -772,6 +772,17 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+  returns a command string exactly at is expected to
+  be run in the shell.
+=end
+  def script__from batch
+    batch.map { |call, *args|
+      command_shell_string__from call, *args
+    }.join(" ;\n")
+  end
+
+
 end
 
 
