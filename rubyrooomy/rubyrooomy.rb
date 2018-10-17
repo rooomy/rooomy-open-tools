@@ -522,6 +522,13 @@ module RubyRooomyPgShellCommandsModule
   reads each of the database dumps from
   db_dumps__to_be_applied, into the same #psql_db__.
 
+  if the #psql_db_dump_replacer__ definition has
+  a second #psql_db__ definition at its 5th position
+  (index 4), db_dumps__to_be_applied will be filled
+  with the contents of that database. Otherwise,
+  it is supposed that db_dumps__to_be_applied already
+  exist in the filesystem.
+
   Just give this method name (or returned array) to
   #exec__batch_generator , with the #psql_db_- definition, e.g:
   exec__batch_generator [ :psql_db_dump_replacer_batch_generator__from, :psql_db_dump_replacer__for_psql_db__sample_example]
