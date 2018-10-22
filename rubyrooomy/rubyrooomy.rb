@@ -635,10 +635,13 @@ module RubyRooomyShellCommandsModule
   returns only the part of @results that corresponds to the
   commands executed during its execution.
 =end
-  def batch_commands batch
+  def batch_commands batch, admitted_errors=Float::INFINITY
+    amount_of_errors=0
     results_before = results.dup
-    batch.map { |call, *args|
+    batch.take_while{ |call, *args|
       batch_command call, *args
+      !(results.last[:success]) && (amount_of_errors += 1)
+      amount_of_errors <= admitted_errors
     }
     results  - results_before
   end
