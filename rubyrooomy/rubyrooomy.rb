@@ -632,6 +632,10 @@ module RubyRooomyShellCommandsModule
   and output (stdout joined with stderr) in the
   last entries of the class variable @results
 
+  accepts as parameter #admitted_errors, a number
+  stating how many errors can be ignored (infinite
+  by default).
+
   returns only the part of @results that corresponds to the
   commands executed during its execution.
 =end
