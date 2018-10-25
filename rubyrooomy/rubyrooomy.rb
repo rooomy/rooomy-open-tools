@@ -1225,6 +1225,7 @@ end
 module RubyRooomyModule
 
   include RubyRooomyMetaModule
+  include RubyRooomyPgGemModule
   include RubyRooomyStringsModule
   include RubyRooomyJsonModule
   include RubyRooomyShellCommandsModule
