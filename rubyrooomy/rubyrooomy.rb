@@ -367,7 +367,15 @@ module RubyRooomyPgShellCommandsModule
     db_user="any_user"
     db_host="localhost"
     db_password="onlyNSAknows"
-    [db_name, db_user, db_password, db_host]
+    db_port = nil
+
+    [
+      db_name,
+      db_user,
+      db_password,
+      db_host,
+      db_port,
+    ]
   end
 
 
