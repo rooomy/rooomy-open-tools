@@ -41,6 +41,19 @@ module RubyRooomyMetaModule
 end
 
 
+=begin
+  The purpose of this module is to offer functions that can
+  simplify the use of the gem 'pg'
+=end
+module RubyRooomyPgGemModule
+
+
+  require 'pg'
+
+
+end
+
+
 =begin 
   The purpose of this module is to offer functions that can
   provide common regexes and other common string manipulation
