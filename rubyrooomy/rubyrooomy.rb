@@ -50,6 +50,41 @@ module RubyRooomyPgGemModule
 
   require 'pg'
 
+=begin
+ defines a #pg_gem_conn__ definition from a
+ #psql_db__ definition.
+ A #pg_gem_conn__ is a #psql_db__ but having
+ the 5th element set as the object returned
+ by PG::Connection.open() (if still not set)
+=end
+  def pg_gem_conn__from psql_db
+    db_name,
+      db_user,
+      db_password,
+      db_host,
+      db_port,
+      db_connection = array__from psql_db
+
+    db_port ||= 5432
+
+    require 'socket'
+    db_connection ||= PG::Connection.open(
+      :hostaddr => (IPSocket.getaddress db_host),
+      :port=> db_port,
+      :dbname=> db_name,
+      :user=> db_user,
+      :password => db_password,
+    )
+    [
+      db_name,
+      db_user,
+      db_password,
+      db_host,
+      db_port,
+      db_connection,
+    ]
+  end
+
 
 end
 
