@@ -368,6 +368,7 @@ module RubyRooomyPgShellCommandsModule
     db_host="localhost"
     db_password="onlyNSAknows"
     db_port = nil
+    db_connection = nil
 
     [
       db_name,
@@ -375,6 +376,7 @@ module RubyRooomyPgShellCommandsModule
       db_password,
       db_host,
       db_port,
+      db_connection,
     ]
   end
 
