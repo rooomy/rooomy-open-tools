@@ -74,7 +74,7 @@ module RubyRooomyPgGemModule
       :dbname=> db_name,
       :user=> db_user,
       :password => db_password,
-    )
+    ) rescue nil
     [
       db_name,
       db_user,
