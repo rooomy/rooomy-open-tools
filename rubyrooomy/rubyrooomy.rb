@@ -89,6 +89,16 @@ module RubyRooomyPgGemModule
 end
 
 
+=begin
+  The purpose of this module is to offer functions that can
+  provide functions to manipulate the file system
+=end
+module RubyRooomyFilesModule
+
+
+end
+
+
 =begin 
   The purpose of this module is to offer functions that can
   provide common regexes and other common string manipulation
