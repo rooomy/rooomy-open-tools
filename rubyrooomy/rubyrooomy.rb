@@ -1271,6 +1271,7 @@ module RubyRooomyModule
 
   include RubyRooomyMetaModule
   include RubyRooomyPgGemModule
+  include RubyRooomyFilesModule
   include RubyRooomyStringsModule
   include RubyRooomyJsonModule
   include RubyRooomyShellCommandsModule
