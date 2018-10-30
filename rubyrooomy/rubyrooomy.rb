@@ -156,6 +156,20 @@ module RubyRooomyStringsModule
   end
 
 
+=begin
+ give it to #file_modifications__from
+=end
+  def file_modifications_plan__sample
+    timestamp = time__now_strftime_default
+    [
+      [  # first modification:
+        "/tmp/file_modifications_plan__sample.#{timestamp}",
+        "Adding timestamp=#{timestamp}\n"
+      ],
+    ]
+  end
+
+
 end
 
 
