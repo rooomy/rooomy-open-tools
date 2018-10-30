@@ -96,6 +96,47 @@ end
 module RubyRooomyFilesModule
 
 
+=begin
+ Generates a #file_modifications definition out of a
+ #file_modifications_plan one. Actually execs the
+ planned modifications.
+
+ A #file_modifications_plan is an array of
+ #file_modification_plan. A #file_modification_plan
+ has at least two elements: the first, being the file
+ path to the file, and the second, the string to
+ be appended to that file.
+ A #file_modifications is an array of #file_modification.
+ A #file_modification is an array with at least 4 elements,
+ being the 3 initials one just like a #file_modification_plan,
+ and the 4th, the number of files written after the
+ modification.
+
+
+ examples:
+   file_modifications__from [[ "/tmp/my_file", "add this text" ]]
+   file_modifications__from file_modifications_plan__sample
+=end
+  def file_modifications__from file_modifications_plan
+    file_modifications_plan.map{|file_modification_plan|
+      p file_modification_plan
+      file,
+        file_addition = array__from(file_modification_plan)
+      bytes_written = File.write(
+        file,
+        file_addition,
+        mode: "a"
+      )
+      [
+        file,
+        file_addition,
+        reserved,
+        bytes_written,
+      ]
+    }
+  end
+
+
 end
 
 
