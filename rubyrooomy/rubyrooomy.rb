@@ -128,6 +128,17 @@ module RubyRooomySQLModule
   end
 
 
+=begin
+ sample #db_queries_operate definition (ie, samples of
+ #db_query_operate___ definition). Here, both
+ rescursive and non rescursive versions were defined.
+=end
+  def db_queries_operate__samples
+    db_queries_operate__samples_non_recursive +
+    db_queries_operate__samples_recursive
+  end
+
+
 end
 
 
