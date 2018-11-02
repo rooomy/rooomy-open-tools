@@ -276,6 +276,7 @@ module RubyRooomyPgGemModule
 
 
   require 'pg'
+  include RubyRooomyArrayOfHashesModule
 
 =begin
  defines a #pg_gem_conn__ definition from a
