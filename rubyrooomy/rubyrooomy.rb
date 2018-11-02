@@ -1509,9 +1509,9 @@ end
 
 
 # Main module, basically a namespace
-# for RubyRooomy (not a module for
-# making serialization easier if ever
-# needed).
+# for RubyRooomy. Consists basically
+# of the inclusion of all available
+# modules.
 module RubyRooomyModule
 
   include RubyRooomyMetaModule
