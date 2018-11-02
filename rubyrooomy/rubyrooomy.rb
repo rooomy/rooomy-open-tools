@@ -1018,6 +1018,35 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+ keeps the state of the current running batch submitted
+ to #batch_commands or #exec__batch, for being able
+ to resume in case of failures.
+=end
+  def working_batch
+    @working_batch
+  end
+
+
+=begin
+ resumes execution of the last batch submitted
+ to #batch_commands or #exec__batch.
+ Only effective if they have stopped due to
+ unsucessful commands (commands that in bash
+ returned false).
+
+ Note that the parameter #admitted_errors and
+ any future parameter added to #batch_comands or
+ #exec__batch, are not stored, falling off to the
+ defaults, unless they're given in the same order
+ (clarifying  that the batch argument is no longer
+ given).
+=end
+  def exec__working_batch *args
+    send :exec__batch, @working_batch, *args
+  end
+
+
 end
 
 
