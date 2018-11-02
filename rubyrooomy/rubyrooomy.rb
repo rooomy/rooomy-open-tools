@@ -944,6 +944,19 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+  default behaviour for batches:
+  . infinity number of errors admitted (won't stop);
+  . runs on the operating system underlying shell.
+=end
+  def batch_controller__default
+    [
+      Float::INFINITY,
+      :batch_command,
+    ]
+  end
+
+
 end
 
 
