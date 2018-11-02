@@ -733,6 +733,7 @@ module RubyRooomyShellCommandsModule
 
    include RubyRooomyFsShellCommandsModule
    include RubyRooomyPgShellCommandsModule
+   include RubyRooomyArrayOfHashesModule
 
 =begin
   executes a command in a shell, storing
