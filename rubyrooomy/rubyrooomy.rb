@@ -605,6 +605,8 @@ module RubyRooomyPgShellCommandsModule
  cli of psql.
 =end
   def psql_db_batch__cli_or_generate_dumps psql_db, db_dump_paths=[nil], options=""
+    psql_db = array__from(psql_db)
+    db_dump_paths = array__from(db_dump_paths)
     batch = db_dump_paths.map { |db_dump_path|
       cli = psql_db_command__cli psql_db
       pg_dump = psql_db_command__dump psql_db
