@@ -372,6 +372,29 @@ module RubyRooomyPgGemModule
   end
 
 
+=begin
+ generates a #exec__ definition (ie, an array of hashes
+ containing information about how went the execution of
+ commands) out of a #exec_plan, which has a #pg_gem_batch
+ definition as a first element and a #batch_controller
+ as second).
+
+ example:
+   pg_gem_exec__from [ pg_gem_batch__from(psql_db__sample_example,  (db_query_select__from ["table"])) ]
+=end
+  def pg_gem_exec__from pg_gem_exec_plan
+    batch,
+      batch_controller = array__from(pg_gem_exec_plan)
+    batch_controller = array__from(batch_controller)
+    batch_controller[1] =  batch_controller__pg_gem_default[1]
+    exec__from [
+    # [
+      batch,
+      batch_controller
+    ]
+  end
+
+
 end
 
 
