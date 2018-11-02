@@ -746,7 +746,7 @@ module RubyRooomyShellCommandsModule
     @results ||= []
     command = "#{call} #{args.join " "}"
     stdin, stdoutanderr, wait_thr =  Open3.popen2e(command)
-     @results.push({
+    @results.push({
         :time => Time.now.inspect,
         :call => call,
         :args => args,
@@ -755,6 +755,7 @@ module RubyRooomyShellCommandsModule
         :output => (stdoutanderr.entries.join "\n"),
         :batch_command_method => "batch_command",
       })
+    @results
   end
 
 
