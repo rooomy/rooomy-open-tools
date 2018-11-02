@@ -149,6 +149,8 @@ module RubyRooomySQLModule
    db_query_operate__from [["A", "B"]]
    db_query_operate__from [["A", "B"], "="]
    db_query_operate__from [["A", "B"], "<"]
+   db_query_operate__from [["A", "B"], "AND", :recursive]
+   db_query_operate__from [[ [["C", "D"], ">"]   , "B"], "AND", :recursive]
    db_query_operate__from db_queries_operate__samples[0]
    db_query_operate__from db_queries_operate__samples_recursive[0]
    db_query_operate__from db_queries_operate__samples_non_recursive[0]
