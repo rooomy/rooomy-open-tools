@@ -22,8 +22,9 @@ module RubyRooomyMetaModule
 
 =begin
   transforms a definition into an Array.
-  currently, tests if a definition is defined
-  by a method, and call it. otherwise, just
+  tests if a definition is defined
+  by a method, and call it (if not a method from
+  Kernel). otherwise, just
   returns whatever definition inside an Array
   (since the only two ways of
   creating a definition is implementing
@@ -33,7 +34,12 @@ module RubyRooomyMetaModule
   that dimensions aren't changed.
 =end
   def array__from definition
-    a = (send definition rescue definition)
+    kernel_method = (Kernel.respond_to? definition) rescue nil
+    kernel_method && (
+      a = definition
+    )  || (!kernel_method)  && (
+      a = (send definition rescue definition)
+    )
     [ a ].flatten 1
   end
 
