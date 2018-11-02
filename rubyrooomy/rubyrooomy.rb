@@ -930,6 +930,18 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+ returns the @results variable, and filtering it
+ down for the hashes to have only the specified
+ keys (or all, if keys = nil).
+=end
+  def results__select_keys keys=nil, results=nil
+    @results ||=  []
+    results ||= @results
+    select_columns_by_kv_as_arrays(results, nil, nil, keys)
+  end
+
+
 end
 
 
