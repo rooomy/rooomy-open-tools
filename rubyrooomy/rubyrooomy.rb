@@ -782,11 +782,13 @@ module RubyRooomyShellCommandsModule
     batch_command_method ||= :batch_command
     amount_of_errors=0
     results_before = results.dup
-    batch.take_while{ |call, *args|
-      batch_command call, *args
+    @working_batch = batch
+    non_executed_batch_part = batch.drop_while{ |call, *args|
+      to_method(batch_command_method).call call, *args
       !(results.last[:success]) && (amount_of_errors += 1)
       amount_of_errors <= admitted_errors
     }
+    @working_batch = non_executed_batch_part
     results  - results_before
   end
 
