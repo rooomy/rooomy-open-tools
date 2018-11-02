@@ -752,7 +752,8 @@ module RubyRooomyShellCommandsModule
         :args => args,
         :command => command,
         :success => wait_thr.value.success?,
-        :output => (stdoutanderr.entries.join "\n")
+        :output => (stdoutanderr.entries.join "\n"),
+        :batch_command_method => "batch_command",
       })
   end
 
