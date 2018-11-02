@@ -313,6 +313,42 @@ module RubyRooomyPgGemModule
   end
 
 
+=begin
+  executes a command by sending the command via
+  a function of a object ("exec" by default, since
+  the expected object is a PG::Connection), storing
+  results, timestamp, command, args, return value,
+  and output (stdout joined with stderr) in the
+  last entry of the class variable @results
+=end
+  def batch_command__pg_gem call, *args
+    @results ||= []
+    call = array__from call
+    call = call.first
+    exec_method ||= "exec"
+    command = args.join " "
+    exec_rv, exception = begin
+      e = !(call.respond_to? exec_method) && NoMethodError.new("undefined method `#{exec_method}' for #{call.class}")
+      (e && [nil, e] || [(call.send exec_method, command), nil])
+      rescue => e2
+      [nil, e2]
+      end
+    exec_rv_entries = exec_rv.entries rescue exec_rv
+    exception_info = (exception_info_base [exception]) rescue []
+    @results.push({
+        :time => Time.now.inspect,
+        :call => call,
+        :args => args,
+        :command => command,
+        :success => exception_info[2].negate_me,
+        :output => exec_rv_entries,
+        :batch_command_method => "batch_command__pg_gem",
+        :exception_info => exception_info,
+      })
+    @results
+  end
+
+
 end
 
 
