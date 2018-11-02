@@ -1107,6 +1107,24 @@ module RubyRooomyArrayOfHashesModule
     h.map {|h1| h1.method(method_name).call  *method_args }
   end
 
+
+=begin
+  does the same as #select_columns_by_kv, but returning the result as arrays of arrays, having only the values (and not the columns/keys of the hashes).
+=end
+  def select_columns_by_kv_as_arrays *args
+    map_to_keys(
+      map_to_keys(
+        map_to_keys(
+          (select_columns_by_kv(*args)),
+          :to_a
+        ),
+        :transpose
+      ),
+      :last
+    )
+  end
+
+
 end
 
 
