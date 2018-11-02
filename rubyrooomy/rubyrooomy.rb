@@ -239,6 +239,32 @@ module RubyRooomySQLModule
   end
 
 
+=begin
+  generates a #db_query_update__ (a String having a SQL select
+  query) out of a #db_query_update_generator, a definitions
+  that allows some elements of the select query to be given;
+  check examples.
+
+ examples:
+  db_query_update__from ["table_sample", [["A", "B"], nil]]
+  db_query_update__from ["table_sample", [["A", "B"], nil], [[["C", "D"], "<"]]]
+  db_query_update__from db_queries_update_generator__samples[0]
+  db_queries_update_generator__samples.map{|g| db_query_update__from g}
+=end
+  def db_query_update__from db_query_update_generator
+    db_query_update_generator = array__from(
+      db_query_update_generator
+    )
+    table,
+      field_operation,
+      where_clause = db_query_update_generator
+    table = (array__from table).first
+    field_operation = db_query_operate__from field_operation
+    where_clause = db_query_where__from where_clause
+    "UPDATE #{table} SET #{field_operation} #{where_clause} "
+  end
+
+
 end
 
 
