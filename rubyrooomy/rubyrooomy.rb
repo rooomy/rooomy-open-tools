@@ -125,7 +125,6 @@ module RubyRooomyFilesModule
 =end
   def file_modifications__from file_modifications_plan
     file_modifications_plan.map{|file_modification_plan|
-      p file_modification_plan
       file,
         file_addition = array__from(file_modification_plan)
       bytes_written = File.write(
