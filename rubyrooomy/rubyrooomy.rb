@@ -192,6 +192,31 @@ module RubyRooomySQLModule
   end
 
 
+=begin
+ generates a #db_query_where__ definition, which is
+ a SQL clause (not a full query). This clause can be used
+ as  the WHERE clause, eg, to define the condition
+ of the query. Check examples.
+
+ examples:
+   db_query_where__from [[["A", "B"]]]
+   db_query_where__from [[["A", "B"], "="]]
+   db_query_where__from [[["A", "B"], "<"]]
+   db_query_where__from [[["A", "B"], "AND", :recursive]]
+   db_query_where__from [[[ [["C", "D"], ">"]   , "B"], "AND", :recursive]]
+   db_query_where__from db_queries_where__samples[0]
+   db_queries_where__samples.map {|g| db_query_where__from g }
+=end
+  def db_query_where__from db_query_where_generator
+    db_query_where_generator = array__from(
+      db_query_where_generator
+    )
+    condition = array__from(db_query_where_generator).first
+    condition = db_query_operate__from condition
+    condition.nne && "WHERE #{condition} " || ""
+  end
+
+
 end
 
 
