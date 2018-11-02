@@ -1071,6 +1071,17 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+ returns the @results variable, and filtering it
+ down for the hashes to have only the specified
+ key :output
+=end
+  def results__select_key_output results=nil
+    keys =  [:output]
+    (results__select_keys keys, results).flatten 1
+  end
+
+
 end
 
 
