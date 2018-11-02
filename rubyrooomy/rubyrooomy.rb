@@ -179,6 +179,17 @@ module RubyRooomySQLModule
   end
 
 
+=begin
+ sample #db_queries_where definition (ie, samples of
+ #db_query_where__ definition). Any array having
+ a #db_query_operate___ definition as first and unique
+ element is a #db_query_where__ definition.
+=end
+  def db_queries_where__samples
+    db_queries_operate__samples.map { |e| [e] }
+  end
+
+
 end
 
 
