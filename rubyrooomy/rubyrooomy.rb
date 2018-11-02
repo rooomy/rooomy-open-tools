@@ -1047,6 +1047,30 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+ resumes execution of the last batch submitted
+ to #batch_commands or #exec__batch, skipping
+ the first command on it, supposedly a failure.
+ Only effective if they have stopped due to
+ unsucessful commands (commands that in bash
+ returned false).
+
+ basically the same as #exec__working_batch,
+ without the first command.
+
+ Note that the parameter #admitted_errors and
+ any future parameter added to #batch_comands or
+ #exec__batch, are not stored, falling off to the
+ defaults, unless they're given in the same order
+ (clarifying  that the batch argument is no longer
+ given).
+=end
+  def exec__working_batch_failure_skipped *args
+    @working_batch.shift
+    send :exec__batch, @working_batch, *args
+  end
+
+
 end
 
 
