@@ -135,10 +135,24 @@ module RubyRooomyFilesModule
       [
         file,
         file_addition,
-        reserved,
+        nil,
         bytes_written,
       ]
     }
+  end
+
+
+=begin
+ give it to #file_modifications__from
+=end
+  def file_modifications_plan__sample
+    timestamp = time__now_strftime_default
+    [
+      [  # first modification:
+        "/tmp/file_modifications_plan__sample.#{timestamp}",
+        "Adding timestamp=#{timestamp}\n"
+      ],
+    ]
   end
 
 
@@ -158,20 +172,6 @@ module RubyRooomyStringsModule
 =end
   def regex__uuid_v4
     /[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}/
-  end
-
-
-=begin
- give it to #file_modifications__from
-=end
-  def file_modifications_plan__sample
-    timestamp = time__now_strftime_default
-    [
-      [  # first modification:
-        "/tmp/file_modifications_plan__sample.#{timestamp}",
-        "Adding timestamp=#{timestamp}\n"
-      ],
-    ]
   end
 
 
