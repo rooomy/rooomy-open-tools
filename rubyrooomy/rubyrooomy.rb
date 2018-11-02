@@ -985,6 +985,21 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+  default behaviour for pg_gem batches:
+  . no errors admitted
+  . runs on a PG::Connection object, calling its
+  method "exec"
+=end
+  def batch_controller__pg_gem_stop_default
+  # batch_command__pg_gem
+    [
+      0,
+      :batch_command__pg_gem,
+    ]
+  end
+
+
 end
 
 
