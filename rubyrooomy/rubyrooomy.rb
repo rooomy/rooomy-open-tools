@@ -396,6 +396,26 @@ module RubyRooomyPgGemModule
   end
 
 
+=begin
+  generates a #pg_gem_result_sets__ , ie, an array of array representing
+  the result sets after executing  #db_queries against #psql_db (the
+  same results can be obtained by giving a #pg_gem_exec__ definition
+  to #results__select_key_output).
+
+  examples
+    pg_gem_result_sets__from psql_db__sample_example, [db_query__show_tables]
+=end
+  def pg_gem_result_sets__from psql_db, db_queries, batch_controller=nil
+    results__select_key_output pg_gem_exec__from [
+      pg_gem_batch__from(
+        psql_db,
+        db_queries,
+      ),
+      batch_controller
+    ]
+  end
+
+
 end
 
 
