@@ -771,6 +771,12 @@ module RubyRooomyShellCommandsModule
   stating how many errors can be ignored (infinite
   by default).
 
+  alternatively, accepts #batch_controller instead
+  of #admitted_errors (the former may contain the
+  latter), which allows a function other than
+  #batch_command to be used instead for each of
+  the commands in the batch.
+
   returns only the part of @results that corresponds to the
   commands executed during its execution.
 =end
