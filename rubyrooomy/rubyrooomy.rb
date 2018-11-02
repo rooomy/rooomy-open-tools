@@ -1515,6 +1515,7 @@ end
 module RubyRooomyModule
 
   include RubyRooomyMetaModule
+  include RubyRooomySQLModule
   include RubyRooomyPgGemModule
   include RubyRooomyFilesModule
   include RubyRooomyStringsModule
