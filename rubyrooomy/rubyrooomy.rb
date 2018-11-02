@@ -217,6 +217,28 @@ module RubyRooomySQLModule
   end
 
 
+=begin
+ sample #db_queries_update_generator__ definition
+ (ie, samples of #db_query_update_generator__ definition).
+=end
+  def db_queries_update_generator__samples
+    sample_1 = [
+      "table_sample",
+      [
+        ["A", "B"], nil  # set A = B
+      ],
+      [
+        [["C", "D"], "<"] # where C < D
+      ]
+    ]
+    other_samples = db_queries_table__samples.product(
+      [db_queries_operate__samples[0]], # only A = B operation makes sense
+      db_queries_where__samples,
+    )
+    [sample_1] + other_samples
+  end
+
+
 end
 
 
