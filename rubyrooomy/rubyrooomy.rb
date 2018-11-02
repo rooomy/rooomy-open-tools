@@ -349,6 +349,29 @@ module RubyRooomyPgGemModule
   end
 
 
+=begin
+ Generates a #pg_gem_batch__ definition, out of a #psql_db__ and
+ a #db_queries (or #db_query_) definition.
+
+ Can be given to #exec__batch, provided that the #batch_controller__
+ argument has  batch_command__pg_gem set as second argument (which
+ is not the default case); for example:
+ exec_batch pg_gem_batch, batch_controller__pg_gem_stop_default
+
+ examples:
+   pg_gem_batch__from psql_db__sample_example,  (db_query_select__from ["table"])
+   pg_gem_batch__from psql_db__sample_example,  db_queries__drop_owned_current_user
+
+=end
+  def pg_gem_batch__from  psql_db, db_queries
+    psql_db = array__from psql_db
+    db_queries = array__from db_queries
+    pg_gem_conn = pg_gem_conn__from psql_db
+    pg_connection = pg_gem_conn[5]
+    batch = [pg_connection].product db_queries
+  end
+
+
 end
 
 
