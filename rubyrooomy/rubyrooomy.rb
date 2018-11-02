@@ -85,6 +85,18 @@ module RubyRooomySQLModule
   end
 
 
+=begin
+ sample #db_queries_table__ (ie, samples of
+ #db_query_table__ definition)
+=end
+  def db_queries_table__samples
+   [
+     "table1",
+     "table2"
+   ]
+  end
+
+
 end
 
 
