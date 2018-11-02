@@ -1125,6 +1125,16 @@ module RubyRooomyArrayOfHashesModule
   end
 
 
+=begin
+ keeps the state of the current running batch submitted
+ to #batch_commands or #exec__batch, for being able
+ to resume in case of failures.
+=end
+  def working_batch
+    @working_batch
+  end
+
+
 end
 
 
