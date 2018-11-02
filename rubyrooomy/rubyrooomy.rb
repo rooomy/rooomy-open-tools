@@ -417,7 +417,8 @@ module RubyRooomySqlQueriesModule
   and then counts those tables again, for validation.
 =end
   def psql_db_batch__db_queries_method psql_db, db_queries_method
-    db_queries = (send db_queries_method) rescue db_queries_method
+    psql_db = array__from(psql_db)
+    db_queries = array__from(db_queries_method)
     batch = psql_db_batch__cli_or_queries psql_db, db_queries
   end
 
