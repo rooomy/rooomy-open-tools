@@ -47,6 +47,16 @@ module RubyRooomyMetaModule
 end
 
 
+=begin 
+  The purpose of this module is to offer functions that can
+  generate or help generating SQL queries
+=end
+module RubyRooomySQLModule
+
+
+end
+
+
 =begin
   The purpose of this module is to offer functions that can
   simplify the use of the gem 'pg'
