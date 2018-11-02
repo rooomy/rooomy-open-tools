@@ -777,8 +777,13 @@ module RubyRooomyShellCommandsModule
   #batch_command to be used instead for each of
   the commands in the batch.
 
+  sets a variable @working_batch, having the commands
+  not executed in a premature stop caused by more
+  errors happening than allowed by #admitted_errors.
+
   returns only the part of @results that corresponds to the
   commands executed during its execution.
+
 =end
   def batch_commands batch, batch_controller=nil
     batch_controller ||= batch_controller__default
