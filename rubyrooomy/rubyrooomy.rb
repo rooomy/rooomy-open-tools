@@ -22,8 +22,9 @@ module RubyRooomyMetaModule
 
 =begin
   transforms a definition into an Array.
-  currently, tests if a definition is defined
-  by a method, and call it. otherwise, just
+  tests if a definition is defined
+  by a method, and call it (if not a method from
+  Kernel). otherwise, just
   returns whatever definition inside an Array
   (since the only two ways of
   creating a definition is implementing
@@ -33,8 +34,449 @@ module RubyRooomyMetaModule
   that dimensions aren't changed.
 =end
   def array__from definition
-    a = (send definition rescue definition)
+    kernel_method = (Kernel.respond_to? definition) rescue nil
+    kernel_method && (
+      a = definition
+    )  || (!kernel_method)  && (
+      a = (send definition rescue definition)
+    )
     [ a ].flatten 1
+  end
+
+
+end
+
+
+=begin 
+  The purpose of this module is to offer functions that can
+  generate or help generating SQL queries
+=end
+module RubyRooomySQLModule
+
+
+=begin
+  generates a #db_query_select__ (a String having a SQL select
+  query) out of a #db_query_select_generator, a definitions
+  that allows some elements of the select query to be given;
+  check examples.
+
+  examples:
+
+    db_query_select__from [ "table" ]
+    db_query_select__from [ "table", "c1" ]
+    db_query_select__from [ "table", ["c1", "c2"] ]
+    db_query_select__from [ "table", ["c1,c2"] ]
+    db_query_select__from [ "table", ["c1,c2"], db_queries_where__samples[0] ]
+    db_query_select__from [ "table", ["c1,c2"], [[["field", "'value'"], "<"]]  ]
+=end
+   def db_query_select__from db_query_select_generator
+     db_query_generator = array__from(
+       db_query_select_generator
+     )
+    table,
+      columns,
+      where_generator = db_query_generator
+    table = (array__from table).first
+    columns ||= "*"
+    columns = array__from columns
+    columns = columns.join(",")
+    where_clause = db_query_where__from where_generator
+    "SELECT #{columns} FROM #{table} #{where_clause}"
+  end
+
+
+=begin
+ sample #db_queries_table__ (ie, samples of
+ #db_query_table__ definition)
+=end
+  def db_queries_table__samples
+   [
+     "table1",
+     "table2"
+   ]
+  end
+
+
+=begin
+ sample #db_queries_operate__ (ie, samples of
+ #db_query_operate___ definition)
+=end
+  def db_queries_operate__samples_non_recursive
+    [
+      [ ["A", "B"],  nil ],
+      [ ["A", "B"],  "<" ],
+      [ ["A", "B"], "OR" ],
+    ]
+
+  end
+
+
+=begin
+ sample #db_queries_operate definition (ie, samples of
+ ##db_query_operate___ definition). Here, rescursive
+ versions were defined.
+=end
+  def db_queries_operate__samples_recursive
+    non_rec = db_queries_operate__samples_non_recursive
+    sample_1 = [ non_rec, "AND", :recursive ]
+    sample_2 = [ ["E", sample_1], "OR", :recursive ]
+    r = [
+      sample_1,
+      sample_2,
+    ]
+
+  end
+
+
+=begin
+ sample #db_queries_operate definition (ie, samples of
+ #db_query_operate___ definition). Here, both
+ rescursive and non rescursive versions were defined.
+=end
+  def db_queries_operate__samples
+    db_queries_operate__samples_non_recursive +
+    db_queries_operate__samples_recursive
+  end
+
+
+=begin
+ generates a #db_query_operate__ definition, which is
+ a SQL clause (not a full query). This clause can be used
+ as part of the WHERE clause, eg, to define the condition
+ of the query. Check examples.
+
+ examples:
+   db_query_operate__from [["A", "B"]]
+   db_query_operate__from [["A", "B"], "="]
+   db_query_operate__from [["A", "B"], "<"]
+   db_query_operate__from [["A", "B"], "AND", :recursive]
+   db_query_operate__from [[ [["C", "D"], ">"]   , "B"], "AND", :recursive]
+   db_query_operate__from db_queries_operate__samples[0]
+   db_query_operate__from db_queries_operate__samples_recursive[0]
+   db_query_operate__from db_queries_operate__samples_non_recursive[0]
+   db_queries_operate__samples.map {|g| db_query_operate__from g}
+=end
+  def db_query_operate__from db_query_operate_generator
+    db_query_operate_generator = array__from(
+      db_query_operate_generator
+    )
+    operands,
+      operation,
+      recursive = db_query_operate_generator
+    operands = array__from(operands).map { |o|
+      recursive && (
+        [
+          "(",
+          db_query_operate__from(o),
+          ")"
+        ].join
+      ) || (
+          array__from(o).first
+      )
+    }.flatten(1)
+    operation = array__from(operation).first
+    operation ||= "="
+    operations = operands.join(" #{operation} ")
+    "#{operations}"
+  end
+
+
+=begin
+ sample #db_queries_where definition (ie, samples of
+ #db_query_where__ definition). Any array having
+ a #db_query_operate___ definition as first and unique
+ element is a #db_query_where__ definition.
+=end
+  def db_queries_where__samples
+    db_queries_operate__samples.map { |e| [e] }
+  end
+
+
+=begin
+ generates a #db_query_where__ definition, which is
+ a SQL clause (not a full query). This clause can be used
+ as  the WHERE clause, eg, to define the condition
+ of the query. Check examples.
+
+ examples:
+   db_query_where__from [[["A", "B"]]]
+   db_query_where__from [[["A", "B"], "="]]
+   db_query_where__from [[["A", "B"], "<"]]
+   db_query_where__from [[["A", "B"], "AND", :recursive]]
+   db_query_where__from [[[ [["C", "D"], ">"]   , "B"], "AND", :recursive]]
+   db_query_where__from db_queries_where__samples[0]
+   db_queries_where__samples.map {|g| db_query_where__from g }
+=end
+  def db_query_where__from db_query_where_generator
+    db_query_where_generator = array__from(
+      db_query_where_generator
+    )
+    condition = array__from(db_query_where_generator).first
+    condition = db_query_operate__from condition
+    condition.nne && "WHERE #{condition} " || ""
+  end
+
+
+=begin
+ sample #db_queries_update_generator__ definition
+ (ie, samples of #db_query_update_generator__ definition).
+=end
+  def db_queries_update_generator__samples
+    sample_1 = [
+      "table_sample",
+      [
+        ["A", "B"], nil  # set A = B
+      ],
+      [
+        [["C", "D"], "<"] # where C < D
+      ]
+    ]
+    other_samples = db_queries_table__samples.product(
+      [db_queries_operate__samples[0]], # only A = B operation makes sense
+      db_queries_where__samples,
+    )
+    [sample_1] + other_samples
+  end
+
+
+=begin
+  generates a #db_query_update__ (a String having a SQL select
+  query) out of a #db_query_update_generator, a definitions
+  that allows some elements of the select query to be given;
+  check examples.
+
+ examples:
+  db_query_update__from ["table_sample", [["A", "B"], nil]]
+  db_query_update__from ["table_sample", [["A", "B"], nil], [[["C", "D"], "<"]]]
+  db_query_update__from db_queries_update_generator__samples[0]
+  db_queries_update_generator__samples.map{|g| db_query_update__from g}
+=end
+  def db_query_update__from db_query_update_generator
+    db_query_update_generator = array__from(
+      db_query_update_generator
+    )
+    table,
+      field_operation,
+      where_clause = db_query_update_generator
+    table = (array__from table).first
+    field_operation = db_query_operate__from field_operation
+    where_clause = db_query_where__from where_clause
+    "UPDATE #{table} SET #{field_operation} #{where_clause} "
+  end
+
+
+end
+
+
+=begin
+  The purpose of this module is to offer functions that can
+  simplify the use of the gem 'pg'
+=end
+module RubyRooomyPgGemModule
+
+
+  require 'pg'
+  include RubyRooomyArrayOfHashesModule
+
+=begin
+ defines a #pg_gem_conn__ definition from a
+ #psql_db__ definition.
+ A #pg_gem_conn__ is a #psql_db__ but having
+ the 5th element set as the object returned
+ by PG::Connection.open() (if still not set)
+=end
+  def pg_gem_conn__from psql_db
+    db_name,
+      db_user,
+      db_password,
+      db_host,
+      db_port,
+      db_connection = array__from psql_db
+
+    db_port ||= 5432
+
+    require 'socket'
+    db_connection ||= PG::Connection.open(
+      :hostaddr => (IPSocket.getaddress db_host),
+      :port=> db_port,
+      :dbname=> db_name,
+      :user=> db_user,
+      :password => db_password,
+    ) rescue nil
+    [
+      db_name,
+      db_user,
+      db_password,
+      db_host,
+      db_port,
+      db_connection,
+    ]
+  end
+
+
+=begin
+  executes a command by sending the command via
+  a function of a object ("exec" by default, since
+  the expected object is a PG::Connection), storing
+  results, timestamp, command, args, return value,
+  and output (stdout joined with stderr) in the
+  last entry of the class variable @results
+=end
+  def batch_command__pg_gem call, *args
+    @results ||= []
+    call = array__from call
+    call = call.first
+    exec_method ||= "exec"
+    command = args.join " "
+    exec_rv, exception = begin
+      e = !(call.respond_to? exec_method) && NoMethodError.new("undefined method `#{exec_method}' for #{call.class}")
+      (e && [nil, e] || [(call.send exec_method, command), nil])
+      rescue => e2
+      [nil, e2]
+      end
+    exec_rv_entries = exec_rv.entries rescue exec_rv
+    exception_info = (exception_info_base [exception]) rescue []
+    @results.push({
+        :time => Time.now.inspect,
+        :call => call,
+        :args => args,
+        :command => command,
+        :success => exception_info[2].negate_me,
+        :output => exec_rv_entries,
+        :batch_command_method => "batch_command__pg_gem",
+        :exception_info => exception_info,
+      })
+    @results
+  end
+
+
+=begin
+ Generates a #pg_gem_batch__ definition, out of a #psql_db__ and
+ a #db_queries (or #db_query_) definition.
+
+ Can be given to #exec__batch, provided that the #batch_controller__
+ argument has  batch_command__pg_gem set as second argument (which
+ is not the default case); for example:
+ exec_batch pg_gem_batch, batch_controller__pg_gem_stop_default
+
+ examples:
+   pg_gem_batch__from psql_db__sample_example,  (db_query_select__from ["table"])
+   pg_gem_batch__from psql_db__sample_example,  db_queries__drop_owned_current_user
+
+=end
+  def pg_gem_batch__from  psql_db, db_queries
+    psql_db = array__from psql_db
+    db_queries = array__from db_queries
+    pg_gem_conn = pg_gem_conn__from psql_db
+    pg_connection = pg_gem_conn[5]
+    batch = [pg_connection].product db_queries
+  end
+
+
+=begin
+ generates a #exec__ definition (ie, an array of hashes
+ containing information about how went the execution of
+ commands) out of a #exec_plan, which has a #pg_gem_batch
+ definition as a first element and a #batch_controller
+ as second).
+
+ example:
+   pg_gem_exec__from [ pg_gem_batch__from(psql_db__sample_example,  (db_query_select__from ["table"])) ]
+=end
+  def pg_gem_exec__from pg_gem_exec_plan
+    batch,
+      batch_controller = array__from(pg_gem_exec_plan)
+    batch_controller = array__from(batch_controller)
+    batch_controller[1] =  batch_controller__pg_gem_default[1]
+    exec__from [
+    # [
+      batch,
+      batch_controller
+    ]
+  end
+
+
+=begin
+  generates a #pg_gem_result_sets__ , ie, an array of array representing
+  the result sets after executing  #db_queries against #psql_db (the
+  same results can be obtained by giving a #pg_gem_exec__ definition
+  to #results__select_key_output).
+
+  examples
+    pg_gem_result_sets__from psql_db__sample_example, [db_query__show_tables]
+=end
+  def pg_gem_result_sets__from psql_db, db_queries, batch_controller=nil
+    results__select_key_output pg_gem_exec__from [
+      pg_gem_batch__from(
+        psql_db,
+        db_queries,
+      ),
+      batch_controller
+    ]
+  end
+
+
+end
+
+
+=begin
+  The purpose of this module is to offer functions that can
+  provide functions to manipulate the file system
+=end
+module RubyRooomyFilesModule
+
+
+=begin
+ Generates a #file_modifications definition out of a
+ #file_modifications_plan one. Actually execs the
+ planned modifications.
+
+ A #file_modifications_plan is an array of
+ #file_modification_plan. A #file_modification_plan
+ has at least two elements: the first, being the file
+ path to the file, and the second, the string to
+ be appended to that file.
+ A #file_modifications is an array of #file_modification.
+ A #file_modification is an array with at least 4 elements,
+ being the 3 initials one just like a #file_modification_plan,
+ and the 4th, the number of files written after the
+ modification.
+
+
+ examples:
+   file_modifications__from [[ "/tmp/my_file", "add this text" ]]
+   file_modifications__from file_modifications_plan__sample
+=end
+  def file_modifications__from file_modifications_plan
+    file_modifications_plan.map{|file_modification_plan|
+      file,
+        file_addition = array__from(file_modification_plan)
+      bytes_written = File.write(
+        file,
+        file_addition,
+        mode: "a"
+      )
+      [
+        file,
+        file_addition,
+        nil,
+        bytes_written,
+      ]
+    }
+  end
+
+
+=begin
+ give it to #file_modifications__from
+=end
+  def file_modifications_plan__sample
+    timestamp = time__now_strftime_default
+    [
+      [  # first modification:
+        "/tmp/file_modifications_plan__sample.#{timestamp}",
+        "Adding timestamp=#{timestamp}\n"
+      ],
+    ]
   end
 
 
@@ -299,7 +741,8 @@ module RubyRooomySqlQueriesModule
   and then counts those tables again, for validation.
 =end
   def psql_db_batch__db_queries_method psql_db, db_queries_method
-    db_queries = (send db_queries_method) rescue db_queries_method
+    psql_db = array__from(psql_db)
+    db_queries = array__from(db_queries_method)
     batch = psql_db_batch__cli_or_queries psql_db, db_queries
   end
 
@@ -340,6 +783,7 @@ module RubyRooomyPgShellCommandsModule
  cli of psql.
 =end
   def psql_db_batch__cli_or_queries psql_db, db_queries=[nil]
+    psql_db = array__from(psql_db)
     batch = db_queries.map { |db_query|
       cli = psql_db_command__cli psql_db
       [cli, db_query && "-c #{quoted_shell_param db_query}"]
@@ -367,7 +811,17 @@ module RubyRooomyPgShellCommandsModule
     db_user="any_user"
     db_host="localhost"
     db_password="onlyNSAknows"
-    [db_name, db_user, db_password, db_host]
+    db_port = nil
+    db_connection = nil
+
+    [
+      db_name,
+      db_user,
+      db_password,
+      db_host,
+      db_port,
+      db_connection,
+    ]
   end
 
 
@@ -475,6 +929,8 @@ module RubyRooomyPgShellCommandsModule
  cli of psql.
 =end
   def psql_db_batch__cli_or_generate_dumps psql_db, db_dump_paths=[nil], options=""
+    psql_db = array__from(psql_db)
+    db_dump_paths = array__from(db_dump_paths)
     batch = db_dump_paths.map { |db_dump_path|
       cli = psql_db_command__cli psql_db
       pg_dump = psql_db_command__dump psql_db
@@ -601,6 +1057,7 @@ module RubyRooomyShellCommandsModule
 
    include RubyRooomyFsShellCommandsModule
    include RubyRooomyPgShellCommandsModule
+   include RubyRooomyArrayOfHashesModule
 
 =begin
   executes a command in a shell, storing
@@ -613,14 +1070,16 @@ module RubyRooomyShellCommandsModule
     @results ||= []
     command = "#{call} #{args.join " "}"
     stdin, stdoutanderr, wait_thr =  Open3.popen2e(command)
-     @results.push({
+    @results.push({
         :time => Time.now.inspect,
         :call => call,
         :args => args,
         :command => command,
         :success => wait_thr.value.success?,
-        :output => (stdoutanderr.entries.join "\n")
+        :output => (stdoutanderr.entries.join "\n"),
+        :batch_command_method => "batch_command",
       })
+    @results
   end
 
 
@@ -636,17 +1095,35 @@ module RubyRooomyShellCommandsModule
   stating how many errors can be ignored (infinite
   by default).
 
+  alternatively, accepts #batch_controller instead
+  of #admitted_errors (the former may contain the
+  latter), which allows a function other than
+  #batch_command to be used instead for each of
+  the commands in the batch.
+
+  sets a variable @working_batch, having the commands
+  not executed in a premature stop caused by more
+  errors happening than allowed by #admitted_errors.
+
   returns only the part of @results that corresponds to the
   commands executed during its execution.
+
 =end
-  def batch_commands batch, admitted_errors=Float::INFINITY
+  def batch_commands batch, batch_controller=nil
+    batch_controller ||= batch_controller__default
+    admitted_errors,
+      batch_command_method = array__from(batch_controller)
+    admitted_errors ||= Float::INFINITY
+    batch_command_method ||= :batch_command
     amount_of_errors=0
     results_before = results.dup
-    batch.take_while{ |call, *args|
-      batch_command call, *args
+    @working_batch = batch
+    non_executed_batch_part = batch.drop_while{ |call, *args|
+      to_method(batch_command_method).call call, *args
       !(results.last[:success]) && (amount_of_errors += 1)
       amount_of_errors <= admitted_errors
     }
+    @working_batch = non_executed_batch_part
     results  - results_before
   end
 
@@ -797,6 +1274,156 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+ returns the @results variable, and filtering it
+ down for the hashes to have only the specified
+ keys (or all, if keys = nil).
+=end
+  def results__select_keys keys=nil, results=nil
+    @results ||=  []
+    results ||= @results
+    select_columns_by_kv_as_arrays(results, nil, nil, keys)
+  end
+
+
+=begin
+  default behaviour for batches:
+  . infinity number of errors admitted (won't stop);
+  . runs on the operating system underlying shell.
+=end
+  def batch_controller__default
+    [
+      Float::INFINITY,
+      :batch_command,
+    ]
+  end
+
+
+=begin
+  default behaviour for pg_gem batches:
+  . infinity number of errors admitted (won't stop);
+  . runs on a PG::Connection object, calling its
+  method "exec"
+=end
+  def batch_controller__pg_gem_default
+  # batch_command__pg_gem
+    [
+      Float::INFINITY,
+      :batch_command__pg_gem,
+    ]
+  end
+
+
+=begin
+  default behaviour for batches:
+  . no errors admitted
+  . runs on the operating system underlying shell.
+=end
+  def batch_controller__stop_default
+    [
+      0,
+      :batch_command,
+    ]
+  end
+
+
+=begin
+  default behaviour for pg_gem batches:
+  . no errors admitted
+  . runs on a PG::Connection object, calling its
+  method "exec"
+=end
+  def batch_controller__pg_gem_stop_default
+  # batch_command__pg_gem
+    [
+      0,
+      :batch_command__pg_gem,
+    ]
+  end
+
+
+=begin
+ keeps the state of the current running batch submitted
+ to #batch_commands or #exec__batch, for being able
+ to resume in case of failures.
+=end
+  def working_batch
+    @working_batch
+  end
+
+
+=begin
+ resumes execution of the last batch submitted
+ to #batch_commands or #exec__batch.
+ Only effective if they have stopped due to
+ unsucessful commands (commands that in bash
+ returned false).
+
+ Note that the parameter #admitted_errors and
+ any future parameter added to #batch_comands or
+ #exec__batch, are not stored, falling off to the
+ defaults, unless they're given in the same order
+ (clarifying  that the batch argument is no longer
+ given).
+=end
+  def exec__working_batch *args
+    send :exec__batch, @working_batch, *args
+  end
+
+
+=begin
+ resumes execution of the last batch submitted
+ to #batch_commands or #exec__batch, skipping
+ the first command on it, supposedly a failure.
+ Only effective if they have stopped due to
+ unsucessful commands (commands that in bash
+ returned false).
+
+ basically the same as #exec__working_batch,
+ without the first command.
+
+ Note that the parameter #admitted_errors and
+ any future parameter added to #batch_comands or
+ #exec__batch, are not stored, falling off to the
+ defaults, unless they're given in the same order
+ (clarifying  that the batch argument is no longer
+ given).
+=end
+  def exec__working_batch_failure_skipped *args
+    @working_batch.shift
+    send :exec__batch, @working_batch, *args
+  end
+
+
+=begin
+ returns the @results variable, and filtering it
+ down for the hashes to have only the specified
+ key :output
+=end
+  def results__select_key_output results=nil
+    keys =  [:output]
+    (results__select_keys keys, results).flatten 1
+  end
+
+
+=begin
+ generates a #exec__ definition (ie, an array of hashes
+ containing information about how went the execution of
+ commands) out of a #exec_plan, which has a #batch
+ definition as a first element and a #batch_controller
+ as second).
+
+ example:
+   exec__from [  [ ["date"], ["pwd"], ["ls /nofile"], ["pwd"]] ]
+   exec__from [  [ ["date"], ["pwd"], ["ls /nofile"], ["pwd"]], "batch_controller__stop_default" ]
+=end
+  def exec__from exec_plan
+    batch,
+      batch_controller = array__from(exec_plan)
+    exec__batch batch, batch_controller
+  end
+
+
 end
 
 
@@ -885,6 +1512,24 @@ module RubyRooomyArrayOfHashesModule
   def map_to_keys h, method_name = :keys, method_args = nil
     h.map {|h1| h1.method(method_name).call  *method_args }
   end
+
+
+=begin
+  does the same as #select_columns_by_kv, but returning the result as arrays of arrays, having only the values (and not the columns/keys of the hashes).
+=end
+  def select_columns_by_kv_as_arrays *args
+    map_to_keys(
+      map_to_keys(
+        map_to_keys(
+          (select_columns_by_kv(*args)),
+          :to_a
+        ),
+        :transpose
+      ),
+      :last
+    )
+  end
+
 
 end
 
@@ -1196,12 +1841,15 @@ end
 
 
 # Main module, basically a namespace
-# for RubyRooomy (not a module for
-# making serialization easier if ever
-# needed).
+# for RubyRooomy. Consists basically
+# of the inclusion of all available
+# modules.
 module RubyRooomyModule
 
   include RubyRooomyMetaModule
+  include RubyRooomySQLModule
+  include RubyRooomyPgGemModule
+  include RubyRooomyFilesModule
   include RubyRooomyStringsModule
   include RubyRooomyJsonModule
   include RubyRooomyShellCommandsModule
