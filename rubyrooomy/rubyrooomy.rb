@@ -972,6 +972,19 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+  default behaviour for batches:
+  . no errors admitted
+  . runs on the operating system underlying shell.
+=end
+  def batch_controller__stop_default
+    [
+      0,
+      :batch_command,
+    ]
+  end
+
+
 end
 
 
