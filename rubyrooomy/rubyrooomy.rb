@@ -459,6 +459,7 @@ module RubyRooomyPgShellCommandsModule
  cli of psql.
 =end
   def psql_db_batch__cli_or_queries psql_db, db_queries=[nil]
+    psql_db = array__from(psql_db)
     batch = db_queries.map { |db_query|
       cli = psql_db_command__cli psql_db
       [cli, db_query && "-c #{quoted_shell_param db_query}"]
