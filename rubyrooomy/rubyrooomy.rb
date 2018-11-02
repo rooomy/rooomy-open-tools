@@ -97,6 +97,20 @@ module RubyRooomySQLModule
   end
 
 
+=begin
+ sample #db_queries_operate__ (ie, samples of
+ #db_query_operate___ definition)
+=end
+  def db_queries_operate__samples_non_recursive
+    [
+      [ ["A", "B"],  nil ],
+      [ ["A", "B"],  "<" ],
+      [ ["A", "B"], "OR" ],
+    ]
+
+  end
+
+
 end
 
 
