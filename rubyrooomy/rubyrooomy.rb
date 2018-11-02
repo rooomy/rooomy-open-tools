@@ -139,6 +139,46 @@ module RubyRooomySQLModule
   end
 
 
+=begin
+ generates a #db_query_operate__ definition, which is
+ a SQL clause (not a full query). This clause can be used
+ as part of the WHERE clause, eg, to define the condition
+ of the query. Check examples.
+
+ examples:
+   db_query_operate__from [["A", "B"]]
+   db_query_operate__from [["A", "B"], "="]
+   db_query_operate__from [["A", "B"], "<"]
+   db_query_operate__from db_queries_operate__samples[0]
+   db_query_operate__from db_queries_operate__samples_recursive[0]
+   db_query_operate__from db_queries_operate__samples_non_recursive[0]
+   db_queries_operate__samples.map {|g| db_query_operate__from g}
+=end
+  def db_query_operate__from db_query_operate_generator
+    db_query_operate_generator = array__from(
+      db_query_operate_generator
+    )
+    operands,
+      operation,
+      recursive = db_query_operate_generator
+    operands = array__from(operands).map { |o|
+      recursive && (
+        [
+          "(",
+          db_query_operate__from(o),
+          ")"
+        ].join
+      ) || (
+          array__from(o).first
+      )
+    }.flatten(1)
+    operation = array__from(operation).first
+    operation ||= "="
+    operations = operands.join(" #{operation} ")
+    "#{operations}"
+  end
+
+
 end
 
 
