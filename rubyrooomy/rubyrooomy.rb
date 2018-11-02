@@ -1362,6 +1362,24 @@ module RubyRooomyShellCommandsModule
   end
 
 
+=begin
+ generates a #exec__ definition (ie, an array of hashes
+ containing information about how went the execution of
+ commands) out of a #exec_plan, which has a #batch
+ definition as a first element and a #batch_controller
+ as second).
+
+ example:
+   exec__from [  [ ["date"], ["pwd"], ["ls /nofile"], ["pwd"]] ]
+   exec__from [  [ ["date"], ["pwd"], ["ls /nofile"], ["pwd"]], "batch_controller__stop_default" ]
+=end
+  def exec__from exec_plan
+    batch,
+      batch_controller = array__from(exec_plan)
+    exec__batch batch, batch_controller
+  end
+
+
 end
 
 
