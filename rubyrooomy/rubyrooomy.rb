@@ -54,6 +54,37 @@ end
 module RubyRooomySQLModule
 
 
+=begin
+  generates a #db_query_select__ (a String having a SQL select
+  query) out of a #db_query_select_generator, a definitions
+  that allows some elements of the select query to be given;
+  check examples.
+
+  examples:
+
+    db_query_select__from [ "table" ]
+    db_query_select__from [ "table", "c1" ]
+    db_query_select__from [ "table", ["c1", "c2"] ]
+    db_query_select__from [ "table", ["c1,c2"] ]
+    db_query_select__from [ "table", ["c1,c2"], db_queries_where__samples[0] ]
+    db_query_select__from [ "table", ["c1,c2"], [[["field", "'value'"], "<"]]  ]
+=end
+   def db_query_select__from db_query_select_generator
+     db_query_generator = array__from(
+       db_query_select_generator
+     )
+    table,
+      columns,
+      where_generator = db_query_generator
+    table = (array__from table).first
+    columns ||= "*"
+    columns = array__from columns
+    columns = columns.join(",")
+    where_clause = db_query_where__from where_generator
+    "SELECT #{columns} FROM #{table} #{where_clause}"
+  end
+
+
 end
 
 
