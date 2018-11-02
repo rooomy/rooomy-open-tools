@@ -111,6 +111,23 @@ module RubyRooomySQLModule
   end
 
 
+=begin
+ sample #db_queries_operate definition (ie, samples of
+ ##db_query_operate___ definition). Here, rescursive
+ versions were defined.
+=end
+  def db_queries_operate__samples_recursive
+    non_rec = db_queries_operate__samples_non_recursive
+    sample_1 = [ non_rec, "AND", :recursive ]
+    sample_2 = [ ["E", sample_1], "OR", :recursive ]
+    r = [
+      sample_1,
+      sample_2,
+    ]
+
+  end
+
+
 end
 
 
