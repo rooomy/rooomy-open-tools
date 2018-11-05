@@ -362,7 +362,7 @@ module RubyRooomyPgGemModule
  examples:
    pg_gem_batch__from psql_db__sample_example,  (db_query_select__from ["table"])
    pg_gem_batch__from psql_db__sample_example,  db_queries__drop_owned_current_user
-
+   results__select_key_output exec__pg_gem_batch__from psql_db__sample_example,  [db_query_transform__count(db_query__show_tables), db_query__show_tables]
 =end
   def pg_gem_batch__from  psql_db, db_queries
     psql_db = array__from psql_db
