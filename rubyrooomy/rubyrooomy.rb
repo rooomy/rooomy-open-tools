@@ -268,6 +268,14 @@ module RubyRooomySQLModule
 end
 
 
+=begin 
+  This module is defined below, but referred
+  by the next module -- so it must be already defined.
+=end
+module RubyRooomyArrayOfHashesModule
+end
+
+
 =begin
   The purpose of this module is to offer functions that can
   simplify the use of the gem 'pg'
