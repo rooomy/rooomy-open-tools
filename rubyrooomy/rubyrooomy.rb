@@ -1811,6 +1811,9 @@ require '#{gem_name}'
 #{gem_validate_class}.new({:invoke => ARGV})
     ENDHEREDOC
     gem_executables = [ gem_bin_generate && "#{gem_name}" ]
+    gem_dependencies = [
+      ["rubyment", "~> 0.7.25694800"],
+    ]
 
     [
        gem_name,
