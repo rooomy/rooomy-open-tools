@@ -1789,7 +1789,7 @@ module RubyRooomyGemModule
     gem_ext ||= ".gem"
     gem_hifen ||= "-"
     gem_ext ||= "date"
-    gem_date ||= "2018-07-13"
+    gem_date ||=  Time.now.strftime("%Y-%m-%d")
     gem_summary     ||= "roOomy open tools for Ruby"
     gem_description ||= "a set of ruby helpers we use mostly in the backend testing environment of roOomy"
     gem_authors     ||= ["roOomy backend development team", "Ribamar Santarosa"]
