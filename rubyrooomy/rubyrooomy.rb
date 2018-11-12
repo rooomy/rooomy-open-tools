@@ -1844,6 +1844,8 @@ require '#{gem_name}'
        gem_bin_generate,
        gem_bin_contents,
        gem_bin_executables,
+       gem_dependencies,
+
    ]
   end
 
