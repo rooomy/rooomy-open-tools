@@ -1821,6 +1821,7 @@ require '#{gem_name}'
     gem_executables = [ gem_bin_generate && "#{gem_name}" ]
     gem_dependencies = [
       ["rubyment", "~> 0.7.25694800"],
+      ["git", "~> 1.4"],
     ]
 
     [
