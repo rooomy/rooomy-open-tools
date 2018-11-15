@@ -459,6 +459,7 @@ module RubyRooomyFilesModule
     file_modifications_plan.map{|file_modification_plan|
       file,
         file_addition = array__from(file_modification_plan)
+      FileUtils.mkdir_p File.dirname file
       bytes_written = File.write(
         file,
         file_addition,
