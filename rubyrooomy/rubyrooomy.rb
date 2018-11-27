@@ -268,6 +268,14 @@ module RubyRooomySQLModule
 end
 
 
+=begin 
+  This module is defined below, but referred
+  by the next module -- so it must be already defined.
+=end
+module RubyRooomyArrayOfHashesModule
+end
+
+
 =begin
   The purpose of this module is to offer functions that can
   simplify the use of the gem 'pg'
@@ -362,7 +370,7 @@ module RubyRooomyPgGemModule
  examples:
    pg_gem_batch__from psql_db__sample_example,  (db_query_select__from ["table"])
    pg_gem_batch__from psql_db__sample_example,  db_queries__drop_owned_current_user
-
+   results__select_key_output exec__pg_gem_batch__from psql_db__sample_example,  [db_query_transform__count(db_query__show_tables), db_query__show_tables]
 =end
   def pg_gem_batch__from  psql_db, db_queries
     psql_db = array__from psql_db
@@ -451,6 +459,7 @@ module RubyRooomyFilesModule
     file_modifications_plan.map{|file_modification_plan|
       file,
         file_addition = array__from(file_modification_plan)
+      FileUtils.mkdir_p File.dirname file
       bytes_written = File.write(
         file,
         file_addition,
@@ -1789,7 +1798,7 @@ module RubyRooomyGemModule
     gem_ext ||= ".gem"
     gem_hifen ||= "-"
     gem_ext ||= "date"
-    gem_date ||= "2018-07-13"
+    gem_date ||=  Time.now.strftime("%Y-%m-%d")
     gem_summary     ||= "roOomy open tools for Ruby"
     gem_description ||= "a set of ruby helpers we use mostly in the backend testing environment of roOomy"
     gem_authors     ||= ["roOomy backend development team", "Ribamar Santarosa"]
@@ -1810,7 +1819,12 @@ module RubyRooomyGemModule
 require '#{gem_name}'
 #{gem_validate_class}.new({:invoke => ARGV})
     ENDHEREDOC
-    gem_executables = [ gem_bin_generate && "#{gem_name}" ]
+    gem_bin_executables ||= [ gem_bin_generate && "#{gem_name}" ]
+    gem_dependencies = [
+      ["rubyment", "~> 0.7.25694800"],
+      ["git", "~> 1.4"],
+      ["pg",  "~> 1.1"],
+    ]
 
     [
        gem_name,
@@ -1833,6 +1847,8 @@ require '#{gem_name}'
        gem_bin_generate,
        gem_bin_contents,
        gem_bin_executables,
+       gem_dependencies,
+
    ]
   end
 
