@@ -1045,6 +1045,88 @@ module RubyRooomyPgShellCommandsModule
     }.flatten 1
   end
 
+
+=begin
+  defines #psql_db_dump_replacer_batch__,
+  out of a #psql_db_dump_replacer__ definition,
+  that can be used
+  to create a #psql_db_batch__ which backups the
+  current contents of #psql_db__ , into each of the
+  files in db_dumps__backup_desired_path,
+  drops all of its tables (by current user), and then
+  reads each of the database dumps from
+  db_dumps__to_be_applied, into the same #psql_db__.
+
+  if the #psql_db_dump_replacer__ definition has
+  a second #psql_db__ definition at its 5th position
+  (index 4), db_dumps__to_be_applied will be filled
+  with the contents of that database. Otherwise,
+  it is supposed that db_dumps__to_be_applied already
+  exist in the filesystem.
+
+  Just give this method name to
+  #exec__batch_generator , with the #psql_db_- definition, e.g:
+  exec__batch_generator [ :psql_db_dump_replacer_batch__from, :psql_db_dump_replacer__for_psql_db__sample_example]
+  or give the returned values to #exec__batch
+
+  examples:
+  # this version supposes "/tmp/database_dump" exists, and will apply it to :psql_db__sample_example, after backup-ing it to "/tmp/database_dump"
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",    [ "/tmp/psql_db_original_dump" ]   ,    [       "/tmp/database_dump"     ], "ON_ERROR_STOP=off"   ]
+  # this one does the same thing, because #psql_db_dump_replacer__for_psql_db__sample_example defines the same array:
+  psql_db_dump_replacer_batch__from :psql_db_dump_replacer__for_psql_db__sample_example
+  # this version will get "/tmp/database_dump" from "src_db" instead:
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",     [ "/tmp/psql_db_original_dump" ]  ,    [       "/tmp/database_dump"     ], "ON_ERROR_STOP=off" , ["src_db", "src_db_user", "src_db_pw", "localhost"],  ]
+
+=end
+  def psql_db_dump_replacer_batch__from psql_db_dump_replacer
+
+   psql_db_dump_replacer = array__from psql_db_dump_replacer
+
+    psql_db,
+      db_dumps__backup_desired_path,
+      db_dumps__to_be_applied,
+      psql_dump_apply_options,
+      psql_db__get_dumps_to_be_applied,
+      reserved = psql_db_dump_replacer
+
+   psql_db = array__from psql_db
+   db_dumps__backup_desired_path = array__from db_dumps__backup_desired_path
+   db_dumps__to_be_applied = array__from db_dumps__to_be_applied
+   psql_db__src_dumps_to_be_applied = array__from psql_db__get_dumps_to_be_applied
+
+    batch_generators = [
+      psql_db__get_dumps_to_be_applied.nne && [
+        :psql_db_batch__cli_or_generate_dumps,
+        psql_db__src_dumps_to_be_applied,
+        db_dumps__to_be_applied,
+        "",
+      ],
+      [
+        :psql_db_batch__cli_or_generate_dumps,
+        psql_db,
+        db_dumps__backup_desired_path,
+        "",
+      ],
+      [
+        :psql_db_batch__db_queries_method,
+        psql_db,
+        :db_queries__drop_owned_current_user,
+      ],
+      [
+        :psql_db_batch__cli_or_apply_dumps,
+        psql_db,
+        db_dumps__to_be_applied,
+        psql_dump_apply_options,
+      ],
+    ].compact
+
+    batch_generators.map {|batch_generator|
+      batch__from_batch_generator batch_generator
+    }.flatten 1
+
+  end
+
+
 end
 
 
