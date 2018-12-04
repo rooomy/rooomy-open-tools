@@ -1678,6 +1678,17 @@ module RubyRooomyGitBaseModule
     end
 
 
+=begin
+  like #log, but fetches the commit objects instead (of
+  the enumeration).
+  Will fetch the amount of commits set by #log_size_limit
+=end
+    def branch_commits
+      commits = log(log_size_limit).entries
+      commits
+    end
+
+
   end # of Git::Base
 
 
