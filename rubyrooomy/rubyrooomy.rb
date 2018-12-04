@@ -1049,13 +1049,24 @@ module RubyRooomyPgShellCommandsModule
   examples:
   # this version supposes "/tmp/database_dump" exists, and will apply it to :psql_db__sample_example, after backup-ing it to "/tmp/database_dump"
   psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",    [ "/tmp/psql_db_original_dump" ]   ,    [       "/tmp/database_dump"     ], "ON_ERROR_STOP=off"   ]
+
   # this one does the same thing, because #psql_db_dump_replacer__for_psql_db__sample_example defines the same array:
   psql_db_dump_replacer_batch__from :psql_db_dump_replacer__for_psql_db__sample_example
+
   # this version will get "/tmp/database_dump" from "src_db" instead:
   psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",     [ "/tmp/psql_db_original_dump" ]  ,    [       "/tmp/database_dump"     ], "ON_ERROR_STOP=off" , ["src_db", "src_db_user", "src_db_pw", "localhost"],  ]
 
   # this version will get "/tmp/database_dump" from "src_db" too, but won't drop the current database.
   psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",     [ "/tmp/psql_db_original_dump" ]  ,    [       "/tmp/sample_2_database_dump"     ], "ON_ERROR_STOP=off" , "psql_db__sample_example_2", "dont_drop" ]
+
+  # this version will just dump the database:
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",     [ "/tmp/psql_db_original_dump" ]  ,   nil, "ON_ERROR_STOP=off" , nil, "dont_drop" ]
+
+  # this version will dump the database and drop it:
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",     [ "/tmp/psql_db_original_dump" ]  ,   nil, "ON_ERROR_STOP=off" , nil ]
+
+  # this version will just apply a migration file having some queries to the database:
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",  nil,   [ "/tmp/migration.sql" ]  , "ON_ERROR_STOP=off" , nil, "dont_drop" ]
 
 
 =end
