@@ -1662,7 +1662,9 @@ module RubyRooomyGitBaseModule
        self
     end
 
-  end
+
+  end # of Git::Base
+
 
 end
 
