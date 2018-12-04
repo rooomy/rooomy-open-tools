@@ -1082,7 +1082,7 @@ module RubyRooomyPgShellCommandsModule
         psql_db,
         :db_queries__drop_owned_current_user,
       ] || nil,
-      [
+      db_dumps__to_be_applied.compact.nne && [
         :psql_db_batch__cli_or_apply_dumps,
         psql_db,
         db_dumps__to_be_applied,
