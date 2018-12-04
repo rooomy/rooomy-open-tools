@@ -1666,7 +1666,7 @@ module RubyRooomyGitBaseModule
   end # of Git::Base
 
 
-end
+end # of RubyRooomyGitBaseModule
 
 
 module RubyRooomyDefineContextsModule
