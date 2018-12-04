@@ -1729,6 +1729,46 @@ module RubyRooomyGitBaseModule
      end
 
 
+=begin
+    separates a given set of commits (like the default #self.log.entries)
+    in an array having 3 arrays: the last having the elements *before*
+    the occurrence of a commit matching str in its message; the middle having
+    the commit which has the match, and the first commits after it.
+
+    If multiple matches are found, then the last one (ie, probably the
+    newest commit) is used. This behaviour can be controlled by changing
+    the argument multiple_occurence_index
+
+    If no matches are found, all the commits are considered to be "older"
+    than the queried, and they will all be placed in the last commit.
+
+    examples:
+
+    # commit messages of commits "newer"/on top of the last/"newest" commit having "commit msg" in its commit message:
+    partition_log_entries("commit msg")[0].transpose[2]
+    # commit SHAs of commits "older"/on botton of the last/"newest" commit having "commit msg" in its commit message:
+    partition_log_entries("commit msg")[2].transpose[0]
+    # must be true:
+    partition_log_entries("commit msg").size == 3
+    partition_log_entries("commit msg").map(&:size).reduce(:+) == branch_commits.size
+=end
+     def partition_log_entries str, log_entries=nil, fields=[:sha, :itself, :message ], multiple_occurence_index=0
+       log_entries ||= self.branch_commits
+       i = multiple_occurence_index.to_i
+       separator = [(select_commits_matching str, log_entries, fields.to_nil)[i]]
+       before  =  log_entries.take_while { |c|
+         !(separator.index c)
+       }
+       after   = (log_entries - before) - separator
+       partitions = [
+         commits_map(before, fields),
+         commits_map(separator.compact, fields),
+         commits_map(after, fields),
+       ]
+       separator.first.nil? && partitions.reverse || partitions
+     end
+
+
 end # of RubyRooomyGitBaseModule
 
 
