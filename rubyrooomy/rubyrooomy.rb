@@ -1711,6 +1711,24 @@ module RubyRooomyGitBaseModule
   end # of Git::Base
 
 
+=begin
+     select commits whose menssage match str
+     the result will be an array, having one
+     element per commit matched. Each of those
+     elements will be an array, having by
+     default 3  elements (sha, message and the
+     commit object itself).
+     each
+=end
+     def select_commits_matching  str, log_entries=nil, fields=[:sha, :itself, :message]
+       log_entries ||= self.branch_commits
+       commits = log_entries.select {|c|
+         c.message.match str
+       }
+       commits_map commits, fields
+     end
+
+
 end # of RubyRooomyGitBaseModule
 
 
