@@ -1041,6 +1041,10 @@ module RubyRooomyPgShellCommandsModule
   # this version will get "/tmp/database_dump" from "src_db" instead:
   psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",     [ "/tmp/psql_db_original_dump" ]  ,    [       "/tmp/database_dump"     ], "ON_ERROR_STOP=off" , ["src_db", "src_db_user", "src_db_pw", "localhost"],  ]
 
+  # this version will get "/tmp/database_dump" from "src_db" too, but won't drop the current database.
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",     [ "/tmp/psql_db_original_dump" ]  ,    [       "/tmp/sample_2_database_dump"     ], "ON_ERROR_STOP=off" , "psql_db__sample_example_2", "dont_drop" ]
+
+
 =end
   def psql_db_dump_replacer_batch__from psql_db_dump_replacer
 
@@ -1051,12 +1055,14 @@ module RubyRooomyPgShellCommandsModule
       db_dumps__to_be_applied,
       psql_dump_apply_options,
       psql_db__get_dumps_to_be_applied,
+      dont_drop,
       reserved = psql_db_dump_replacer
 
    psql_db = array__from psql_db
    db_dumps__backup_desired_path = array__from db_dumps__backup_desired_path
    db_dumps__to_be_applied = array__from db_dumps__to_be_applied
    psql_db__src_dumps_to_be_applied = array__from psql_db__get_dumps_to_be_applied
+   dont_drop = dont_drop.nne
 
     batch_generators = [
       psql_db__get_dumps_to_be_applied.nne && [
@@ -1071,11 +1077,11 @@ module RubyRooomyPgShellCommandsModule
         db_dumps__backup_desired_path,
         "",
       ],
-      [
+      (!dont_drop) && [
         :psql_db_batch__db_queries_method,
         psql_db,
         :db_queries__drop_owned_current_user,
-      ],
+      ] || nil,
       [
         :psql_db_batch__cli_or_apply_dumps,
         psql_db,
