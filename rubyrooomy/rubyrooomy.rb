@@ -1663,6 +1663,21 @@ module RubyRooomyGitBaseModule
     end
 
 
+=begin
+  GitBase::log will fetch only the last 30 commits.
+  A parameter can be given to it.
+  Internal functions
+  want to work with an infinite number.
+
+  This function sets the big enough value, Float::INFINITY
+  by default.
+=end
+    def log_size_limit set_to=nil
+      set_to && (@log_size_limit = set_to)
+      @log_size_limit ||= Float::INFINITY
+    end
+
+
   end # of Git::Base
 
 
