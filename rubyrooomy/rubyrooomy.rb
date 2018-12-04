@@ -546,6 +546,17 @@ module RubyRooomyJsonModule
 end
 
 
+=begin 
+  The purpose of this module is to offer functions that can
+  execute git related commands and batches in the command line
+  shell where ruby is running, like forking a branch
+=end
+module RubyRooomyGitShellCommandsModule
+
+
+end # of RubyRooomyGitShellCommandsModule
+
+
 =begin
   The purpose of this module is to offer functions that can
   execute file system related commands in the command line
