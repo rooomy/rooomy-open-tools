@@ -1118,6 +1118,7 @@ end
 =end
 module RubyRooomyShellCommandsModule
 
+   include RubyRooomyGitShellCommandsModule
    include RubyRooomyFsShellCommandsModule
    include RubyRooomyPgShellCommandsModule
    include RubyRooomyArrayOfHashesModule
