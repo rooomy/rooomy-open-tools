@@ -1689,6 +1689,25 @@ module RubyRooomyGitBaseModule
     end
 
 
+=begin
+  Takes a list of commit objects (like the one returned by
+  #self.log.entries ) and maps them into the attributes
+  given as parameter. To check candidate options, check
+  self.log.entries[0].methods
+
+  If fields is nil, return the commits without mapping them.
+=end
+     def commits_map  log_entries=nil, fields=[:sha, :message, :itself,]
+       log_entries ||= self.branch_commits
+       commits = log_entries
+       (fields && commits.map{ |c|
+         fields.map {|f|
+           c.send f
+         }
+       } || commits)
+     end
+
+
   end # of Git::Base
 
 
