@@ -1071,7 +1071,7 @@ module RubyRooomyPgShellCommandsModule
         db_dumps__to_be_applied,
         "",
       ],
-      [
+      db_dumps__backup_desired_path.compact.nne && [
         :psql_db_batch__cli_or_generate_dumps,
         psql_db,
         db_dumps__backup_desired_path,
