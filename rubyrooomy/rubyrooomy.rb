@@ -1006,6 +1006,8 @@ module RubyRooomyPgShellCommandsModule
   Just give this method name (or returned array) to
   #exec__batch_generator , with the #psql_db_- definition, e.g:
   exec__batch_generator [ :psql_db_dump_replacer_batch_generator__from, :psql_db_dump_replacer__for_psql_db__sample_example]
+  or to
+  #batch__from_batch_generator psql_db_dump_replacer_batch_generator__from(psql_db_dump_replacer__for_psql_db__sample_example)
 
   examples:
   # this version supposes "/tmp/database_dump" exists, and will apply it to :psql_db__sample_example, after backup-ing it to "/tmp/database_dump"
