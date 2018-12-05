@@ -357,11 +357,16 @@ module RubyRooomyPgGemModule
  Can be given to #exec__batch, provided that the #batch_controller__
  argument has  batch_command__pg_gem set as second argument (which
  is not the default case); for example:
- exec_batch pg_gem_batch, batch_controller__pg_gem_stop_default
+ exec__batch pg_gem_batch, batch_controller__pg_gem_stop_default
+
+ Alternatively can be given as the first element of the array given
+ to #pg_gem_exec__from
 
  examples:
-   pg_gem_batch__from psql_db__sample_example,  (db_query_select__from ["table"])
-   pg_gem_batch__from psql_db__sample_example,  db_queries__drop_owned_current_user
+   pg_gem_batch__from(psql_db__sample_example,  (db_query_select__from ["table"]))
+   pg_gem_batch__from(psql_db__sample_example,  db_queries__drop_owned_current_user)
+   pg_gem_exec__from [ pg_gem_batch__from(psql_db__sample_example,  (db_query_select__from ["table"]))]
+   results__select_key_output pg_gem_exec__from [ pg_gem_batch__from(psql_db__sample_example,  (db_query_select__from ["table"]))]
 
 =end
   def pg_gem_batch__from  psql_db, db_queries
