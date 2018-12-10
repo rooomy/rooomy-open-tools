@@ -830,6 +830,43 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+   generates a #git_batch__ definition from
+   a #git_operation__ definition, that will
+   derive, from its #git_command__ definition,
+   a git command (e.g: show, or reset),
+   and its options, to be run for a list of object ids
+   (like sha, or branch names) defined by its
+   #git_object_ids__ definition
+
+   give to #exec__batch to execute it.
+
+   example:
+
+   git_batch__from [["show", ["--raw"] ], ["HEAD~1"]]
+   git_batch__from [["show", ["--raw"] ], ]
+   git_batch__from :git_operation__show_raw_HEAD
+   git_batch__from [ :git_command__show_raw ]
+   git_batch__from [ :git_command__show_raw, :git_object_ids__HEAD ]
+   git_batch__from [ :git_command__branch_delete_force, "undesired_branch" ]
+
+=end
+  def git_batch__from git_operation
+    git_operation = array__from git_operation
+    git_command, git_object_ids  = git_operation
+    git_command = array__from git_command
+    git_object_ids = array__from git_object_ids
+    git_object_ids = [ git_object_ids ].flatten 1
+    git_command_name,
+    git_options,
+      reserved = git_command
+    git_options = [ git_options ].flatten 1
+    [
+      [ "git", git_command_name, git_options, git_object_ids ].flatten(1),
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
