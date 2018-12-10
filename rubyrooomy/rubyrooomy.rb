@@ -612,6 +612,24 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git cherry-pick
+
+  example:
+
+  git_batch__from [ :git_command__cherry_pick , "sha" ]
+  git_batch__from [ :git_command__cherry_pick, :git_object_ids__HEAD ]
+
+=end
+  def git_command__cherry_pick
+    [
+      "cherry-pick",     # command
+      [],                # options
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
