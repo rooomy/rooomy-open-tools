@@ -714,6 +714,24 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git reset --hard sha
+
+  example:
+
+  git_batch__from [ :git_command__reset_hard, ["sha"] ]
+  git_batch__from [ :git_command__reset_hard, "sha" ]
+
+=end
+  def git_command__reset_hard
+    [
+      "reset",           # command
+      ["--hard"],        # options
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
