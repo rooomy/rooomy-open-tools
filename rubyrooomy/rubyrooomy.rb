@@ -658,6 +658,26 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git merge branch_name -X theirs
+  (which, in case of conflict, preserve the changes on
+  branch_name)
+
+  example:
+
+  git_batch__from [ :git_command__merge_theirs, ["master"] ]
+  git_batch__from [ :git_command__merge_theirs, "master" ]
+
+=end
+  def git_command__merge_theirs
+    [
+      "merge",           # command
+      ["-X theirs"],     # options
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
