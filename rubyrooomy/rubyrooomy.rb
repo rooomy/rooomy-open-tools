@@ -394,7 +394,6 @@ module RubyRooomyPgGemModule
     batch_controller = array__from(batch_controller)
     batch_controller[1] =  batch_controller__pg_gem_default[1]
     exec__from [
-    # [
       batch,
       batch_controller
     ]
