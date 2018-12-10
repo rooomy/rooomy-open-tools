@@ -696,6 +696,24 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git checkout -b branch_name_or_file
+
+  example:
+
+  git_batch__from [ :git_command__checkout_b, ["new_branch"] ]
+  git_batch__from [ :git_command__checkout_b, "new_branch" ]
+
+=end
+  def git_command__checkout_b
+    [
+      "checkout",        # command
+      ["-b"],            # options
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
