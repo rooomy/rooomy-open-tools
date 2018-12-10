@@ -867,6 +867,26 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+   generates a #git_batch__ definition from
+   an array of #git_operation__ definitions.
+   check #git_batch__from_
+
+   give to #exec__batch to execute it.
+
+   example:
+   git_batch__from_operations [[:git_command__show_raw, :git_object_ids__HEAD ]]
+
+=end
+  def git_batch__from_operations git_operations
+    git_operations = array__from git_operations
+
+    git_operations.map{ |git_operation|
+      git_batch__from git_operation
+    }.flatten(1)
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
