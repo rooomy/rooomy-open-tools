@@ -732,6 +732,25 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git reset file_or_sha
+
+  example:
+
+  git_batch__from [ :git_command__reset, ["file"] ]
+  git_batch__from [ :git_command__reset, "file" ]
+  git_batch__from [ :git_command__reset ]
+
+=end
+  def git_command__reset
+    [
+      "reset",           # command
+      [],                # options
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
