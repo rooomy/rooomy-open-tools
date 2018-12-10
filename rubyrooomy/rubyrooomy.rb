@@ -785,6 +785,27 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+   sample #git_operation__ definition, composed of a
+   #git_command__ definition (#git_command__show_raw)
+   and a #git_object_ids__ definition (#git_object_ids__HEAD)
+   give to #git_batch__ and the result to
+   #exec__batch in order  to execute it.
+
+   example:
+
+   git_batch__from git_operation__show_raw_HEAD
+   # same as:
+   git_batch__from [:git_command__show_raw, :git_object_ids__HEAD ]
+=end
+  def git_operation__show_raw_HEAD
+    [
+      git_command__show_raw,
+      git_object_ids__HEAD,
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
