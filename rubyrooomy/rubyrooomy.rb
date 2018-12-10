@@ -567,6 +567,15 @@ end
 module RubyRooomyGitShellCommandsModule
 
 
+=begin
+  generates a string out of a timestamp that can
+  be used as a git branch name
+=end
+  def git_branch_name__from_timestamp
+    Time.now.strftime "%Y.%m.%d_%H.%M.%S"
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
