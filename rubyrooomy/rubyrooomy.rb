@@ -648,6 +648,16 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  sample #git_comand__ definition
+=end
+  def git_object_ids__HEAD
+    [
+      "HEAD~0",     # first object id ...
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
