@@ -806,6 +806,30 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  generates a #git_batch_generator__ definition
+  out of a #git_operation.
+
+  give to #exec__batch_generator in order to execute it,
+  or to #batch__from_batch_generator to analyse it.
+
+  example:
+
+  git_batch_generator__from git_operation__show_raw_HEAD
+  exec__batch_generator git_batch_generator__from git_operation__show_raw_HEAD
+  # only batch:
+  batch__from_batch_generator git_batch_generator__from git_operation__show_raw_HEAD
+  # same as:
+  git_batch__from git_operation__show_raw_HEAD
+=end
+  def git_batch_generator__from git_operation
+    [
+      :git_batch__from,
+      git_operation,
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
