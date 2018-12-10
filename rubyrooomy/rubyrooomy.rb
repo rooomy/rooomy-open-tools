@@ -1726,9 +1726,6 @@ module RubyRooomyGitBaseModule
      end
 
 
-  end # of Git::Base
-
-
 =begin
      select commits whose menssage match str
      the result will be an array, having one
@@ -1785,6 +1782,9 @@ module RubyRooomyGitBaseModule
        ]
        separator.first.nil? && partitions.reverse || partitions
      end
+
+
+  end # of Git::Base
 
 
 end # of RubyRooomyGitBaseModule
