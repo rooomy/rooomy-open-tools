@@ -768,6 +768,23 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git branch -D
+
+  example:
+
+  git_batch__from [ :git_command__branch_delete_force, "undesired_branch" ]
+
+=end
+  def git_command__branch_delete_force
+    [
+      "branch",    # command
+      ["-D"],      # options
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
