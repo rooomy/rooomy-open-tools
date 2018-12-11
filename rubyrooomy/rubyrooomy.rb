@@ -365,8 +365,20 @@ module RubyRooomyPgGemModule
  Can be given to #exec__batch, provided that the #batch_controller__
  argument has  batch_command__pg_gem set as second argument (which
  is not the default case); for example:
- exec_batch pg_gem_batch, batch_controller__pg_gem_stop_default
+ exec__batch pg_gem_batch, batch_controller__pg_gem_stop_default
 
+ Alternatively can be given as the first element of the array given
+ to #pg_gem_exec__from
+
+ examples:
+   pg_gem_batch__from(psql_db__sample_example,  (db_query_select__from ["table"]))
+   pg_gem_batch__from(psql_db__sample_example,  db_queries__drop_owned_current_user)
+   pg_gem_exec__from [ pg_gem_batch__from(psql_db__sample_example,  (db_query_select__from ["table"]))]
+   results__select_key_output pg_gem_exec__from [ pg_gem_batch__from(psql_db__sample_example,  (db_query_select__from ["table"]))]
+
+
+ # TODO: these 4 lines below must be manually removed. I was forced to leave
+ them otherwise the merge tool will get confused and won't merge this branch.
  examples:
    pg_gem_batch__from psql_db__sample_example,  (db_query_select__from ["table"])
    pg_gem_batch__from psql_db__sample_example,  db_queries__drop_owned_current_user
@@ -397,7 +409,6 @@ module RubyRooomyPgGemModule
     batch_controller = array__from(batch_controller)
     batch_controller[1] =  batch_controller__pg_gem_default[1]
     exec__from [
-    # [
       batch,
       batch_controller
     ]
@@ -553,6 +564,17 @@ module RubyRooomyJsonModule
 
 
 end
+
+
+=begin 
+  The purpose of this module is to offer functions that can
+  execute git related commands and batches in the command line
+  shell where ruby is running, like forking a branch
+=end
+module RubyRooomyGitShellCommandsModule
+
+
+end # of RubyRooomyGitShellCommandsModule
 
 
 =begin
@@ -977,6 +999,13 @@ module RubyRooomyPgShellCommandsModule
 
 
 =begin
+  This function had a bad name, it was coded as
+  it was #psql_db_dump_replacer_batch__from. After
+  #psql_db_dump_replacer_batch__from was implemented,
+  this function could have been removed, but it is
+  left deprecated for API backwards compatibility
+  respect.
+
   defines #psql_db_dump_replacer_batch_generator__,
   out of a #psql_db_dump_replacer__ definition,
   that can be used
@@ -997,17 +1026,71 @@ module RubyRooomyPgShellCommandsModule
   Just give this method name (or returned array) to
   #exec__batch_generator , with the #psql_db_- definition, e.g:
   exec__batch_generator [ :psql_db_dump_replacer_batch_generator__from, :psql_db_dump_replacer__for_psql_db__sample_example]
+  or to
+  #batch__from_batch_generator psql_db_dump_replacer_batch_generator__from(psql_db_dump_replacer__for_psql_db__sample_example)
 
   examples:
   # this version supposes "/tmp/database_dump" exists, and will apply it to :psql_db__sample_example, after backup-ing it to "/tmp/database_dump"
   psql_db_dump_replacer_batch_generator__from    [   :psql_db__sample_example,    [ "/tmp/psql_db_original_dump" ]   ,    [       "/tmp/database_dump"     ], "ON_ERROR_STOP=off"   ]
   # this one does the same thing, because #psql_db_dump_replacer__for_psql_db__sample_example defines the same array:
-  psql_db_dump_replacer_batch_generator__from :psql_db_dump_replacer__for_psql_db__sample_example]
+  psql_db_dump_replacer_batch_generator__from :psql_db_dump_replacer__for_psql_db__sample_example
   # this version will get "/tmp/database_dump" from "src_db" instead:
   psql_db_dump_replacer_batch_generator__from    [   :psql_db__sample_example,     [ "/tmp/psql_db_original_dump" ]  ,    [       "/tmp/database_dump"     ], "ON_ERROR_STOP=off" , ["src_db", "src_db_user", "src_db_pw", "localhost"],  ]
 
 =end
   def psql_db_dump_replacer_batch_generator__from psql_db_dump_replacer
+    [ "psql_db_dump_replacer_batch__from",  psql_db_dump_replacer ]
+  end
+
+
+=begin
+  defines #psql_db_dump_replacer_batch__,
+  out of a #psql_db_dump_replacer__ definition,
+  that can be used
+  to create a #psql_db_batch__ which backups the
+  current contents of #psql_db__ , into each of the
+  files in db_dumps__backup_desired_path,
+  drops all of its tables (by current user), and then
+  reads each of the database dumps from
+  db_dumps__to_be_applied, into the same #psql_db__.
+
+  if the #psql_db_dump_replacer__ definition has
+  a second #psql_db__ definition at its 5th position
+  (index 4), db_dumps__to_be_applied will be filled
+  with the contents of that database. Otherwise,
+  it is supposed that db_dumps__to_be_applied already
+  exist in the filesystem.
+
+  Just give this method name to
+  #exec__batch_generator , with the #psql_db_- definition, e.g:
+  exec__batch_generator [ :psql_db_dump_replacer_batch__from, :psql_db_dump_replacer__for_psql_db__sample_example]
+  or give the returned values to #exec__batch
+
+  examples:
+  # this version supposes "/tmp/database_dump" exists, and will apply it to :psql_db__sample_example, after backup-ing it to "/tmp/database_dump"
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",    [ "/tmp/psql_db_original_dump" ]   ,    [       "/tmp/database_dump"     ], "ON_ERROR_STOP=off"   ]
+
+  # this one does the same thing, because #psql_db_dump_replacer__for_psql_db__sample_example defines the same array:
+  psql_db_dump_replacer_batch__from :psql_db_dump_replacer__for_psql_db__sample_example
+
+  # this version will get "/tmp/database_dump" from "src_db" instead:
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",     [ "/tmp/psql_db_original_dump" ]  ,    [       "/tmp/database_dump"     ], "ON_ERROR_STOP=off" , ["src_db", "src_db_user", "src_db_pw", "localhost"],  ]
+
+  # this version will get "/tmp/database_dump" from "src_db" too, but won't drop the current database.
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",     [ "/tmp/psql_db_original_dump" ]  ,    [       "/tmp/sample_2_database_dump"     ], "ON_ERROR_STOP=off" , "psql_db__sample_example_2", "dont_drop" ]
+
+  # this version will just dump the database:
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",     [ "/tmp/psql_db_original_dump" ]  ,   nil, "ON_ERROR_STOP=off" , nil, "dont_drop" ]
+
+  # this version will dump the database and drop it:
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",     [ "/tmp/psql_db_original_dump" ]  ,   nil, "ON_ERROR_STOP=off" , nil ]
+
+  # this version will just apply a migration file having some queries to the database:
+  psql_db_dump_replacer_batch__from    [   "psql_db__sample_example",  nil,   [ "/tmp/migration.sql" ]  , "ON_ERROR_STOP=off" , nil, "dont_drop" ]
+
+
+=end
+  def psql_db_dump_replacer_batch__from psql_db_dump_replacer
 
    psql_db_dump_replacer = array__from psql_db_dump_replacer
 
@@ -1016,12 +1099,14 @@ module RubyRooomyPgShellCommandsModule
       db_dumps__to_be_applied,
       psql_dump_apply_options,
       psql_db__get_dumps_to_be_applied,
+      dont_drop,
       reserved = psql_db_dump_replacer
 
    psql_db = array__from psql_db
    db_dumps__backup_desired_path = array__from db_dumps__backup_desired_path
    db_dumps__to_be_applied = array__from db_dumps__to_be_applied
    psql_db__src_dumps_to_be_applied = array__from psql_db__get_dumps_to_be_applied
+   dont_drop = dont_drop.nne
 
     batch_generators = [
       psql_db__get_dumps_to_be_applied.nne && [
@@ -1030,18 +1115,18 @@ module RubyRooomyPgShellCommandsModule
         db_dumps__to_be_applied,
         "",
       ],
-      [
+      db_dumps__backup_desired_path.compact.nne && [
         :psql_db_batch__cli_or_generate_dumps,
         psql_db,
         db_dumps__backup_desired_path,
         "",
       ],
-      [
+      (!dont_drop) && [
         :psql_db_batch__db_queries_method,
         psql_db,
         :db_queries__drop_owned_current_user,
-      ],
-      [
+      ] || nil,
+      db_dumps__to_be_applied.compact.nne && [
         :psql_db_batch__cli_or_apply_dumps,
         psql_db,
         db_dumps__to_be_applied,
@@ -1052,7 +1137,9 @@ module RubyRooomyPgShellCommandsModule
     batch_generators.map {|batch_generator|
       batch__from_batch_generator batch_generator
     }.flatten 1
+
   end
+
 
 end
 
@@ -1064,6 +1151,7 @@ end
 =end
 module RubyRooomyShellCommandsModule
 
+   include RubyRooomyGitShellCommandsModule
    include RubyRooomyFsShellCommandsModule
    include RubyRooomyPgShellCommandsModule
    include RubyRooomyArrayOfHashesModule
@@ -1607,9 +1695,114 @@ module RubyRooomyGitBaseModule
        self
     end
 
-  end
 
-end
+=begin
+  GitBase::log will fetch only the last 30 commits.
+  A parameter can be given to it.
+  Internal functions
+  want to work with an infinite number.
+
+  This function sets the big enough value, Float::INFINITY
+  by default.
+=end
+    def log_size_limit set_to=nil
+      set_to && (@log_size_limit = set_to)
+      @log_size_limit ||= Float::INFINITY
+    end
+
+
+=begin
+  like #log, but fetches the commit objects instead (of
+  the enumeration).
+  Will fetch the amount of commits set by #log_size_limit
+=end
+    def branch_commits
+      commits = log(log_size_limit).entries
+      commits
+    end
+
+
+=begin
+  Takes a list of commit objects (like the one returned by
+  #self.log.entries ) and maps them into the attributes
+  given as parameter. To check candidate options, check
+  self.log.entries[0].methods
+
+  If fields is nil, return the commits without mapping them.
+=end
+     def commits_map  log_entries=nil, fields=[:sha, :message, :itself,]
+       log_entries ||= self.branch_commits
+       commits = log_entries
+       (fields && commits.map{ |c|
+         fields.map {|f|
+           c.send f
+         }
+       } || commits)
+     end
+
+
+=begin
+     select commits whose menssage match str
+     the result will be an array, having one
+     element per commit matched. Each of those
+     elements will be an array, having by
+     default 3  elements (sha, message and the
+     commit object itself).
+     each
+=end
+     def select_commits_matching  str, log_entries=nil, fields=[:sha, :itself, :message]
+       log_entries ||= self.branch_commits
+       commits = log_entries.select {|c|
+         c.message.match str
+       }
+       commits_map commits, fields
+     end
+
+
+=begin
+    separates a given set of commits (like the default #self.log.entries)
+    in an array having 3 arrays: the last having the elements *before*
+    the occurrence of a commit matching str in its message; the middle having
+    the commit which has the match, and the first commits after it.
+
+    If multiple matches are found, then the last one (ie, probably the
+    newest commit) is used. This behaviour can be controlled by changing
+    the argument multiple_occurence_index
+
+    If no matches are found, all the commits are considered to be "older"
+    than the queried, and they will all be placed in the last commit.
+
+    examples:
+
+    # commit messages of commits "newer"/on top of the last/"newest" commit having "commit msg" in its commit message:
+    partition_log_entries("commit msg")[0].transpose[2]
+    # commit SHAs of commits "older"/on botton of the last/"newest" commit having "commit msg" in its commit message:
+    partition_log_entries("commit msg")[2].transpose[0]
+    # must be true:
+    partition_log_entries("commit msg").size == 3
+    partition_log_entries("commit msg").map(&:size).reduce(:+) == branch_commits.size
+=end
+     def partition_log_entries str, log_entries=nil, fields=[:sha, :itself, :message ], multiple_occurence_index=0
+       log_entries ||= self.branch_commits
+       i = multiple_occurence_index.to_i
+       separator = [(select_commits_matching str, log_entries, fields.to_nil)[i]]
+       before  =  log_entries.take_while { |c|
+         !(separator.index c)
+       }
+       after   = (log_entries - before) - separator
+       partitions = [
+         commits_map(before, fields),
+         commits_map(separator.compact, fields),
+         commits_map(after, fields),
+       ]
+       separator.first.nil? && partitions.reverse || partitions
+     end
+
+
+  end # of Git::Base
+
+
+end # of RubyRooomyGitBaseModule
 
 
 module RubyRooomyDefineContextsModule
