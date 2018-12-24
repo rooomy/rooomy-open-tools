@@ -937,6 +937,44 @@ end # of RubyRooomyGitShellCommandsModule
 module RubyRooomySubShellCommandsModule
 
 
+=begin
+  Generates a sample #bash_subshell definition
+  that can be used to create batches to run
+  a script called "my_script.sh", installed under
+  a location set in an environment var PREFIX.
+
+  Give it to #bash_subshell_batch__generate, and give
+  some imaginary commands to it, like [ "build", "run"]
+
+  Note: an echo was prepended to the "my_script.sh"
+  script to make it succeed if the batch is given
+  to #exec__batch
+
+=end
+  def bash_subshell__my_script_sample
+    [
+      [
+        nil,                                   # command for program (reserved)
+        "echo my_script.sh",                        # program
+        nil,                                   # options for program (reserved)
+        nil,                                   # token separator
+        nil,                                   # prepended variables
+        " | tee  output.txt",                       # appended redirects
+      ],                                       # program
+      [
+        [ "${HOME}/my_script/"    , "PREFIX"          , ],
+        [ "$PATH:${PREFIX}/bin/"  , "PATH"            , ],
+        [ "${PREFIX}/lib/"        , "LD_LIBRARY_PATH" , ],
+      ],                                       # exports
+      [
+        [ "${PREFIX}/my_script.conf" , "--conf-file"  , ],
+        [ "-v"                       ,                  ],
+        [ "8081"                     , "-port"  , ":" , ],
+      ],                                       # options
+    ]
+  end
+
+
 end # of RubyRooomySubShellCommandsModule
 
 
