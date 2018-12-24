@@ -73,7 +73,7 @@ module RubyRooomyMetaModule
   end
 
 
-end
+end # of RubyRooomyMetaModule
 
 
 =begin 
