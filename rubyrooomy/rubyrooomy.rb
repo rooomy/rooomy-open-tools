@@ -44,6 +44,35 @@ module RubyRooomyMetaModule
   end
 
 
+=begin
+  Merge two given definitions into one, ie,
+  given two arrays, preserves the first one,
+  filling the indexes having nil values with
+  the corresponding index from the second one.
+
+  This merge is not recursive.
+
+  Example:
+
+  # defining a port for psql_db__sample_example:
+  definition__merge_simple "psql_db__sample_example", [nil, nil, nil, nil, "5433"]
+  # => ["any_db", "any_user", "onlyNSAknows", "localhost", "5433", nil]
+
+  definition__merge_simple  [ nil, "another_user" ],  "psql_db__sample_example"
+  # => ["any_db", "another_user", "onlyNSAknows", "localhost", nil, nil]
+
+
+=end
+  def definition__merge_simple definition1, definition2
+    definition1 = array__from definition1
+    definition2 = array__from definition2
+    arrays__zip(definition1, definition2).map { |a|
+        a.reduce "nne"
+    }
+
+  end
+
+
 end
 
 
