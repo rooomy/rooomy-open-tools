@@ -2423,6 +2423,7 @@ module RubyRooomyModule
   include RubyRooomyFilesModule
   include RubyRooomyStringsModule
   include RubyRooomyJsonModule
+  include RubyRooomySubShellCommandsModule
   include RubyRooomyShellCommandsModule
   include RubyRooomyGemModule
   include RubyRooomyDefineContextsModule
