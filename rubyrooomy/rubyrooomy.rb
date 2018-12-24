@@ -489,6 +489,7 @@ module RubyRooomyFilesModule
    file_modifications__from file_modifications_plan__sample
 =end
   def file_modifications__from file_modifications_plan
+    require 'fileutils'
     file_modifications_plan.map{|file_modification_plan|
       file,
         file_addition = array__from(file_modification_plan)
