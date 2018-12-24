@@ -919,6 +919,26 @@ module RubyRooomyGitShellCommandsModule
 end # of RubyRooomyGitShellCommandsModule
 
 
+=begin 
+  The purpose of this module is to offer functions that can
+  generalize the way other ShellCommandsModule are created.
+  Normally most shell comands will take the basic form:
+
+  command subcommand options args
+
+
+  like:
+
+  git show --raw HEAD~0
+
+
+=end
+module RubyRooomySubShellCommandsModule
+
+
+end # of RubyRooomySubShellCommandsModule
+
+
 =begin
   The purpose of this module is to offer functions that can
   execute file system related commands in the command line
