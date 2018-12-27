@@ -2001,7 +2001,7 @@ module RubyRooomyShellCommandsModule
   end
 
 
-end
+end # of RubyRooomyShellCommandsModule
 
 
 =begin
