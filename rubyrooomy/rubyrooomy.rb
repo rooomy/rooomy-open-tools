@@ -998,6 +998,62 @@ module RubyRooomySubShellCommandsModule
   end
 
 
+=begin
+  Given a #batch_subshell definition, generates a batch for it.
+
+  Examples:
+
+  bash_subshell_batch__generate "bash_subshell__my_script_sample", ["build", "run"]
+  # => [[" ",
+    "export PREFIX=${HOME}/my_script/; export PATH=$PATH:${PREFIX}/bin/; export LD_LIBRARY_PATH=${PREFIX}/lib/; echo my_script.sh --conf-file=${PREFIX}/my_script.conf -v -port:8081 build  | tee  output.txt"],
+  #    [" ",
+       "export PREFIX=${HOME}/my_script/; export PATH=$PATH:${PREFIX}/bin/; export LD_LIBRARY_PATH=${PREFIX}/lib/; echo my_script.sh --conf-file=${PREFIX}/my_script.conf -v -port:8081 run  | tee  output.txt"]]
+
+=end
+  def bash_subshell_batch__generate subshell, commands
+    program,
+     definitions,
+     program_options,
+     reserved = array__from(subshell)
+
+   variables = array__from(definitions).map {|d|
+     d = array__from d
+     d = definition__merge_simple d, bash_subshell_program__export_deps
+     string__from_definition d
+   }
+
+   program_options = array__from(program_options).map { |o|
+     o = array__from o
+     o[2] ||= o[1] && "=" # default assignment operator, if two operands
+     string__from_definition o
+   }
+
+   commands = array__from(commands).map { |c|
+     string__from_definition c
+   }
+   call_complement = [
+     nil,  # command
+     nil,  # program
+     string__recursive_join(
+       [" "] +  program_options,
+     ),   # options
+     " ",  # token separator
+     string__recursive_join(
+       [" "] +  variables, # varibles
+     ),
+     nil,   # redirections
+
+   ]
+
+   batch = commands.map { |command|
+     call_complement[0] = command
+     definition  = definition__merge_simple program, call_complement
+     [ " ",  string__from_definition(definition) ]
+   }
+
+  end # of bash_subshell_batch__generate
+
+
 end # of RubyRooomySubShellCommandsModule
 
 
