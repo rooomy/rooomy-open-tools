@@ -929,6 +929,35 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  generates a #git_operations__ definition, a list of
+  #git_operation__, by combining the each of the
+  #git_command__ (in the #git_commads_ ) given
+  with each of the #git_object_id__ (in the
+  #git_object_ids) given.
+
+  Examples:
+
+  git_operations__from [:git_command__show ], ["HEAD~1", "HEAD~2"]
+  # => [[:git_command__show, "HEAD~1"], [:git_command__show, "HEAD~2"]]
+
+  git_operations__from [:git_command__show, :git_command__cherry_pick], ["HEAD~1", "HEAD~2"]
+  # => [[:git_command__show, "HEAD~1"],
+  #  [:git_command__cherry_pick, "HEAD~1"],
+  #   [:git_command__show, "HEAD~2"],
+  #    [:git_command__cherry_pick, "HEAD~2"]]
+
+=end
+  def git_operations__from git_comands, git_object_ids
+    git_comands = array__from git_comands
+    git_object_ids = array__from git_object_ids
+    git_object_ids.map { |git_object_id|
+      git_object_id = array__from git_object_id
+      git_comands.product  git_object_id
+    }.flatten(1)
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
