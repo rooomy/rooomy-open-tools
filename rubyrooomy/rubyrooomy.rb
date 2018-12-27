@@ -1131,6 +1131,21 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+   extracts the sha object id (ie, the actual sha strings) from a
+   given #git_sha_msg_map__
+
+  examples:
+  git_sha_object_ids__from git_sha_msg_map__newer_than [:git_base__from, nil, "commit msg"]
+  ["cherry-pick"].product   git_sha_object_ids__from git_sha_msg_map__newer_than [:git_base__from, nil, "commit msg"]
+
+=end
+  def git_sha_object_ids__from git_sha_msg_map
+    git_sha_msg_map = array__from git_sha_msg_map
+    git_sha_msg_map.transpose[0].to_a
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
