@@ -567,6 +567,346 @@ end
 module RubyRooomyGitShellCommandsModule
 
 
+=begin
+  generates a string out of a timestamp that can
+  be used as a git branch name
+=end
+  def git_branch_name__from_timestamp
+    Time.now.strftime "%Y.%m.%d_%H.%M.%S"
+  end
+
+
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git show --raw
+
+  example:
+
+  git_batch__from [ :git_command__show_raw, :git_object_ids__HEAD ]
+  git_batch__from [ :git_command__show_raw ]
+
+=end
+  def git_command__show_raw
+    [
+      "show",     # command
+      ["--raw"],  # options
+    ]
+  end
+
+
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git show
+
+  example:
+
+  git_batch__from [ :git_command__show, :git_object_ids__HEAD ]
+  git_batch__from [ :git_command__show ]
+
+=end
+  def git_command__show
+    [
+      "show",     # command
+      [],         # options
+    ]
+  end
+
+
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git cherry-pick
+
+  example:
+
+  git_batch__from [ :git_command__cherry_pick , "sha" ]
+  git_batch__from [ :git_command__cherry_pick, :git_object_ids__HEAD ]
+
+=end
+  def git_command__cherry_pick
+    [
+      "cherry-pick",     # command
+      [],                # options
+    ]
+  end
+
+
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git merge branch_name
+
+  example:
+
+  git_batch__from [ :git_command__merge, ["master"] ]
+  git_batch__from [ :git_command__merge, "master" ]
+
+=end
+  def git_command__merge
+    [
+      "merge",           # command
+      [],                # options
+    ]
+  end
+
+
+=begin
+  sample #git_comand__ definition
+=end
+  def git_object_ids__HEAD
+    [
+      "HEAD~0",     # first object id ...
+    ]
+  end
+
+
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git merge branch_name -X theirs
+  (which, in case of conflict, preserve the changes on
+  branch_name)
+
+  example:
+
+  git_batch__from [ :git_command__merge_theirs, ["master"] ]
+  git_batch__from [ :git_command__merge_theirs, "master" ]
+
+=end
+  def git_command__merge_theirs
+    [
+      "merge",           # command
+      ["-X theirs"],     # options
+    ]
+  end
+
+
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git checkout branch_name_or_file
+
+  example:
+
+  git_batch__from [ :git_command__checkout, ["master"] ]
+  git_batch__from [ :git_command__checkout, "master" ]
+
+=end
+  def git_command__checkout
+    [
+      "checkout",        # command
+      [],                # options
+    ]
+  end
+
+
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git checkout -b branch_name_or_file
+
+  example:
+
+  git_batch__from [ :git_command__checkout_b, ["new_branch"] ]
+  git_batch__from [ :git_command__checkout_b, "new_branch" ]
+
+=end
+  def git_command__checkout_b
+    [
+      "checkout",        # command
+      ["-b"],            # options
+    ]
+  end
+
+
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git reset --hard sha
+
+  example:
+
+  git_batch__from [ :git_command__reset_hard, ["sha"] ]
+  git_batch__from [ :git_command__reset_hard, "sha" ]
+
+=end
+  def git_command__reset_hard
+    [
+      "reset",           # command
+      ["--hard"],        # options
+    ]
+  end
+
+
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git reset file_or_sha
+
+  example:
+
+  git_batch__from [ :git_command__reset, ["file"] ]
+  git_batch__from [ :git_command__reset, "file" ]
+  git_batch__from [ :git_command__reset ]
+
+=end
+  def git_command__reset
+    [
+      "reset",           # command
+      [],                # options
+    ]
+  end
+
+
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git branch -d
+
+  example:
+
+  git_batch__from [ :git_command__branch_delete_local, "undesired_branch" ]
+
+=end
+  def git_command__branch_delete_local
+    [
+      "branch",    # command
+      ["-d"],      # options
+    ]
+  end
+
+
+=begin
+  sample #git_comand__ definition, that can be used to
+  generate and execute the command git branch -D
+
+  example:
+
+  git_batch__from [ :git_command__branch_delete_force, "undesired_branch" ]
+
+=end
+  def git_command__branch_delete_force
+    [
+      "branch",    # command
+      ["-D"],      # options
+    ]
+  end
+
+
+=begin
+   sample #git_operation__ definition, composed of a
+   #git_command__ definition (#git_command__show_raw)
+   and a #git_object_ids__ definition (#git_object_ids__HEAD)
+   give to #git_batch__ and the result to
+   #exec__batch in order  to execute it.
+
+   example:
+
+   git_batch__from git_operation__show_raw_HEAD
+   # same as:
+   git_batch__from [:git_command__show_raw, :git_object_ids__HEAD ]
+=end
+  def git_operation__show_raw_HEAD
+    [
+      git_command__show_raw,
+      git_object_ids__HEAD,
+    ]
+  end
+
+
+=begin
+  generates a #git_batch_generator__ definition
+  out of a #git_operation.
+
+  give to #exec__batch_generator in order to execute it,
+  or to #batch__from_batch_generator to analyse it.
+
+  example:
+
+  git_batch_generator__from git_operation__show_raw_HEAD
+  exec__batch_generator git_batch_generator__from git_operation__show_raw_HEAD
+  # only batch:
+  batch__from_batch_generator git_batch_generator__from git_operation__show_raw_HEAD
+  # same as:
+  git_batch__from git_operation__show_raw_HEAD
+=end
+  def git_batch_generator__from git_operation
+    [
+      :git_batch__from,
+      git_operation,
+    ]
+  end
+
+
+=begin
+   generates a #git_batch__ definition from
+   a #git_operation__ definition, that will
+   derive, from its #git_command__ definition,
+   a git command (e.g: show, or reset),
+   and its options, to be run for a list of object ids
+   (like sha, or branch names) defined by its
+   #git_object_ids__ definition
+
+   give to #exec__batch to execute it.
+
+   example:
+
+   git_batch__from [["show", ["--raw"] ], ["HEAD~1"]]
+   git_batch__from [["show", ["--raw"] ], ]
+   git_batch__from :git_operation__show_raw_HEAD
+   git_batch__from [ :git_command__show_raw ]
+   git_batch__from [ :git_command__show_raw, :git_object_ids__HEAD ]
+   git_batch__from [ :git_command__branch_delete_force, "undesired_branch" ]
+
+=end
+  def git_batch__from git_operation
+    git_operation = array__from git_operation
+    git_command, git_object_ids  = git_operation
+    git_command = array__from git_command
+    git_object_ids = array__from git_object_ids
+    git_object_ids = [ git_object_ids ].flatten 1
+    git_command_name,
+    git_options,
+      reserved = git_command
+    git_options = [ git_options ].flatten 1
+    [
+      [ "git", git_command_name, git_options, git_object_ids ].flatten(1),
+    ]
+  end
+
+
+=begin
+   generates a #git_batch__ definition from
+   an array of #git_operation__ definitions.
+   check #git_batch__from_
+
+   give to #exec__batch to execute it.
+
+   example:
+   git_batch__from_operations [[:git_command__show_raw, :git_object_ids__HEAD ]]
+
+=end
+  def git_batch__from_operations git_operations
+    git_operations = array__from git_operations
+
+    git_operations.map{ |git_operation|
+      git_batch__from git_operation
+    }.flatten(1)
+  end
+
+
+=begin
+ #git_branch_backup_name_generator__ default definition:
+ bk-output_from_git_branch_name__from_timestamp method
+
+ give it to #git_branch_backup_name__from
+
+ example:
+ git_branch_backup_name__from git_branch_backup_name_generator__default
+
+=end
+  def git_branch_backup_name_generator__default
+    [
+      "bk",                               # backup prefix
+      "-",                                # default infix
+      :git_branch_name__from_timestamp,   # default postfixing method
+    ]
+  end
+
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
