@@ -975,6 +975,29 @@ module RubyRooomySubShellCommandsModule
   end
 
 
+=begin
+  Defines a sample #bash_subshell_program__
+  definition which can be used to generate
+  export commands
+
+  Examples:
+
+  string__from_definition definition__merge_simple [ "${HOME}/my_script/" , "PREFIX" , ], bash_subshell_program__export_deps
+  # => "export PREFIX=${HOME}/my_script/;"
+
+=end
+  def bash_subshell_program__export_deps
+    [
+      nil,              # reserved for value
+      nil,              # reserved for variable
+      "=",              # default assignment operator
+      "",               # default separator
+      ["", "export"],   # default begin ("export ")
+      ";",              # default end
+    ]
+  end
+
+
 end # of RubyRooomySubShellCommandsModule
 
 
