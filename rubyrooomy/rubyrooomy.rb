@@ -999,6 +999,29 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  generates a #git_branch__ definition from a
+  #git_base definition (#git_base__from by default)
+
+  planned improvements:
+  currently this function detects only the branch
+  name, leaving #git_branch__ incomplete
+
+  examples:
+
+  git_branch__current_from :git_base__from
+  # => ["master"]
+
+  git_branch__current_from # assumed :git_base__from
+  # => ["master"]
+
+=end
+  def git_branch__current_from  git_base=:git_base__from
+    git_base = array__from git_base
+    [ git_base.first.current_branch ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
