@@ -1146,6 +1146,20 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+   extracts the commits messages from a given #git_sha_msg_map__
+
+  examples: 
+  git_commit_msgs__from git_sha_msg_map__newer_than [:git_base__from, nil, "commit msg"]
+  ["cherry-pick"].product   git_commit_msgs__from git_sha_msg_map__newer_than [:git_base__from, nil, "commit msg"]
+
+=end
+  def git_commit_msgs__from git_sha_msg_map
+    git_sha_msg_map = array__from git_sha_msg_map
+    git_sha_msg_map.transpose[1].to_a
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
