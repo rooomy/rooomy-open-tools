@@ -1117,6 +1117,20 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  just like #git_sha_msg_map_partitions__from, but takes a #git_base__
+  definition as parameter instead.
+
+  examples:
+
+  git_sha_msg_map__from
+  git_sha_msg_map__from [:git_base__from ]
+=end
+  def git_sha_msg_map__from git_base=nil
+    git_sha_msg_map_partitions__from(git_base).flatten(1)
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
