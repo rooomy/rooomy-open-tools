@@ -1061,6 +1061,28 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  generates a #git_base_partition__ definition,
+  that can be use to partition a branch (the
+  current dir's one in its first element, the
+  #git_base__ definition), given its third element
+  (string that will be used to match commits' message).
+
+  give it to #git_base_partition__sample
+
+  example:
+    git_base_partition__from git_base_partition__sample
+
+=end
+  def git_base_partition__sample
+    [
+      :git_base__from,
+      nil,   # reserved for dir
+      "commit msg",
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
