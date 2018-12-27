@@ -906,6 +906,28 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+ takes a #git_branch_backup_name_generator__ definition and
+ generates a #git_branch_backup_name (string which must be a
+ valid name for a branch).
+
+ example:
+ git_branch_backup_name__from "git_branch_backup_name_generator__default"
+ # => "bk-2018.12.27_14.11.39"
+
+ git_branch_backup_name__from ["backup", "-", "git_branch_name__from_timestamp" ]
+ # => "backup-2018.12.27_14.11.47"
+
+
+=end
+  def git_branch_backup_name__from git_branch_backup_name_generator
+    git_branch_backup_name_generator = array__from git_branch_backup_name_generator
+    parts = git_branch_backup_name_generator.map { |part|
+      (array__from part).first
+    }
+    parts.join
+  end
+
 
 end # of RubyRooomyGitShellCommandsModule
 
