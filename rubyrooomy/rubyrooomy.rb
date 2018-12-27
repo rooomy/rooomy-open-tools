@@ -1099,6 +1099,24 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  just like #git_sha_msg_map_partitions__from, but returns only
+  the commits newer than the commit's having the message in
+  the given #git_base_partition_plan
+
+  examples:
+
+  git_sha_msg_map__newer_than [:git_base__from, nil, "commit msg"]
+  git_sha_msg_map__newer_than [:git_base__from ] # assumed [ :git_base__from,  nil, "" ]
+  git_sha_msg_map__newer_than # assumed [ :git_base__from,  nil, "" ]
+
+
+=end
+  def git_sha_msg_map__newer_than git_base_partition_plan=nil
+    git_sha_msg_map_partitions__from(git_base_partition_plan)[0]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
