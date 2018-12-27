@@ -1083,6 +1083,22 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  same as #git_base_partition__from, but returns only the
+  map (the fourth element)
+
+  examples:
+
+  git_sha_msg_map_partitions__from [:git_base__from, nil, "commit msg"]
+  git_sha_msg_map_partitions__from [:git_base__from ] # assumed [ :git_base__from,  nil, "" ]
+  git_sha_msg_map_partitions__from # assumed [ :git_base__from,  nil, "" ]
+
+=end
+  def git_sha_msg_map_partitions__from git_base_partition_plan=nil
+    git_base_partition__from(git_base_partition_plan)[3]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
