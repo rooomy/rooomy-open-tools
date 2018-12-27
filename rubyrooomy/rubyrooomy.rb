@@ -2463,6 +2463,7 @@ module RubyRooomyGemModule
       gem_bin_contents,
       gem_bin_executables,
       gem_dependencies,
+      gem_non_ruby_executables,
       reserved = args
 
 
@@ -2495,10 +2496,20 @@ require '#{gem_name}'
     ENDHEREDOC
     gem_bin_executables ||= [ gem_bin_generate && "#{gem_name}" ]
     gem_dependencies ||= [
-      ["rubyment", "~> 0.7.25694800"],
+      ["rubyment", "~> 0.7.25761146"],
       ["git", "~> 1.4"],
       ["pg",  "~> 1.1"],
     ]
+
+    gem_non_ruby_executables = [
+      # gem normally can only deploy non_ruby execs.
+      # each file in this array will be escapsulated
+      # as a ruby script that calls that file instead.
+      # that ruby script will be placed in the
+      # bin/ dir, and added to gem_executables
+
+    ]
+
 
     [
        gem_name,
@@ -2522,6 +2533,7 @@ require '#{gem_name}'
        gem_bin_contents,
        gem_bin_executables,
        gem_dependencies,
+       gem_non_ruby_executables,
 
    ]
   end
