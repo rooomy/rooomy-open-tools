@@ -1160,6 +1160,26 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  reduces the given #git_sha_msg_map__ definition to contain
+  only the ones having messages matching #msgs
+
+  examples:
+
+  git_sha_msg_map__select_with_msg_match ["document"], :git_sha_msg_map__from
+  git_sha_msg_map__select_with_msg_match ["module", "class"], :git_sha_msg_map__from
+  git_sha_msg_map__select_with_msg_match ["module", "class"] # :git_sha_msg_map__from assumed
+=end
+  def git_sha_msg_map__select_with_msg_match msgs, git_sha_msg_map=:git_sha_msg_map__from
+    git_sha_msg_map = array__from git_sha_msg_map
+    msgs = array__from msgs
+    msgs.product(git_sha_msg_map).select { |msg_git_sha_msg|
+      msg, git_sha_msg = msg_git_sha_msg
+      git_sha_msg[1].match(msg)
+    }.transpose[1]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
