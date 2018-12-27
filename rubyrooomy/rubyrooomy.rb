@@ -958,6 +958,47 @@ module RubyRooomyGitShellCommandsModule
   end
 
 
+=begin
+  gets a #git_base__ definition, which is
+  an array having a Git::Base
+  for the given dir (pwd by default).
+  It's better than Git.open because Git.open requires
+  the base directory, while this function will look
+  in all directories upwards until .git can be found.
+
+  Examples:
+
+  # if we are in a git repository:
+  git_base__from
+  # => [#<Git::Base:0x007ff6c2a08a28
+  #   @index=
+  #    #<Git::Index:0x007ff6c25ce250
+
+  git_base__from (Dir.pwd + "/any/sub/dir")
+  # => [#<Git::Base:0x007f6f8b722e58
+  #   @index=
+  #    #<Git::Index:0x007ff6c25ce254
+
+  # if we are not in a git repository:
+  git_base__from "/"
+  # => [#<Git::Base:0x007ff6c25fa120
+  #   @index=nil,
+
+
+=end
+  def git_base__from dir=nil
+    dir ||= Dir.pwd
+    paths = (parent_dirs__from dir).reverse
+    git_base_object = Git.open paths.find {|p|
+      (Git.open "#{p}") rescue nil
+    }
+    [
+      git_base_object,
+      dir
+    ]
+  end
+
+
 end # of RubyRooomyGitShellCommandsModule
 
 
