@@ -1403,6 +1403,17 @@ module RubyRooomySqlQueriesModule
   end
 
 
+=begin
+  returns a query to revoke super user powers to a user
+  (the current user, by default, although it may not
+  be so effective, since only super users can can perform
+  such operation).
+=end
+  def db_query__alter_user_with_nosuperuser username="CURRENT_USER"
+      db_query = "ALTER USER #{username} WITH NOSUPERUSER"
+  end
+
+
 end # of RubyRooomySqlQueriesModule
 
 
