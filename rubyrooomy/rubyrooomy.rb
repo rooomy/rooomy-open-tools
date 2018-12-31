@@ -1392,7 +1392,7 @@ module RubyRooomySqlQueriesModule
   end
 
 
-end
+end # of RubyRooomySqlQueriesModule
 
 
 =begin
