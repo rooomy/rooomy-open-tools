@@ -1440,6 +1440,23 @@ module RubyRooomyPgShellCommandsModule
  generates a batch of psql commads, for each given db_query.
  if a db_query is nil, will generate a command to enter the
  cli of psql.
+
+  Examples:
+
+  psql_db_batch__cli_or_queries psql_db__sample_example
+  => [["PGPASSWORD=\"onlyNSAknows\" psql -h \"localhost\" -U \"any_user\" \"any_db\" ",
+  nil]]
+
+  psql_db_batch__cli_or_queries psql_db__sample_example, "select * from table"
+  => [["PGPASSWORD=\"onlyNSAknows\" psql -h \"localhost\" -U \"any_user\" \"any_db\" ",
+  "-c \"select * from table\""]]
+
+
+  psql_db_batch__cli_or_queries psql_db__sample_example, ["select  c1 from table", "select c2 from table"]
+  => [["PGPASSWORD=\"onlyNSAknows\" psql -h \"localhost\" -U \"any_user\" \"any_db\" ",
+  "-c \"select  c1 from table\""],
+   ["PGPASSWORD=\"onlyNSAknows\" psql -h \"localhost\" -U \"any_user\" \"any_db\" ",
+   "-c \"select c2 from table\""]]
 =end
   def psql_db_batch__cli_or_queries psql_db, db_queries=[nil]
     psql_db = array__from(psql_db)
