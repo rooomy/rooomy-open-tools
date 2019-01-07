@@ -1414,6 +1414,27 @@ module RubyRooomySqlQueriesModule
   end
 
 
+=begin
+  returns a query to reassign the ownership (of the currently
+  connected database) from current_owner ("CURRENT_USER") if
+  none given to new_owner
+
+  Examples:
+
+  db_query__reassign_to("new_owner")
+  => "REASSIGN OWNED BY CURRENT_USER TO new_owner"
+
+  psql_db_batch__cli_or_queries "psql_db__sample_example", db_query__reassign_to("new_owner", "old_owner")
+  => [["PGPASSWORD=\"onlyNSAknows\" psql -h \"localhost\" -U \"any_user\" \"any_db\" ",
+    "-c \"REASSIGN OWNED BY old_owner TO new_owner\""]]
+
+
+=end
+  def db_query__reassign_to new_owner, current_owner="CURRENT_USER"
+    db_query = "REASSIGN OWNED BY #{current_owner} TO #{new_owner}"
+  end
+
+
 end # of RubyRooomySqlQueriesModule
 
 
