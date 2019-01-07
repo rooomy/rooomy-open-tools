@@ -1435,6 +1435,31 @@ module RubyRooomySqlQueriesModule
   end
 
 
+=begin
+  returns a query to create a database.
+  takes the database name as parameter
+  (or a #psql_db__ definition).
+
+  Examples:
+
+  db_query__database_create "new_db"
+  => "CREATE DATABASE new_db"
+
+
+  psql_db_batch__cli_or_queries "psql_db__sample_example", db_query__database_create("new_db")
+  => [["PGPASSWORD=\"onlyNSAknows\" psql -h \"localhost\" -U \"any_user\" \"any_db\" ",
+    "-c \"CREATE DATABASE new_db\""]]
+
+  db_query__database_create psql_db__sample_example
+  => "CREATE DATABASE any_db"
+
+=end
+  def db_query__database_create db_name
+    db_name = array__from(db_name).first
+    db_query = "CREATE DATABASE #{db_name}"
+  end
+
+
 end # of RubyRooomySqlQueriesModule
 
 
