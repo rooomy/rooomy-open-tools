@@ -1460,6 +1460,32 @@ module RubyRooomySqlQueriesModule
   end
 
 
+=begin
+  returns a query to drop a database.
+  takes the database name as parameter
+  (or a #psql_db__ definition).
+
+  Examples:
+
+  db_query__database_drop "new_db"
+  => "DROP DATABASE new_db"
+
+  psql_db_batch__cli_or_queries "psql_db__sample_example", db_query__database_drop("new_db")
+  => [["PGPASSWORD=\"onlyNSAknows\" psql -h \"localhost\" -U \"any_user\" \"any_db\" ",
+    "-c \"DROP DATABASE new_db\""]]
+
+
+  db_query__database_drop psql_db__sample_example
+  => "DROP DATABASE any_db"
+
+
+=end
+  def db_query__database_drop db_name
+    db_name = array__from(db_name).first
+    db_query = "DROP DATABASE #{db_name}"
+  end
+
+
 end # of RubyRooomySqlQueriesModule
 
 
