@@ -1833,7 +1833,7 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
-end
+end # of RubyRooomyPgShellCommandsModule
 
 
 =begin
