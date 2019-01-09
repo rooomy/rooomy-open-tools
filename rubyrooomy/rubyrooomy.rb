@@ -1875,6 +1875,22 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
+=begin
+  Generates a createdb command for the given
+  #psql_db__ definition , which can be used
+  to create a database
+
+  Examples:
+
+  psql_db_command__createdb "psql_db__sample_example"
+  => "PGPASSWORD=\"onlyNSAknows\" createdb -h \"localhost\" -U \"any_user\" \"any_db\" "
+
+=end
+  def psql_db_command__createdb psql_db
+   psql_db_command__program "createdb", psql_db
+  end
+
+
 end # of RubyRooomyPgShellCommandsModule
 
 
