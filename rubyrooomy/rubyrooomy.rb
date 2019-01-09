@@ -1859,6 +1859,22 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
+=begin
+  Generates a createdb command for the given
+  #psql_db__ definition , which can be used
+  to drop a database
+
+  Examples:
+
+  psql_db_command__dropdb "psql_db__sample_example"
+  => "PGPASSWORD=\"onlyNSAknows\" dropdb -h \"localhost\" -U \"any_user\" \"any_db\" "
+
+=end
+  def psql_db_command__dropdb psql_db
+   psql_db_command__program "dropdb", psql_db
+  end
+
+
 end # of RubyRooomyPgShellCommandsModule
 
 
