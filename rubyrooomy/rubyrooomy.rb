@@ -1891,6 +1891,76 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
+=begin
+  Generates a #psql_db_batch__, ie, a #batch__
+  definition tied to a #psql_db__ definition,
+  which can be used to generate commands to
+  drop and recreate a database, apply some
+  dumps and reassign the ownership of that
+  database to the user of a second #psql_db__
+  definition given, the reassignee_psql_db.
+
+  You may want to give "ON_ERROR_STOP=off"
+  if there are ignorable errors on the dump
+  files.
+
+  You can give the results to #exec__batch
+
+  Examples:
+
+  puts psql_db_batch__database_reinstate(psql_db__sample_example, nil, "ON_ERROR_STOP=off", [nil, "new_owner"])
+  PGPASSWORD="onlyNSAknows" dropdb -h "localhost" -U "any_user" "any_db"
+  PGPASSWORD="onlyNSAknows" createdb -h "localhost" -U "any_user" "any_db"
+  PGPASSWORD="onlyNSAknows" psql -h "localhost" -U "any_user" "any_db"
+  -c "REASSIGN OWNED BY "\"any_user\"" TO new_owner"
+
+  puts psql_db_batch__database_reinstate(["my_db", "old_owner", "pw", "localhost"], nil, "ON_ERROR_STOP=off", [nil, "new_owner"])
+  PGPASSWORD="pw" dropdb -h "localhost" -U "old_owner" "my_db"
+  PGPASSWORD="pw" createdb -h "localhost" -U "old_owner" "my_db"
+  PGPASSWORD="pw" psql -h "localhost" -U "old_owner" "my_db"
+  -c "REASSIGN OWNED BY "\"old_owner\"" TO new_owner"
+
+=end
+  def psql_db_batch__database_reinstate psql_db, db_dump_paths = nil, options= "", reassignee_psql_db = nil
+
+    reassignee_db_name,
+      reassignee_db_user,
+      reassignee_db_password,
+      reserved = array__from(reassignee_psql_db)
+
+    db_name,
+      db_user,
+      db_password,
+      reserved = array__from(psql_db)
+    db_dump_paths = array__from(db_dump_paths).compact
+    options = options.nne ""
+
+    quoted_db_user = db_user.nne && db_user.inspect.inspect || nil
+
+    reassign_batch = reassignee_db_user.nne &&
+      psql_db_batch__cli_or_queries(
+        psql_db,
+        db_query__reassign_to(
+          reassignee_db_user,
+          quoted_db_user,
+        )
+      ) || [] # no reassignee = no command generated
+
+    batch =
+      [
+        [ psql_db_command__dropdb(psql_db) ],
+        [ psql_db_command__createdb(psql_db) ],
+      ] +
+      psql_db_batch__cli_or_apply_dumps(
+        psql_db,
+        db_dump_paths,
+        options
+      ) +
+      reassign_batch
+
+  end
+
+
 end # of RubyRooomyPgShellCommandsModule
 
 
