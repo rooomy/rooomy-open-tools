@@ -1961,6 +1961,44 @@ module RubyRooomyPgShellCommandsModule
   end
 
 
+=begin
+  A sample #psql_db__ which is supposed to
+  be a super user on the dbms as of
+  #psql_db__sample_example .
+  It is intended mostly for use in examples
+  in psql_db related functions.
+
+  Examples:
+
+  psql_db_command__dump psql_db__sample_superuser_example
+  => "PGPASSWORD=\"NSAowns\" pg_dump -h \"localhost\" -U \"any_superuser\" \"any_db\" "
+
+  psql_db_batch__cli_or_generate_dumps "psql_db__sample_superuser_example", "db_dump"
+  => [["PGPASSWORD=\"NSAowns\" pg_dump -h \"localhost\" -U \"any_superuser\" \"any_db\" ", "  -f \"db_dump\""]]
+
+  script__from(psql_db_batch__cli_or_generate_dumps "psql_db__sample_superuser_example")
+  => "PGPASSWORD=\"NSAowns\" psql -h \"localhost\" -U \"any_superuser\" \"any_db\"  "
+
+=end
+  def psql_db__sample_superuser_example *args
+    db_name="any_db"
+    db_user="any_superuser"
+    db_host="localhost"
+    db_password="NSAowns"
+    db_port = nil
+    db_connection = nil
+
+    [
+      db_name,
+      db_user,
+      db_password,
+      db_host,
+      db_port,
+      db_connection,
+    ]
+  end # of psql_db__sample_superuser_example
+
+
 end # of RubyRooomyPgShellCommandsModule
 
 
