@@ -1999,6 +1999,43 @@ module RubyRooomyPgShellCommandsModule
   end # of psql_db__sample_superuser_example
 
 
+=begin
+  Just another sample #psql_db__ definition,
+  used in examples which operates more than
+  one database.
+
+  Examples:
+
+  psql_db_command__dump psql_db__sample_example_2
+  PGPASSWORD="onlyNSAknows2" pg_dump -h "localhost" -U "any_user_2" "any_db_2" 
+
+  psql_db_batch__cli_or_generate_dumps "psql_db__sample_example_2", "db_dump"
+  => [["PGPASSWORD=\"onlyNSAknows2\" pg_dump -h \"localhost\" -U \"any_user_2\" \"any_db_2\" ", "  -f \"db_dump\""]]
+
+  script__from(psql_db_batch__cli_or_generate_dumps "psql_db__sample_example_2")
+  PGPASSWORD="onlyNSAknows2" psql -h "localhost" -U "any_user_2" "any_db_2"  
+
+
+=end
+  def psql_db__sample_example_2 *args
+    db_name="any_db_2"
+    db_user="any_user_2"
+    db_host="localhost"
+    db_password="onlyNSAknows2"
+    db_port = nil
+    db_connection = nil
+
+    [
+      db_name,
+      db_user,
+      db_password,
+      db_host,
+      db_port,
+      db_connection,
+    ]
+  end # of psql_db__sample_example_2
+
+
 end # of RubyRooomyPgShellCommandsModule
 
 
