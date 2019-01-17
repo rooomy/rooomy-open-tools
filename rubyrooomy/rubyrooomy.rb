@@ -3405,6 +3405,17 @@ require '#{gem_name}'
 end # of RubyRooomyGemModule
 
 
+=begin
+  The purpose of this module is to offer functions
+  that were removed from other modules, but may be
+  still under usage.
+=end
+module RubyRooomyUnderDeprecationModule
+
+
+end # of RubyRooomyUnderDeprecationModule
+
+
 # Main module, basically a namespace
 # for RubyRooomy. Consists basically
 # of the inclusion of all available
