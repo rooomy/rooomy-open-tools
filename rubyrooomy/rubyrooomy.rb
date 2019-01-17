@@ -2355,55 +2355,66 @@ module RubyRooomyPgShellCommandsModule
 
   Examples:
 
-  puts psql_db_batch__database_reinstate(psql_db__sample_example, nil, "ON_ERROR_STOP=off", [nil, "new_owner"])
-  PGPASSWORD="onlyNSAknows" dropdb -h "localhost" -U "any_user" "any_db"
-  PGPASSWORD="onlyNSAknows" createdb -h "localhost" -U "any_user" "any_db"
-  PGPASSWORD="onlyNSAknows" psql -h "localhost" -U "any_user" "any_db"
-  -c "REASSIGN OWNED BY "\"any_user\"" TO new_owner"
+  # just recreate database:
+  script__from psql_db_batch__database_reinstate("psql_db__sample_superuser_example")
+  # PGPASSWORD="NSAowns" dropdb -h "localhost" -U "any_superuser" "any_db"   ;
+  # PGPASSWORD="NSAowns" createdb -h "localhost" -U "any_superuser" "any_db"
 
-  puts psql_db_batch__database_reinstate(["my_db", "old_owner", "pw", "localhost"], nil, "ON_ERROR_STOP=off", [nil, "new_owner"])
-  PGPASSWORD="pw" dropdb -h "localhost" -U "old_owner" "my_db"
-  PGPASSWORD="pw" createdb -h "localhost" -U "old_owner" "my_db"
-  PGPASSWORD="pw" psql -h "localhost" -U "old_owner" "my_db"
-  -c "REASSIGN OWNED BY "\"old_owner\"" TO new_owner"
+  # just backup/dump database:
+  script__from psql_db_batch__database_reinstate("psql_db__sample_superuser_example", nil, nil, nil,  ["/tmp/dump_before_drop"], "keep")
+  # PGPASSWORD="NSAowns" pg_dump -h "localhost" -U "any_superuser" "any_db"    -f "/tmp/dump_before_drop"
+
+
+  # just recreate database, but backup/dump it before:
+  script__from psql_db_batch__database_reinstate("psql_db__sample_superuser_example", nil, nil, nil,  ["/tmp/dump_before_drop"])
+  # PGPASSWORD="NSAowns" pg_dump -h "localhost" -U "any_superuser" "any_db"    -f "/tmp/dump_before_drop" ;
+  # PGPASSWORD="NSAowns" dropdb -h "localhost" -U "any_superuser" "any_db"   ;
+  # PGPASSWORD="NSAowns" createdb -h "localhost" -U "any_superuser" "any_db"
+
+
+
+  # recreate database and reassign to the user in psql_db__sample_example:
+  script__from psql_db_batch__database_reinstate("psql_db__sample_superuser_example", nil, "ON_ERROR_STOP=off", "psql_db__sample_example")
+  # PGPASSWORD="NSAowns" dropdb -h "localhost" -U "any_superuser" "any_db"   ;
+  # PGPASSWORD="NSAowns" createdb -h "localhost" -U "any_superuser" "any_db"   ;
+  # PGPASSWORD="NSAowns" psql -h "localhost" -U "any_superuser" "any_db"  -c "REASSIGN OWNED BY "\"any_superuser\"" TO any_user"
+
+
+  # recreate database and reassign to the user in psql_db__sample_example, after dump/backup of it:
+  script__from psql_db_batch__database_reinstate("psql_db__sample_superuser_example", nil, "ON_ERROR_STOP=off", "psql_db__sample_example", ["/tmp/dump_before_drop"])
+  # PGPASSWORD="NSAowns" pg_dump -h "localhost" -U "any_superuser" "any_db"   ON_ERROR_STOP=off -f "/tmp/dump_before_drop" ;
+  # PGPASSWORD="NSAowns" dropdb -h "localhost" -U "any_superuser" "any_db"   ;
+  # PGPASSWORD="NSAowns" createdb -h "localhost" -U "any_superuser" "any_db"   ;
+  # PGPASSWORD="NSAowns" psql -h "localhost" -U "any_superuser" "any_db"  -c "REASSIGN OWNED BY "\"any_superuser\"" TO any_user"
+
+  # the full example: recreate database, apply some dumps/migrations, reassign to the user in psql_db__sample_example, all after dump/backup of it
+  script__from psql_db_batch__database_reinstate("psql_db__sample_superuser_example", [["package/migration_1.sql", "package/migration_2.sql"]], "ON_ERROR_STOP=off", "psql_db__sample_example", ["/tmp/dump_before_drop"])
+  # PGPASSWORD="NSAowns" pg_dump -h "localhost" -U "any_superuser" "any_db"   ON_ERROR_STOP=off -f "/tmp/dump_before_drop" ;
+  # PGPASSWORD="NSAowns" dropdb -h "localhost" -U "any_superuser" "any_db"   ;
+  # PGPASSWORD="NSAowns" createdb -h "localhost" -U "any_superuser" "any_db"   ;
+  # PGPASSWORD="NSAowns" psql -h "localhost" -U "any_superuser" "any_db"   ON_ERROR_STOP=off -f "package/migration_1.sql" ;
+  # PGPASSWORD="NSAowns" psql -h "localhost" -U "any_superuser" "any_db"   ON_ERROR_STOP=off -f "package/migration_2.sql" ;
+  # PGPASSWORD="NSAowns" psql -h "localhost" -U "any_superuser" "any_db"  -c "REASSIGN OWNED BY "\"any_superuser\"" TO any_user"
+
+  # as often, values can be directly inlined:
+  script__from psql_db_batch__database_reinstate(["my_db", "old_owner", "pw", "localhost"], nil, "ON_ERROR_STOP=off", [nil, "new_owner"])
+  # PGPASSWORD="pw" dropdb -h "localhost" -U "old_owner" "my_db"   ;
+  # PGPASSWORD="pw" createdb -h "localhost" -U "old_owner" "my_db"   ;
+  # PGPASSWORD="pw" psql -h "localhost" -U "old_owner" "my_db"  -c "REASSIGN OWNED BY "\"old_owner\"" TO new_owner"
 
 =end
-  def psql_db_batch__database_reinstate psql_db, db_dump_paths = nil, options= "", reassignee_psql_db = nil
+  def psql_db_batch__database_reinstate(psql_db, db_dump_paths = nil, options= "", reassignee_psql_db = nil, bk_dump_to_paths = nil, no_reset = nil)
 
-    reassignee_db_name,
-      reassignee_db_user,
-      reassignee_db_password,
-      reserved = array__from(reassignee_psql_db)
+    psql_db_derivative = [
+      bk_dump_to_paths,
+      psql_db,
+      db_dump_paths,
+      options,
+      reassignee_psql_db,
+      no_reset.nne.negate_me,
+    ]
 
-    db_name,
-      db_user,
-      db_password,
-      reserved = array__from(psql_db)
-    db_dump_paths = array__from(db_dump_paths).compact
-    options = options.nne ""
-
-    quoted_db_user = db_user.nne && db_user.inspect.inspect || nil
-
-    reassign_batch = reassignee_db_user.nne &&
-      psql_db_batch__cli_or_queries(
-        psql_db,
-        db_query__reassign_to(
-          reassignee_db_user,
-          quoted_db_user,
-        )
-      ) || [] # no reassignee = no command generated
-
-    batch =
-      [
-        [ psql_db_command__dropdb(psql_db) ],
-        [ psql_db_command__createdb(psql_db) ],
-      ] +
-      psql_db_batch__cli_or_apply_dumps(
-        psql_db,
-        db_dump_paths,
-        options
-      ) +
-      reassign_batch
+    psql_db_derivative_batch__from psql_db_derivative
 
   end
 
