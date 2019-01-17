@@ -1583,6 +1583,41 @@ module RubyRooomyPgShellDerivativesModule
   end # of psql_db_derivative__sample_db_apply_dumps
 
 
+=begin
+  Sample #psql_db_derivative__ to generate a
+  batch to apply to the database defined
+  by the #psql_db__, at its second element,
+  a list of dumps/migrations/file containing
+  sql queries.
+
+  This example differs from #psql_db_derivative__sample_db_apply_dumps
+  in which it generates, recursively, a batch
+  to generate the backup dumps of another database,
+  and apply it to the current one.
+
+
+  Give it to #psql_db_derivative_batch__from
+
+  Example:
+  script__from psql_db_derivative_batch__from "psql_db_derivative__sample_db_apply_dumps_from_backup"
+  PGPASSWORD="onlyNSAknows" pg_dump -h "localhost" -U "any_user" "any_db"    -f "/tmp/backup_dump" ;
+  PGPASSWORD="onlyNSAknows2" psql -h "localhost" -U "any_user_2" "any_db_2"    -f "/tmp/backup_dump"
+
+=end
+  def psql_db_derivative__sample_db_apply_dumps_from_backup *args
+    [
+      nil,
+      psql_db__sample_example_2, # psql_db, having database access info
+      psql_db_derivative__sample_db_backup_dump,
+                                 # list of dumps to apply is the
+                                 # backup list of another derivative
+      nil,
+      nil,
+      nil,
+    ]
+  end # of psql_db_derivative__sample_db_apply_dumps_from_backup
+
+
 end # of RubyRooomyPgShellDerivativesModule
 
 
