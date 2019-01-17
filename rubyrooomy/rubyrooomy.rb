@@ -1618,6 +1618,33 @@ module RubyRooomyPgShellDerivativesModule
   end # of psql_db_derivative__sample_db_apply_dumps_from_backup
 
 
+=begin
+  Sample #psql_db_derivative__ to generate a
+  batch to transfer the database ownershipf of
+  the database defined
+  by the #psql_db__, at its second element,
+  to the (user of the) #psql_db defined at
+  its 5th element.
+
+  Give it to #psql_db_derivative_batch__from
+
+  Example:
+  script__from psql_db_derivative_batch__from "psql_db_derivative__sample_db_reassign"
+  PGPASSWORD="NSAowns" psql -h "localhost" -U "any_superuser" "any_db"  -c "REASSIGN OWNED BY "\"any_superuser\"" TO any_user"
+
+=end
+  def psql_db_derivative__sample_db_reassign *args
+    [
+      nil,
+      psql_db__sample_superuser_example, # psql_db, having database access info
+      nil,
+      nil,
+      psql_db__sample_example,           # psql_db, having the user to assing the db
+      nil,
+    ]
+  end # of psql_db_derivative__sample_db_reassign
+
+
 end # of RubyRooomyPgShellDerivativesModule
 
 
