@@ -3422,6 +3422,8 @@ end # of RubyRooomyUnderDeprecationModule
 # modules.
 module RubyRooomyModule
 
+  include RubyRooomyUnderDeprecationModule
+
   include RubyRooomyMetaModule
   include RubyRooomySQLModule
   include RubyRooomyPgGemModule
