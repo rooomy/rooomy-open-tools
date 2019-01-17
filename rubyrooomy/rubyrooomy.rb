@@ -1757,6 +1757,182 @@ module RubyRooomyPgShellDerivativesModule
   end # of psql_db_derivative__sample_full_example
 
 
+=begin
+  Takes as input a #psql_db_derivative__ definition,
+  a definition that offers a robust way to describe
+  dumping and restoration of a database (described
+  by a #psql_db__ definition). A #psql_db_derivative__
+  definitions has the following elements:
+
+  * backup_paths: a dump of the database will be
+  generated to each element in this array.
+
+  * psql_db: describes the database (an array having
+  name, username, password, host). The only mandatory
+  field.
+
+  * db_dumps_to_apply_paths: consider the first element
+  of this array: it is also an array, having the paths
+  of dumps, or migrations (any file having sql queries).
+  So, now consider the second element of this array. If
+  given, will make this array to be considered another
+  ##psql_db_derivative__, and this function will be called
+  recursively. It's used to describe another #psql_db__
+  to dump and apply to the current psql_db.
+
+  * options: to the psql command line. Normally
+  "ON_ERROR_STOP=off" to ignore sql that raises errors.
+
+  * reassignee_psql_db: if the database ownership needs
+  to be, at the end of the process, reassigned to another
+  user, it can be given as the user of this #psql_db__
+  (second element of the array). Normally needed if a
+  reset (next paramenter) is required (so, psqldb has
+  the supseruser and this one the reassignee).
+
+  * reset: by default, all db_dumps_to_apply_paths will
+  be applied on top of the current state of psql_db. If reset
+  is set, a command to drop the database and another one
+  to recreate it.
+
+  Create a #psql_db_derivative__ and give to this function.
+  There are many sample and their usage in the examples
+  section. Take the one that fits your use case, search for
+  its definition; there will be more information on their
+  comments; specially #psql_db_derivative__sample_full_example
+
+  Examples:
+
+  # dump the database:
+  script__from psql_db_derivative_batch__from "psql_db_derivative__sample_db_backup_dump"
+  PGPASSWORD="onlyNSAknows" pg_dump -h "localhost" -U "any_user" "any_db"    -f "/tmp/backup_dump"
+
+
+  # reset the database:
+  script__from psql_db_derivative_batch__from "psql_db_derivative__sample_db_reset"
+  PGPASSWORD="onlyNSAknows" dropdb -h "localhost" -U "any_user" "any_db"   ;
+  PGPASSWORD="onlyNSAknows" createdb -h "localhost" -U "any_user" "any_db"
+
+
+  # reset and dump the database:
+  script__from psql_db_derivative_batch__from definition__merge_simple(psql_db_derivative__sample_db_backup_dump, psql_db_derivative__sample_db_reset)
+  PGPASSWORD="onlyNSAknows" pg_dump -h "localhost" -U "any_user" "any_db"    -f "/tmp/backup_dump" ;
+  PGPASSWORD="onlyNSAknows" dropdb -h "localhost" -U "any_user" "any_db"   ;
+  PGPASSWORD="onlyNSAknows" createdb -h "localhost" -U "any_user" "any_db"
+
+
+  # apply dumps or migrations to the database:
+  script__from psql_db_derivative_batch__from "psql_db_derivative__sample_db_apply_dumps"
+  PGPASSWORD="onlyNSAknows" psql -h "localhost" -U "any_user" "any_db"    -f "migrations/file_1.sql" ;
+  PGPASSWORD="onlyNSAknows" psql -h "localhost" -U "any_user" "any_db"    -f "migrations/file_2.sql"
+
+  # dump a database and restore it into another one:
+  script__from psql_db_derivative_batch__from "psql_db_derivative__sample_db_apply_dumps_from_backup"
+  PGPASSWORD="onlyNSAknows" pg_dump -h "localhost" -U "any_user" "any_db"    -f "/tmp/backup_dump" ;
+  PGPASSWORD="onlyNSAknows2" psql -h "localhost" -U "any_user_2" "any_db_2"    -f "/tmp/backup_dump"
+
+  # reassign ownership of a database:
+  script__from psql_db_derivative_batch__from "psql_db_derivative__sample_db_reassign"
+  PGPASSWORD="NSAowns" psql -h "localhost" -U "any_superuser" "any_db"  -c "REASSIGN OWNED BY "\"any_superuser\"" TO any_user"
+
+  script__from psql_db_derivative_batch__from definition__merge_simple(
+      psql_db_derivative__sample_db_apply_dumps,
+      psql_db_derivative__with_options
+    )
+  PGPASSWORD="onlyNSAknows" psql -h "localhost" -U "any_user" "any_db"   ON_ERROR_STOP=off -f "migrations/file_1.sql" ;
+  PGPASSWORD="onlyNSAknows" psql -h "localhost" -U "any_user" "any_db"   ON_ERROR_STOP=off -f "migrations/file_2.sql"
+
+  # dump database, set option to ignore errors.
+  script__from psql_db_derivative_batch__from "psql_db_derivative__sample_db_apply_dumps_with_options"
+  PGPASSWORD="onlyNSAknows" psql -h "localhost" -U "any_user" "any_db"   ON_ERROR_STOP=off -f "migrations/file_1.sql" ;
+  PGPASSWORD="onlyNSAknows" psql -h "localhost" -U "any_user" "any_db"   ON_ERROR_STOP=off -f "migrations/file_2.sql"
+
+=end
+  def psql_db_derivative_batch__from psql_db_derivative
+
+    # interpreting input:
+    backup_paths,
+      psql_db,
+      psql_db_derivative_or_db_dumps_to_apply_paths,
+      options,
+      reassignee_psql_db,
+      reset,
+      reserved = array__from(psql_db_derivative)
+
+    db_name,
+      db_user,
+      db_password,
+      reserved = array__from(psql_db)
+
+    reassignee_db_name,
+      reassignee_db_user,
+      reassignee_db_password,
+      reserved = array__from(reassignee_psql_db)
+
+    db_dumps_to_apply_paths,
+      next_psql_db,
+      reserved = array__from(
+        psql_db_derivative_or_db_dumps_to_apply_paths.nne
+      )
+
+    db_dumps_to_apply_paths = array__from(
+      db_dumps_to_apply_paths.nne
+    ).compact
+    backup_paths = array__from(
+      backup_paths.nne
+    ).compact
+    options = options.nne ""
+    quoted_db_user = db_user.nne && db_user.inspect.inspect || nil
+
+    # generate (recursion) dependent batches, if defined.
+    dependency_batch = next_psql_db.nne && (
+      send(
+        __method__, # recursion
+        psql_db_derivative_or_db_dumps_to_apply_paths.nne
+      )
+    ) || []
+
+    # generate backup/dumping batches
+    backup_batch = psql_db_batch__cli_or_generate_dumps(
+      psql_db,
+      backup_paths,
+      options
+    )
+
+    # generate database reset batch, if needed
+    reset_batch = reset.nne && [
+      [ psql_db_command__dropdb(psql_db) ],
+      [ psql_db_command__createdb(psql_db) ],
+    ] || []
+
+    # generate dump restoration / application batch
+    apply_dumps_batch = psql_db_batch__cli_or_apply_dumps(
+      psql_db,
+      db_dumps_to_apply_paths,
+      options
+    )
+
+    # generate dump database reassignment batch
+    reassign_batch = reassignee_db_user.nne &&
+      psql_db_batch__cli_or_queries(
+        psql_db,
+        db_query__reassign_to(
+          reassignee_db_user,
+          quoted_db_user,
+        )
+      ) || [] # no reassignee = no command generated
+
+    batch =
+      dependency_batch +
+      backup_batch +
+      reset_batch +
+      apply_dumps_batch +
+      reassign_batch +
+      []
+
+  end # of psql_db_derivative_batch__from
+
+
 end # of RubyRooomyPgShellDerivativesModule
 
 
