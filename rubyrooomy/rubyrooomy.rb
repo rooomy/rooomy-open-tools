@@ -3413,6 +3413,34 @@ end # of RubyRooomyGemModule
 module RubyRooomyUnderDeprecationModule
 
 
+=begin
+  defines #psql_db_dump_replacer__, that can be used
+  to create a #psql_db_batch__ which backups the
+  current contents of #psql_db__ , defined by
+  #psql_db__sample_example , into each of the
+  files in the array ["/tmp/psql_db_original_dump"],
+  drops all of its tables (by current user), and then
+  reads each of the database dumps from
+  ["/tmp/database_dump"] into the same #psql_db__.
+
+  Just give this method name (or returned array) to
+  #psql_db_dump_replacer_batch_generator__from
+
+=end
+  def psql_db_dump_replacer__for_psql_db__sample_example
+    [
+      psql_db__sample_example,
+      [
+         "/tmp/psql_db_original_dump"
+      ],
+      [
+        "/tmp/database_dump"
+      ],
+      "ON_ERROR_STOP=off",
+    ]
+  end
+
+
 end # of RubyRooomyUnderDeprecationModule
 
 
