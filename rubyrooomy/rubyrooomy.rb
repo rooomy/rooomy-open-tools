@@ -3416,6 +3416,17 @@ module RubyRooomyUnderDeprecationModule
 end # of RubyRooomyUnderDeprecationModule
 
 
+=begin 
+  The purpose of this module is to offer functions
+  that were removed from other modules, and certainly
+  should not be under usage anomore.
+=end
+module RubyRooomyDeprecatedModule
+
+
+end # of RubyRooomyDeprecatedModule
+
+
 # Main module, basically a namespace
 # for RubyRooomy. Consists basically
 # of the inclusion of all available
