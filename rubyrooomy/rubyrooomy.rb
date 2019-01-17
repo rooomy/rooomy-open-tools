@@ -1499,6 +1499,31 @@ end # of RubyRooomySqlQueriesModule
 module RubyRooomyPgShellDerivativesModule
 
 
+=begin
+  Sample #psql_db_derivative__ to generate a
+  batch to dump a backup the database described
+  by the #psql_db__, at its second element,
+  in the filepath at the first position.
+
+  Give it to #psql_db_derivative_batch__from
+
+  Example:
+  script__from psql_db_derivative_batch__from "psql_db_derivative__sample_db_backup_dump"
+  PGPASSWORD="onlyNSAknows" pg_dump -h "localhost" -U "any_user" "any_db"    -f "/tmp/backup_dump"
+
+=end
+  def psql_db_derivative__sample_db_backup_dump *args
+    [
+      "/tmp/backup_dump",            # file to dump a backup of psql_db
+      psql_db__sample_example,       # psql_db, having database access info
+      nil,
+      nil,
+      nil,
+      nil,
+    ]
+  end # of psql_db_derivative__sample_db_backup_dump
+
+
 end # of RubyRooomyPgShellDerivativesModule
 
 
