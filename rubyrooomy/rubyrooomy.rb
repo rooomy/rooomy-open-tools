@@ -2049,6 +2049,9 @@ module RubyRooomyPgShellCommandsModule
   end # of psql_db__sample_example_2
 
 
+  include RubyRooomyPgShellDerivativesModule
+
+
 end # of RubyRooomyPgShellCommandsModule
 
 
