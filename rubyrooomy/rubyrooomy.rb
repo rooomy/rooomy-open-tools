@@ -1489,6 +1489,19 @@ module RubyRooomySqlQueriesModule
 end # of RubyRooomySqlQueriesModule
 
 
+=begin 
+  The purpose of this module is to offer functions to
+  help batching the functions of RubyRooomyPgShellCommandsModule
+  and creating higher level operations on databases,
+  like "reset" (droping and recreating), backup,
+  apply the contents of another database, and so on.
+=end
+module RubyRooomyPgShellDerivativesModule
+
+
+end # of RubyRooomyPgShellDerivativesModule
+
+
 =begin
   The purpose of this module is to offer functions that can
   execute postgresql commands in the command line shell where
