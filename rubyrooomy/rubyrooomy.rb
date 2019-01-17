@@ -3434,6 +3434,7 @@ end # of RubyRooomyDeprecatedModule
 module RubyRooomyModule
 
   include RubyRooomyUnderDeprecationModule
+  include RubyRooomyDeprecatedModule
 
   include RubyRooomyMetaModule
   include RubyRooomySQLModule
