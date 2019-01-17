@@ -3402,7 +3402,7 @@ require '#{gem_name}'
   end
 
 
-end
+end # of RubyRooomyGemModule
 
 
 # Main module, basically a namespace
