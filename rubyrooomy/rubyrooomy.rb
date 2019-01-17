@@ -1524,6 +1524,33 @@ module RubyRooomyPgShellDerivativesModule
   end # of psql_db_derivative__sample_db_backup_dump
 
 
+=begin
+  Sample #psql_db_derivative__ to generate a
+  batch to reset the database defined
+  by the #psql_db__, at its second element;
+  a reset means basically a dropdb and a
+  createdb command.
+
+  Give it to #psql_db_derivative_batch__from
+
+  Example:
+  script__from psql_db_derivative_batch__from "psql_db_derivative__sample_db_reset"
+  PGPASSWORD="onlyNSAknows" dropdb -h "localhost" -U "any_user" "any_db"   ;
+  PGPASSWORD="onlyNSAknows" createdb -h "localhost" -U "any_user" "any_db"
+
+=end
+  def psql_db_derivative__sample_db_reset *args
+    [
+      nil,
+      psql_db__sample_example, # psql_db, having database access info
+      nil,
+      nil,
+      nil,
+      "reset",                 # set reset to true
+    ]
+  end
+
+
 end # of RubyRooomyPgShellDerivativesModule
 
 
