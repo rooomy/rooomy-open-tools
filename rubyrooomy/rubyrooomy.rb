@@ -3436,7 +3436,7 @@ module RubyRooomyModule
   include RubyRooomyGitBaseModule
   include RubyRooomyArrayOfHashesModule
 
-end
+end # of RubyRooomyModule
 
 
 # Main class, basically a namespace
