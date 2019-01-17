@@ -1699,6 +1699,64 @@ module RubyRooomyPgShellDerivativesModule
   end # of psql_db_derivative__sample_db_apply_dumps_with_options
 
 
+=begin
+  Sample #psql_db_derivative__ to generate a
+  batch to apply to apply all supported operations
+  on the database defined by the #psql_db__,
+  at its second element.
+
+  It will first backup the dump of the database
+  defined by psql_db__sample_example (due to a recursive
+  call to psql_db_derivative__sample_db_backup_dump),
+  at "/tmp/backup_dump".
+
+  Since the database defined by
+  psql_db__sample_superuser_example is about to
+  be operated, its backup will be dumped into
+  "/tmp/superuser_backup_dump".
+
+  Since "reset" is set, "dropdb" and "createdb"
+  commands are generated.
+
+  It will then use the backup dump generated at the
+  first step to restore the database defined by
+  psql_db__sample_superuser_example.
+
+  Since the option "ON_ERROR_STOP=off" is defined,
+  it will ignore errors during the restoration.
+
+  Since another #psql_db__ is given, it will reassign
+  the ownership of the database to the user defined
+  by psql_db__sample_example
+
+
+  Give it to #psql_db_derivative_batch__from
+
+  Example:
+
+  script__from psql_db_derivative_batch__from "psql_db_derivative__sample_full_example"
+  PGPASSWORD="onlyNSAknows" pg_dump -h "localhost" -U "any_user" "any_db"    -f "/tmp/backup_dump" ;
+  PGPASSWORD="NSAowns" pg_dump -h "localhost" -U "any_superuser" "any_db"   ON_ERROR_STOP=off -f "/tmp/superuser_backup_dump" ;
+  PGPASSWORD="NSAowns" dropdb -h "localhost" -U "any_superuser" "any_db"   ;
+  PGPASSWORD="NSAowns" createdb -h "localhost" -U "any_superuser" "any_db"   ;
+  PGPASSWORD="NSAowns" psql -h "localhost" -U "any_superuser" "any_db"   ON_ERROR_STOP=off -f "/tmp/backup_dump" ;
+  PGPASSWORD="NSAowns" psql -h "localhost" -U "any_superuser" "any_db"  -c "REASSIGN OWNED BY "\"any_superuser\"" TO any_user"
+
+=end
+  def psql_db_derivative__sample_full_example *args
+    [
+      "/tmp/superuser_backup_dump",
+      psql_db__sample_superuser_example, # psql_db, having database access info
+      psql_db_derivative__sample_db_backup_dump,
+                                 # list of dumps to apply is the
+                                 # backup list of another derivative
+      "ON_ERROR_STOP=off",
+      psql_db__sample_example,   # psql_db, having the user to assign the db
+      "reset",                   # set reset to true
+    ]
+  end # of psql_db_derivative__sample_full_example
+
+
 end # of RubyRooomyPgShellDerivativesModule
 
 
