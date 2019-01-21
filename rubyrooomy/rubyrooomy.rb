@@ -2974,12 +2974,16 @@ module RubyRooomyGitBaseModule
   Internal functions
   want to work with an infinite number.
 
-  This function sets the big enough value, Float::INFINITY
+  This function sets the big enough value, 1_000_000_000_000
   by default.
 =end
     def log_size_limit set_to=nil
       set_to && (@log_size_limit = set_to)
-      @log_size_limit ||= Float::INFINITY
+      # @log_size_limit ||= Float::INFINITY
+      # unfortunatelly, Float::INFINITY is printed as "Infinity"
+      # in bash script batches. So, we really have to give it
+      # a numerical size:
+      @log_size_limit ||= 1_000_000_000_000
     end
 
 
