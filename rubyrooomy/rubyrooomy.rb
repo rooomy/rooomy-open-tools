@@ -542,6 +542,23 @@ module RubyRooomyStringsModule
   end
 
 
+=begin
+  Returns a string having the number of seconds after
+  some time in the beginning of 2019.
+
+  Good for generating non critical sequencial IDs,
+  for operations that do not occur so often, like
+  the dumping of a database.
+
+  Surely, as the time passes, this won't be small
+  again, but it's going to take more than 10 years
+  for it to have more than 10 digits.
+=end
+  def string__small_sn_2019 *args
+    (1548260387 - Time.now.to_i).abs.to_s
+  end
+
+
 end # of RubyRooomyStringsModule
 
 
