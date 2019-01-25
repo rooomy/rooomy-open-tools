@@ -542,7 +542,7 @@ module RubyRooomyStringsModule
   end
 
 
-end
+end # of RubyRooomyStringsModule
 
 
 =begin
