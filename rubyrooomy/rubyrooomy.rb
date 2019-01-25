@@ -2413,6 +2413,30 @@ module RubyRooomyPgShellCommandsModule
   include RubyRooomyPgShellDerivativesModule
 
 
+=begin
+  #psql_db__ definition to update a a given
+  psql_db with the information regarding only
+  the dbms from another psql_db.
+
+  Basically, that means copying the host and
+  the port from psql_db_having_host, and cleaning
+  the connection, if any.
+
+  It is useful when the same structures are
+  installed in multiple instances of the dbms,
+  postgresql.
+=end
+  def psql_db__dbms_from psql_db, psql_db_having_dbms
+
+    psql_db = array__from(psql_db)
+    psql_db_having = array__from(psql_db_having_dbms)
+    psql_db[3] = psql_db_having[3] # host
+    psql_db[4] = psql_db_having[4] # port
+    psql_db[5] = nil # resets the connection, if any
+    psql_db
+  end # of psql_db__dbms_from
+
+
 end # of RubyRooomyPgShellCommandsModule
 
 
