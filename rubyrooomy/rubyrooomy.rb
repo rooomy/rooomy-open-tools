@@ -2437,6 +2437,30 @@ module RubyRooomyPgShellCommandsModule
   end # of psql_db__dbms_from
 
 
+=begin
+  #psql_db__ definition to update a a given
+  psql_db with the information regarding only
+  the user from another psql_db.
+
+  Basically, that means copying the username and
+  the password from psql_db_having_user, and cleaning
+  the connection, if any.
+
+  It is useful when the same structures are
+  installed in multiple instances of the dbms,
+  postgresql.
+=end
+  def psql_db__user_from psql_db, psql_db_having_user
+
+    psql_db = array__from(psql_db)
+    psql_db_having = array__from(psql_db_having_user)
+    psql_db[1] = psql_db_having[1] # user
+    psql_db[2] = psql_db_having[2] # pw
+    psql_db[5] = nil # resets the connection, if any
+    psql_db
+  end # of psql_db__user_from
+
+
 end # of RubyRooomyPgShellCommandsModule
 
 
