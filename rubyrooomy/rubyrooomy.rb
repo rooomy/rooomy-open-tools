@@ -2461,6 +2461,21 @@ module RubyRooomyPgShellCommandsModule
   end # of psql_db__user_from
 
 
+=begin
+  generates a string out of a psql_db.
+  good to generate file names, and so on.
+=end
+  def string__psql_db psql_db, joinner = "_"
+    db_name,
+      db_user,
+      db_password,
+      db_host,
+      db_port,
+      reserved = array__from psql_db
+    [ db_host, db_port, db_name, ].compact.join joinner
+  end # of string__psql_db
+
+
 end # of RubyRooomyPgShellCommandsModule
 
 
