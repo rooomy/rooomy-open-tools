@@ -2493,6 +2493,32 @@ module RubyRooomyPgShellCommandsModule
   end # of string__psql_db
 
 
+=begin
+  #psql_db__ definition to update a a given
+  psql_db with the information regarding only
+  the database name from another psql_db.
+
+  Basically, that means copying the database name
+  from psql_db_having_name, and cleaning
+  the connection, if any.
+
+  It is useful to derive a super user psql_db for the
+  same dbms as another super user psql_db, but for
+  a different database (ie it "sums" a super user
+  psql_db and a normal psql_db, resulting in a super
+  user psql_db for the normal psql_db)
+
+=end
+  def psql_db__name_from psql_db, psql_db_having_name
+
+    psql_db = array__from(psql_db)
+    psql_db_having = array__from(psql_db_having_name)
+    psql_db[0] = psql_db_having[0] # db name
+    psql_db[5] = nil # resets the connection, if any
+    psql_db
+  end # of psql_db__name_from
+
+
 end # of RubyRooomyPgShellCommandsModule
 
 
