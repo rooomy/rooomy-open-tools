@@ -542,7 +542,24 @@ module RubyRooomyStringsModule
   end
 
 
-end
+=begin
+  Returns a string having the number of seconds after
+  some time in the beginning of 2019.
+
+  Good for generating non critical sequencial IDs,
+  for operations that do not occur so often, like
+  the dumping of a database.
+
+  Surely, as the time passes, this won't be small
+  again, but it's going to take more than 10 years
+  for it to have more than 10 digits.
+=end
+  def string__small_sn_2019 *args
+    (1548260387 - Time.now.to_i).abs.to_s
+  end
+
+
+end # of RubyRooomyStringsModule
 
 
 =begin
@@ -2100,6 +2117,67 @@ module RubyRooomyPgShellDerivativesModule
   end # of psql_db_derivative_batch__from
 
 
+=begin
+  generates a #psql_db_derivative out of
+  psql_db, superuser_psql_db, source_psql_db,
+  to backup, drop, and repopulate psql_db, using
+  the psql installation of superuser_psql_db, with
+  the contents of source_psql_db. At the end,
+  the original user is restored.
+
+  It's very similar to the #psql_db_derivative__sample_full_example
+  (which is well documented), but takes the #psql_db__ definitions
+  as parameter. It modifies the psql_db making it a super user
+  psql_db, with the help of superuser_psql_db (calling
+  #psql_db__name_from).
+ 
+  Also generates nicer dump file names, more
+  suitable for a concrete use case.
+
+  Examples:
+
+  script__from psql_db_derivative_batch__from psql_db_derivative__sample_full_from_3("psql_db__sample_example", "psql_db__sample_superuser_example", "psql_db__sample_example_2")
+  PGPASSWORD="onlyNSAknows2" pg_dump -h "localhost" -U "any_user_2" "any_db_2"    -f "/tmp/dump__source_any_db_2_171552.sql" ;
+  PGPASSWORD="NSAowns" pg_dump -h "localhost" -U "any_superuser" "any_db"   ON_ERROR_STOP=off -f "/tmp/dump__backup_any_db_171552.sql" ;
+  PGPASSWORD="NSAowns" dropdb -h "localhost" -U "any_superuser" "any_db"   ;
+  PGPASSWORD="NSAowns" createdb -h "localhost" -U "any_superuser" "any_db"   ;
+  PGPASSWORD="NSAowns" psql -h "localhost" -U "any_superuser" "any_db"   ON_ERROR_STOP=off -f "/tmp/dump__source_any_db_2_171552.sql" ;
+  PGPASSWORD="NSAowns" psql -h "localhost" -U "any_superuser" "any_db"  -c "REASSIGN OWNED BY "\"any_superuser\"" TO any_user"
+
+
+=end
+  def psql_db_derivative__sample_full_from_3 psql_db, superuser_psql_db, source_psql_db
+
+    superuser_psql_db = array__from(superuser_psql_db)
+    source_psql_db = array__from(source_psql_db)
+    psql_db = array__from psql_db
+    superuser_psql_db = array__from superuser_psql_db
+
+    psql_db__superuser = psql_db__name_from(
+      superuser_psql_db,
+      psql_db
+    )
+
+    dump_serial_number = string__small_sn_2019
+    source_psql_db = array__from(source_psql_db)
+    backup_db_dump = "/tmp/dump__backup_#{psql_db__superuser[0]}_#{dump_serial_number}.sql"
+    source_db_dump = "/tmp/dump__source_#{source_psql_db[0]}_#{dump_serial_number}.sql"
+    [
+      backup_db_dump,
+      psql_db__superuser,  # psql_db, having database access info
+      [
+        source_db_dump,
+        source_psql_db,
+      ],
+                                 # list of dumps to apply is the
+                                 # backup list of another derivative
+      "ON_ERROR_STOP=off",
+      psql_db,                   # psql_db, having the user to assign the db
+      "reset",                   # set reset to true
+    ]
+  end # of  psql_db_derivative__sample_full_from_3
+
+
 end # of RubyRooomyPgShellDerivativesModule
 
 
@@ -2411,6 +2489,95 @@ module RubyRooomyPgShellCommandsModule
 
 
   include RubyRooomyPgShellDerivativesModule
+
+
+=begin
+  #psql_db__ definition to update a a given
+  psql_db with the information regarding only
+  the dbms from another psql_db.
+
+  Basically, that means copying the host and
+  the port from psql_db_having_host, and cleaning
+  the connection, if any.
+
+  It is useful when the same structures are
+  installed in multiple instances of the dbms,
+  postgresql.
+=end
+  def psql_db__dbms_from psql_db, psql_db_having_dbms
+
+    psql_db = array__from(psql_db)
+    psql_db_having = array__from(psql_db_having_dbms)
+    psql_db[3] = psql_db_having[3] # host
+    psql_db[4] = psql_db_having[4] # port
+    psql_db[5] = nil # resets the connection, if any
+    psql_db
+  end # of psql_db__dbms_from
+
+
+=begin
+  #psql_db__ definition to update a a given
+  psql_db with the information regarding only
+  the user from another psql_db.
+
+  Basically, that means copying the username and
+  the password from psql_db_having_user, and cleaning
+  the connection, if any.
+
+  It is useful when the same structures are
+  installed in multiple instances of the dbms,
+  postgresql.
+=end
+  def psql_db__user_from psql_db, psql_db_having_user
+
+    psql_db = array__from(psql_db)
+    psql_db_having = array__from(psql_db_having_user)
+    psql_db[1] = psql_db_having[1] # user
+    psql_db[2] = psql_db_having[2] # pw
+    psql_db[5] = nil # resets the connection, if any
+    psql_db
+  end # of psql_db__user_from
+
+
+=begin
+  generates a string out of a psql_db.
+  good to generate file names, and so on.
+=end
+  def string__psql_db psql_db, joinner = "_"
+    db_name,
+      db_user,
+      db_password,
+      db_host,
+      db_port,
+      reserved = array__from psql_db
+    [ db_host, db_port, db_name, ].compact.join joinner
+  end # of string__psql_db
+
+
+=begin
+  #psql_db__ definition to update a a given
+  psql_db with the information regarding only
+  the database name from another psql_db.
+
+  Basically, that means copying the database name
+  from psql_db_having_name, and cleaning
+  the connection, if any.
+
+  It is useful to derive a super user psql_db for the
+  same dbms as another super user psql_db, but for
+  a different database (ie it "sums" a super user
+  psql_db and a normal psql_db, resulting in a super
+  user psql_db for the normal psql_db)
+
+=end
+  def psql_db__name_from psql_db, psql_db_having_name
+
+    psql_db = array__from(psql_db)
+    psql_db_having = array__from(psql_db_having_name)
+    psql_db[0] = psql_db_having[0] # db name
+    psql_db[5] = nil # resets the connection, if any
+    psql_db
+  end # of psql_db__name_from
 
 
 end # of RubyRooomyPgShellCommandsModule
@@ -2974,12 +3141,16 @@ module RubyRooomyGitBaseModule
   Internal functions
   want to work with an infinite number.
 
-  This function sets the big enough value, Float::INFINITY
+  This function sets the big enough value, 1_000_000_000_000
   by default.
 =end
     def log_size_limit set_to=nil
       set_to && (@log_size_limit = set_to)
-      @log_size_limit ||= Float::INFINITY
+      # @log_size_limit ||= Float::INFINITY
+      # unfortunatelly, Float::INFINITY is printed as "Infinity"
+      # in bash script batches. So, we really have to give it
+      # a numerical size:
+      @log_size_limit ||= 1_000_000_000_000
     end
 
 
