@@ -626,6 +626,33 @@ module RubyRooomyShortcutsModule
   end # of shortcut_print_definition
 
 
+=begin
+  Instead of
+  invoke_double p definition
+
+  Just:
+  shortcut_show_definition definition
+
+
+  Examples:
+
+  # it may be not so good to definitions returning formatted data, like JSON:
+  shortcut_show_definition "json_string__pretty", '{"1" : "2"}'
+  "{\n  \"1\": \"2\"\n}"
+
+
+  # but it works well with definitions returning Arrays:
+  shortcut_show_definition "psql_db__sample_example"
+  ["any_db", "any_user", "onlyNSAknows", "localhost", nil, nil]
+
+
+=end
+  def shortcut_show_definition *args
+    result = invoke__basic_sender_array [ self, *args ]
+    stdout_puts(result.inspect)
+  end # of shortcut_show_definition
+
+
 end # of RubyRooomyShortcutsModule
 
 
