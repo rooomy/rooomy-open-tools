@@ -586,7 +586,7 @@ module RubyRooomyJsonModule
   end
 
 
-end
+end # of RubyRooomyJsonModule
 
 
 =begin 
