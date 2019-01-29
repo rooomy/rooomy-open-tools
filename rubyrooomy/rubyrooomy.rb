@@ -596,6 +596,36 @@ end # of RubyRooomyJsonModule
 module RubyRooomyShortcutsModule
 
 
+=begin
+  Instead of
+  invoke_double puts definition
+
+  Just:
+  shortcut_print_definition definition
+
+
+  Examples:
+
+  # it's good mostly to definitions returning formatted data, like JSON:
+  shortcut_print_definition "json_string__pretty", '{"1" : "2"}'
+  {
+    "1": "2"
+  }
+
+  # but it may not be the best to use with Arrays:
+  shortcut_print_definition "psql_db__sample_example"
+  any_db
+  any_user
+  onlyNSAknows
+  localhost
+
+=end
+  def shortcut_print_definition *args
+    result = invoke__basic_sender_array [ self, *args ]
+    stdout_puts(result)
+  end # of shortcut_print_definition
+
+
 end # of RubyRooomyShortcutsModule
 
 
