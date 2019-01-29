@@ -603,7 +603,74 @@ module RubyRooomyJsonModule
   end
 
 
-end
+end # of RubyRooomyJsonModule
+
+
+=begin
+  The purpose of this module is to offer functions
+  that are simply shortcuts to commonly called calls.
+=end
+module RubyRooomyShortcutsModule
+
+
+=begin
+  Instead of
+  invoke_double puts definition
+
+  Just:
+  shortcut_print_definition definition
+
+
+  Examples:
+
+  # it's good mostly to definitions returning formatted data, like JSON:
+  shortcut_print_definition "json_string__pretty", '{"1" : "2"}'
+  {
+    "1": "2"
+  }
+
+  # but it may not be the best to use with Arrays:
+  shortcut_print_definition "psql_db__sample_example"
+  any_db
+  any_user
+  onlyNSAknows
+  localhost
+
+=end
+  def shortcut_print_definition *args
+    result = invoke__basic_sender_array [ self, *args ]
+    stdout_puts(result)
+  end # of shortcut_print_definition
+
+
+=begin
+  Instead of
+  invoke_double p definition
+
+  Just:
+  shortcut_show_definition definition
+
+
+  Examples:
+
+  # it may be not so good to definitions returning formatted data, like JSON:
+  shortcut_show_definition "json_string__pretty", '{"1" : "2"}'
+  "{\n  \"1\": \"2\"\n}"
+
+
+  # but it works well with definitions returning Arrays:
+  shortcut_show_definition "psql_db__sample_example"
+  ["any_db", "any_user", "onlyNSAknows", "localhost", nil, nil]
+
+
+=end
+  def shortcut_show_definition *args
+    result = invoke__basic_sender_array [ self, *args ]
+    stdout_puts(result.inspect)
+  end # of shortcut_show_definition
+
+
+end # of RubyRooomyShortcutsModule
 
 
 =begin 
@@ -3794,6 +3861,7 @@ module RubyRooomyModule
   include RubyRooomyFilesModule
   include RubyRooomyStringsModule
   include RubyRooomyJsonModule
+  include RubyRooomyShortcutsModule
   include RubyRooomySubShellCommandsModule
   include RubyRooomyShellCommandsModule
   include RubyRooomyGemModule
