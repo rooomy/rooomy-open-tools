@@ -589,6 +589,16 @@ module RubyRooomyJsonModule
 end # of RubyRooomyJsonModule
 
 
+=begin
+  The purpose of this module is to offer functions
+  that are simply shortcuts to commonly called calls.
+=end
+module RubyRooomyShortcutsModule
+
+
+end # of RubyRooomyShortcutsModule
+
+
 =begin 
   The purpose of this module is to offer functions that can
   execute git related commands and batches in the command line
