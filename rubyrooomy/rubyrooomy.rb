@@ -624,20 +624,27 @@ module RubyRooomyShortcutsModule
   Examples:
 
   # it's good mostly to definitions returning formatted data, like JSON:
-  shortcut_print_definition "json_string__pretty", '{"1" : "2"}'
+  shortcut_print_definition ["json_string__pretty", '{"1" : "2"}']
   {
     "1": "2"
   }
 
+
   # but it may not be the best to use with Arrays:
-  shortcut_print_definition "psql_db__sample_example"
+  shortcut_print_definition ["psql_db__sample_example"]
   any_db
   any_user
   onlyNSAknows
   localhost
 
+
+  # in the command line, the same results are achieved with:
+  rubyrooomy shortcut_print_definition  json_string__pretty '{"1" : "2"}'
+  rubyrooomy shortcut_print_definition psql_db__sample_example
+
+
 =end
-  def shortcut_print_definition *args
+  def shortcut_print_definition args
     result = invoke__basic_sender_array [ self, *args ]
     stdout_puts(result)
   end # of shortcut_print_definition
@@ -654,17 +661,20 @@ module RubyRooomyShortcutsModule
   Examples:
 
   # it may be not so good to definitions returning formatted data, like JSON:
-  shortcut_show_definition "json_string__pretty", '{"1" : "2"}'
+  shortcut_show_definition [ "json_string__pretty", '{"1" : "2"}' ]
   "{\n  \"1\": \"2\"\n}"
 
 
   # but it works well with definitions returning Arrays:
-  shortcut_show_definition "psql_db__sample_example"
+  shortcut_show_definition [ "psql_db__sample_example" ]
   ["any_db", "any_user", "onlyNSAknows", "localhost", nil, nil]
 
+  # in the command line, the same results can be achieved with:
+  rubyrooomy shortcut_show_definition  json_string__pretty '{"1" : "2"}'
+  rubyrooomy shortcut_show_definition  psql_db__sample_example
 
 =end
-  def shortcut_show_definition *args
+  def shortcut_show_definition args
     result = invoke__basic_sender_array [ self, *args ]
     stdout_puts(result.inspect)
   end # of shortcut_show_definition
