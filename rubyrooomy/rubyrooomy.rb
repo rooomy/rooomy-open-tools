@@ -3633,6 +3633,7 @@ module RubyRooomyModule
   include RubyRooomyFilesModule
   include RubyRooomyStringsModule
   include RubyRooomyJsonModule
+  include RubyRooomyShortcutsModule
   include RubyRooomySubShellCommandsModule
   include RubyRooomyShellCommandsModule
   include RubyRooomyGemModule
