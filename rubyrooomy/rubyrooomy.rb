@@ -2157,7 +2157,6 @@ module RubyRooomyPgShellDerivativesModule
     backup_batch = psql_db_batch__cli_or_generate_dumps(
       psql_db,
       backup_paths,
-      options
     )
 
     # generate database reset batch, if needed
